@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Addons插件 Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/addons.html">
+</head>
+<body class="alt apidoc" id="api-section-addons">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="addons.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="addons.html#addons_addons">Addons插件</a><ul>
+<li><a href="addons.html#addons_hello_world">Hello world（世界你好）</a></li>
+<li><a href="addons.html#addons_addon_patterns">Addon patterns（插件方式）</a><ul>
+<li><a href="addons.html#addons_function_arguments">Function arguments（函数参数）</a></li>
+<li><a href="addons.html#addons_callbacks">Callbacks（回调）</a></li>
+<li><a href="addons.html#addons_object_factory">Object factory（对象工厂）</a></li>
+<li><a href="addons.html#addons_function_factory">Function factory（函数工厂）</a></li>
+<li><a href="addons.html#addons_wrapping_c_objects_c">Wrapping C++ objects（包装c++对象）</a></li>
+<li><a href="addons.html#addons_factory_of_wrapped_objects">Factory of wrapped objects（工厂包装对象）</a></li>
+<li><a href="addons.html#addons_passing_wrapped_objects_around">Passing wrapped objects around（传递包装的对象）</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>Addons插件<span><a href="addons.html#addons_addons" id="addons_addons">#</a></span></h1>
+<p>Addons are dynamically linked shared objects. They can provide glue to C and
+C++ libraries. The API (at the moment) is rather complex, involving
+knowledge of several libraries:
+
+</p>
+<p>Addons插件就是动态连接库。它类似胶水，将c、c++和Node粘贴起来。它的API（目前来说）相当复杂，涉及到了几个类库的知识。
+
+</p>
+<ul>
+<li><p>V8 JavaScript, a C++ library. Used for interfacing with JavaScript:
+creating objects, calling functions, etc.  Documented mostly in the
+<code>v8.h</code> header file (<code>deps/v8/include/v8.h</code> in the Node source
+tree), which is also available
+<a href="http://izs.me/v8-docs/main.html">online</a>.</p>
+</li>
+<li><p>V8 JavaScript引擎,一个 C++ 类库. 用于和JavaScript进行交互的接口。
+创建对象, 调用函数等. 文档大部分在这里：
+<code>v8.h</code> 头文件 (<code>deps/v8/include/v8.h</code>在Node源代码目录里), 也有可用的线上文档
+<a href="http://izs.me/v8-docs/main.html">线上</a>.
+（译者：想要学习c++的addons插件编写，必须先了解v8的接口）</p>
+</li>
+<li><p><a href="https://github.com/joyent/libuv">libuv</a>, C event loop library.
+Anytime one needs to wait for a file descriptor to become readable,
+wait for a timer, or wait for a signal to be received one will need
+to interface with libuv. That is, if you perform any I/O, libuv will
+need to be used.</p>
+</li>
+<li><p><a href="https://github.com/joyent/libuv">libuv</a>, C语言编写的事件循环类库。任何时候需要等待一个文件描述符变为可读状态，等待一个定时器，或者等待一个接受信号都需要使用libuv类库的接口。也就是说，如果你执行任何I/O操作，libuv类库将会被用到。</p>
+</li>
+<li><p>Internal Node libraries. Most importantly is the <code>node::ObjectWrap</code>
+class which you will likely want to derive from.</p>
+</li>
+<li><p>内部 Node 类库.最重要的接口就是 <code>node::ObjectWrap</code> 类，这个类你应该是最可能想要派生的。</p>
+</li>
+<li><p>Others. Look in <code>deps/</code> for what else is available.</p>
+</li>
+<li><p>其他.请参阅 <code>deps/</code> 获得更多可用类库。</p>
+</li>
+</ul>
+<p>Node statically compiles all its dependencies into the executable.
+When compiling your module, you don&apos;t need to worry about linking to
+any of these libraries.
+
+</p>
+<p>Node 静态编译了所有依赖到它的可执行文件中去了。当编译你的模块时，你不必担心无法连接上述那些类库。
+（译者：换而言之，你在编译自己的addons插件时，只管在头部 #include &lt;uv.h&gt;，不必在binding.gyp中声明）
+
+</p>
+<p>All of the following examples are available for
+<a href="https://github.com/rvagg/node-addon-examples">download</a> and may be
+used as a starting-point for your own Addon.
+
+</p>
+<p>下面所有的例子都可以下载到：
+<a href="https://github.com/rvagg/node-addon-examples">下载</a> 
+这或许能成为你学习和创作自己addon插件的起点。
+
+</p>
+<h2>Hello world（世界你好）<span><a href="addons.html#addons_hello_world" id="addons_hello_world">#</a></span></h2>
+<p>To get started let&apos;s make a small Addon which is the C++ equivalent of
+the following JavaScript code:
+
+</p>
+<p>作为开始，让我们用编写一个小的addon插件，这个addon插件的c++代码相当于下面的JavaScript代码。
+
+</p>
+<pre><code>module.exports.hello = function() { return &apos;world&apos;; };</code></pre>
+<p>First we create a file <code>hello.cc</code>:
+
+</p>
+<p>首先我们创建一个 <code>hello.cc</code>文件:
+
+</p>
+<pre><code>NODE_MODULE(hello, init)//译者：将addon插件名hello和上述init函数关联输出</code></pre>
+<p>Note that all Node addons must export an initialization function:
+
+</p>
+<p>注意所有Node的addons插件都必须输出一个初始化函数：
+
+</p>
+<pre><code>void Initialize (Handle&lt;Object&gt; exports);
+NODE_MODULE(module_name, Initialize)</code></pre>
+<p>There is no semi-colon after <code>NODE_MODULE</code> as it&apos;s not a function (see
+<code>node.h</code>).
+
+</p>
+<p>在<code>NODE_MODULE</code>之后没有分号，因为它不是一个函数（请参阅<code>node.h</code>）
+
+</p>
+<p>The <code>module_name</code> needs to match the filename of the final binary (minus the
+.node suffix).
+
+</p>
+<p>这个<code>module_name</code>（模块名）需要和最后编译生成的2进制文件名（减去.node后缀名）相同。
+
+</p>
+<p>The source code needs to be built into <code>hello.node</code>, the binary Addon. To
+do this we create a file called <code>binding.gyp</code> which describes the configuration
+to build your module in a JSON-like format. This file gets compiled by
+<a href="https://github.com/TooTallNate/node-gyp">node-gyp</a>.
+
+</p>
+<p>源代码需要生成在<code>hello.node</code>，这个2进制addon插件中。
+需要做到这些，我们要创建一个名为<code>binding.gyp</code>的文件，它描述了创建这个模块的配置，并且它的格式是类似JSON的。
+文件将被命令：<a href="https://github.com/TooTallNate/node-gyp">node-gyp</a> 编译。
+
+</p>
+<pre><code>{
+  &quot;targets&quot;: [
+    {
+      &quot;target_name&quot;: &quot;hello&quot;, //译者：addon插件名，注意这里的名字必需和上面NODE_MODULE中的一致
+      &quot;sources&quot;: [ &quot;hello.cc&quot; ]  //译者：这是需要编译的源文件
+    }
+  ]
+}</code></pre>
+<p>The next step is to generate the appropriate project build files for the
+current platform. Use <code>node-gyp configure</code> for that.
+
+</p>
+<p>下一步是根据当前的操作系统平台，利用<code>node-gyp configure</code>命令，生成合适的项目文件。
+
+</p>
+<p>Now you will have either a <code>Makefile</code> (on Unix platforms) or a <code>vcxproj</code> file
+(on Windows) in the <code>build/</code> directory. Next invoke the <code>node-gyp build</code>
+command.
+
+</p>
+<p>现在你会有一个<code>Makefile</code> (在Unix平台) 或者一个 <code>vcxproj</code> file
+(在Windows上)，它们都在<code>build/</code> 文件夹中. 
+然后执行命令 <code>node-gyp build</code>进行编译。
+（译者：当然你可以执行 <code>node-gyp rebuild</code>一步搞定）
+
+</p>
+<p>Now you have your compiled <code>.node</code> bindings file! The compiled bindings end up
+in <code>build/Release/</code>.
+
+</p>
+<p>现在你已经有了编译好的 <code>.node</code> 文件了，这个编译好的绑定文件会在目录 <code>build/Release/</code>下
+
+</p>
+<p>You can now use the binary addon in a Node project <code>hello.js</code> by pointing
+<code>require</code> to the recently built <code>hello.node</code> module:
+
+</p>
+<p>现在你可以使用这个2进制addon插件在Node项目<code>hello.js</code> 中了，通过指明<code>require</code>这个刚刚创建的<code>hello.node</code>模块使用它。
+
+</p>
+<pre><code>console.log(addon.hello()); // &apos;world&apos;</code></pre>
+<p>Please see patterns below for further information or
+</p>
+<p><a href="https://github.com/arturadib/node-qt">https://github.com/arturadib/node-qt</a> for an example in production.
+
+</p>
+<p>请阅读下面的内容获得更多详情或者访问<a href="https://github.com/arturadib/node-qt">https://github.com/arturadib/node-qt</a>获取一个生产环境的例子。
+
+</p>
+<h2>Addon patterns（插件方式）<span><a href="addons.html#addons_addon_patterns" id="addons_addon_patterns">#</a></span></h2>
+<p>Below are some addon patterns to help you get started. Consult the online
+<a href="http://izs.me/v8-docs/main.html">v8 reference</a> for help with the various v8
+calls, and v8&apos;s <a href="http://code.google.com/apis/v8/embed.html">Embedder&apos;s Guide</a>
+for an explanation of several concepts used such as handles, scopes,
+function templates, etc.
+
+</p>
+<p>下面是一些帮助你开始编写addon插件的方式。参考这个在线的<a href="http://izs.me/v8-docs/main.html">v8 手册</a>用来帮助你调用各种v8接口， 然后是v8的 <a href="http://code.google.com/apis/v8/embed.html">嵌入式开发向导</a> ，解释几个概念，如 handles, scopes,function templates等。
+
+
+</p>
+<p>In order to use these examples you need to compile them using <code>node-gyp</code>.
+Create the following <code>binding.gyp</code> file:
+
+</p>
+<p>为了能跑起来这些例子，你必须用 <code>node-gyp</code> 来编译他们。
+创建一个<code>binding.gyp</code> 文件：
+
+</p>
+<pre><code>{
+  &quot;targets&quot;: [
+    {
+      &quot;target_name&quot;: &quot;addon&quot;,
+      &quot;sources&quot;: [ &quot;addon.cc&quot; ]
+    }
+  ]
+}</code></pre>
+<p>In cases where there is more than one <code>.cc</code> file, simply add the file name to
+the <code>sources</code> array, e.g.:
+
+</p>
+<p>事实上可以有多个  <code>.cc</code> 文件, 就简单的在 <code>sources</code>  数组里加上即可，例子：
+
+</p>
+<pre><code>&quot;sources&quot;: [&quot;addon.cc&quot;, &quot;myexample.cc&quot;]</code></pre>
+<p>Now that you have your <code>binding.gyp</code> ready, you can configure and build the
+addon:
+
+</p>
+<p>现在你有了你的<code>binding.gyp</code>文件了，你可要开始执行configure 和 build 命令构建你的addon插件了
+
+</p>
+<pre><code>$ node-gyp configure build</code></pre>
+<h3>Function arguments（函数参数）<span><a href="addons.html#addons_function_arguments" id="addons_function_arguments">#</a></span></h3>
+<p>The following pattern illustrates how to read arguments from JavaScript
+function calls and return a result. This is the main and only needed source
+<code>addon.cc</code>:
+
+</p>
+<p>下面的部分说明了如何从JavaScript的函数调用获得参数然后返回一个值。这是主要的内容并且仅需要源代码<code>addon.cc</code>。
+
+</p>
+<pre><code>NODE_MODULE(addon, Init)</code></pre>
+<p>You can test it with the following JavaScript snippet:
+
+</p>
+<p>你可以使用下面的JavaScript代码片段来测试它
+
+</p>
+<pre><code>console.log( &apos;This should be eight:&apos;, addon.add(3,5) );</code></pre>
+<h3>Callbacks（回调）<span><a href="addons.html#addons_callbacks" id="addons_callbacks">#</a></span></h3>
+<p>You can pass JavaScript functions to a C++ function and execute them from
+there. Here&apos;s <code>addon.cc</code>:
+
+</p>
+<p>你可以传递JavaScript functions 到一个C++ function 并且执行他们，这里是 <code>addon.cc</code>文件:
+
+</p>
+<pre><code>NODE_MODULE(addon, Init)</code></pre>
+<p>Note that this example uses a two-argument form of <code>Init()</code> that receives
+the full <code>module</code> object as the second argument. This allows the addon
+to completely overwrite <code>exports</code> with a single function instead of
+adding the function as a property of <code>exports</code>.
+
+</p>
+<p>注意这个例子对<code>Init()</code>使用了两个参数，将完整的 <code>module</code> 对象作为第二个参数传入。这允许addon插件完全的重写 <code>exports</code>，这样就可以用一个函数代替多个函数作为<code>exports</code>的属性了。
+
+</p>
+<p>To test it run the following JavaScript snippet:
+
+</p>
+<p>你可以使用下面的JavaScript代码片段来测试它
+
+</p>
+<pre><code>addon(function(msg){
+  console.log(msg); // &apos;hello world&apos;
+});</code></pre>
+<h3>Object factory（对象工厂）<span><a href="addons.html#addons_object_factory" id="addons_object_factory">#</a></span></h3>
+<p>You can create and return new objects from within a C++ function with this
+<code>addon.cc</code> pattern, which returns an object with property <code>msg</code> that echoes
+the string passed to <code>createObject()</code>:
+
+</p>
+<p>在这个<code>addon.cc</code>文件里用一个c++函数，你可以创建并且返回一个新的对象，这个新的对象拥有一个msg的属性，它的值是通过createObject()方法传入的
+
+</p>
+<pre><code>NODE_MODULE(addon, Init)</code></pre>
+<p>To test it in JavaScript:
+
+</p>
+<p>在js中测试如下:
+
+</p>
+<pre><code>var obj1 = addon(&apos;hello&apos;);
+var obj2 = addon(&apos;world&apos;);
+console.log(obj1.msg+&apos; &apos;+obj2.msg); // &apos;hello world&apos;</code></pre>
+<h3>Function factory（函数工厂）<span><a href="addons.html#addons_function_factory" id="addons_function_factory">#</a></span></h3>
+<p>This pattern illustrates how to create and return a JavaScript function that
+wraps a C++ function:
+
+</p>
+<p>这次将展示如何创建并返回一个JavaScript function函数，这个函数其实是通过c++包装的。
+
+</p>
+<pre><code>NODE_MODULE(addon, Init)</code></pre>
+<p>To test:
+
+</p>
+<p>测试它:
+
+</p>
+<pre><code>var fn = addon();
+console.log(fn()); // &apos;hello world&apos;</code></pre>
+<h3>Wrapping C++ objects（包装c++对象）<span><a href="addons.html#addons_wrapping_c_objects_c" id="addons_wrapping_c_objects_c">#</a></span></h3>
+<p>Here we will create a wrapper for a C++ object/class <code>MyObject</code> that can be
+instantiated in JavaScript through the <code>new</code> operator. First prepare the main
+module <code>addon.cc</code>:
+
+</p>
+<p>这里将创建一个被c++包裹的对象或类<code>MyObject</code>，它是可以在JavaScript中通过<code>new</code>操作符实例化的。
+首先我们要准备主要的模块文件<code>addon.cc</code>:
+
+</p>
+<pre><code>NODE_MODULE(addon, InitAll)</code></pre>
+<p>Then in <code>myobject.h</code> make your wrapper inherit from <code>node::ObjectWrap</code>:
+
+</p>
+<p>然后在<code>myobject.h</code>文件中创建你的包装类，它继承自 <code>node::ObjectWrap</code>:
+
+</p>
+<pre><code>#endif</code></pre>
+<p>And in <code>myobject.cc</code> implement the various methods that you want to expose.
+Here we expose the method <code>plusOne</code> by adding it to the constructor&apos;s
+prototype:
+
+</p>
+<p>在文件 <code>myobject.cc</code> 可以实施各种你想要暴露给js的方法。 
+这里我们暴露方法名为 <code>plusOne</code>给就是，它表示将构造函数的属性加1.
+
+</p>
+<pre><code>  return scope.Close(Number::New(obj-&gt;counter_));
+}</code></pre>
+<p>Test it with:
+
+</p>
+<p>测试它:
+
+</p>
+<pre><code>var obj = new addon.MyObject(10);
+console.log( obj.plusOne() ); // 11
+console.log( obj.plusOne() ); // 12
+console.log( obj.plusOne() ); // 13</code></pre>
+<h3>Factory of wrapped objects（工厂包装对象）<span><a href="addons.html#addons_factory_of_wrapped_objects" id="addons_factory_of_wrapped_objects">#</a></span></h3>
+<p>This is useful when you want to be able to create native objects without
+explicitly instantiating them with the <code>new</code> operator in JavaScript, e.g.
+
+</p>
+<p>这是非常有用的，当你想创建原生的JavaScript对象时，又不想明确的使用JavaScript的<code>new</code>操作符。
+
+</p>
+<pre><code>var obj = addon.createObject();
+// 用上面的方式代替下面的:
+// var obj = new addon.Object();</code></pre>
+<p>Let&apos;s register our <code>createObject</code> method in <code>addon.cc</code>:
+
+</p>
+<p>让我们注册在 <code>addon.cc</code> 文件中注册<code>createObject</code>方法:
+
+</p>
+<pre><code>NODE_MODULE(addon, InitAll)</code></pre>
+<p>In <code>myobject.h</code> we now introduce the static method <code>NewInstance</code> that takes
+care of instantiating the object (i.e. it does the job of <code>new</code> in JavaScript):
+
+</p>
+<p>在<code>myobject.h</code>文件中，我们现在介绍静态方法NewInstance<code>，它能够实例化对象（举个例子，它的工作就像是 在JavaScript中的</code>new` 操作符。）
+
+</p>
+<pre><code>#endif</code></pre>
+<p>The implementation is similar to the above in <code>myobject.cc</code>:
+
+</p>
+<p>这里的处理方式和上面的 <code>myobject.cc</code>很像:
+
+</p>
+<pre><code>  return scope.Close(Number::New(obj-&gt;counter_));
+}</code></pre>
+<p>Test it with:
+
+</p>
+<p>测试它:
+
+</p>
+<pre><code>var obj2 = createObject(20);
+console.log( obj2.plusOne() ); // 21
+console.log( obj2.plusOne() ); // 22
+console.log( obj2.plusOne() ); // 23</code></pre>
+<h3>Passing wrapped objects around（传递包装的对象）<span><a href="addons.html#addons_passing_wrapped_objects_around" id="addons_passing_wrapped_objects_around">#</a></span></h3>
+<p>In addition to wrapping and returning C++ objects, you can pass them around
+by unwrapping them with Node&apos;s <code>node::ObjectWrap::Unwrap</code> helper function.
+In the following <code>addon.cc</code> we introduce a function <code>add()</code> that can take on two
+<code>MyObject</code> objects:
+
+</p>
+<p>除了包装和返回c++对象以外，你可以传递他们并且通过Node的<code>node::ObjectWrap::Unwrap</code>帮助函数解包装他们。
+在下面的<code>addon.cc</code> 文件中，我们介绍了一个函数<code>add()</code>，它能够获取2个<code>MyObject</code>对象。
+
+</p>
+<pre><code>NODE_MODULE(addon, InitAll)</code></pre>
+<p>To make things interesting we introduce a public method in <code>myobject.h</code> so we
+can probe private values after unwrapping the object:
+
+</p>
+<p>为了使事情变得有趣，我们在 <code>myobject.h</code> 采用一个公共的方法，所以我们能够在unwrapping解包装对象之后使用私有成员的值。
+
+</p>
+<pre><code>#endif</code></pre>
+<p>The implementation of <code>myobject.cc</code> is similar as before:
+
+</p>
+<p><code>myobject.cc</code>文件的处理方式和前面类似
+
+</p>
+<pre><code>  return scope.Close(instance);
+}</code></pre>
+<p>Test it with:
+
+</p>
+<p>测试它:
+
+</p>
+<pre><code>var obj1 = addon.createObject(10);
+var obj2 = addon.createObject(20);
+var result = addon.add(obj1, obj2);
+
+console.log(result); // 30
+
+
+console.log(result); // 30</code></pre>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>

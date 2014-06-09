@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>事件 (Events) Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/events.html">
+</head>
+<body class="alt apidoc" id="api-section-events">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="http://jixiangac.com/doc/node/events.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="events.html#events_events">事件 (Events)</a><ul>
+<li><a href="events.html#events_events_eventemitter">类: events.EventEmitter</a><ul>
+<li><a href="events.html#events_emitter_addlistener_event_listener">emitter.addListener(event, listener)</a></li>
+<li><a href="events.html#events_emitter_on_event_listener">emitter.on(event, listener)</a></li>
+<li><a href="events.html#events_emitter_addlistener_event_listener_1">emitter.addListener(event, listener)</a></li>
+<li><a href="events.html#events_emitter_on_event_listener_1">emitter.on(event, listener)</a></li>
+<li><a href="events.html#events_emitter_once_event_listener">emitter.once(event, listener)</a></li>
+<li><a href="events.html#events_emitter_removelistener_event_listener">emitter.removeListener(event, listener)</a></li>
+<li><a href="events.html#events_emitter_removealllisteners_event">emitter.removeAllListeners([event])</a></li>
+<li><a href="events.html#events_emitter_setmaxlisteners_n">emitter.setMaxListeners(n)</a></li>
+<li><a href="events.html#events_eventemitter_defaultmaxlisteners">EventEmitter.defaultMaxListeners</a></li>
+<li><a href="events.html#events_emitter_listeners_event">emitter.listeners(event)</a></li>
+<li><a href="events.html#events_emitter_emit_event_arg1_arg2">emitter.emit(event, [arg1], [arg2], [...])</a></li>
+<li><a href="events.html#events_eventemitter_listenercount_emitter_event">类方法: EventEmitter.listenerCount(emitter, event)</a></li>
+<li><a href="events.html#events_newlistener">事件: &apos;newListener&apos;</a></li>
+<li><a href="events.html#events_removelistener">事件: &apos;removeListener&apos;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>事件 (Events)<span><a href="events.html#events_events" id="events_events">#</a></span></h1>
+<pre><code>稳定度: 4 - 冻结</code></pre>
+<!--type=module-->
+
+<p>Many objects in Node emit events: a <code>net.Server</code> emits an event each time
+a peer connects to it, a <code>fs.readStream</code> emits an event when the file is
+opened. All objects which emit events are instances of <code>events.EventEmitter</code>.
+You can access this module by doing: <code>require(&quot;events&quot;);</code>
+
+</p>
+<p>Node里面的许多对象都会分发事件：一个<code>net.Server</code>对象会在每次有新连接时分发一个事件， 一个<code>fs.readStream</code>对象会在文件被打开的时候发出一个事件。
+所有这些产生事件的对象都是 <code>events.EventEmitter</code> 的实例。
+你可以通过<code>require(&quot;events&quot;);</code>来访问该模块
+
+</p>
+<p>Typically, event names are represented by a camel-cased string, however,
+there aren&apos;t any strict restrictions on that, as any string will be accepted.
+
+</p>
+<p>通常，事件名是驼峰命名 (camel-cased) 的字符串。不过也没有强制的要求，任何字符串都是可以使用的。
+
+</p>
+<p>Functions can then be attached to objects, to be executed when an event
+is emitted. These functions are called <em>listeners</em>. Inside a listener
+function, <code>this</code> refers to the <code>EventEmitter</code> that the listener was
+attached to.
+
+</p>
+<p>为了处理发出的事件，我们将函数 (Function) 关联到对象上。
+我们把这些函数称为 <em>监听器 (listeners)</em>。
+在监听函数中 <code>this</code> 指向当前监听函数所关联的 <code>EventEmitter</code> 对象。
+
+</p>
+<h2>类: events.EventEmitter<span><a href="events.html#events_events_eventemitter" id="events_events_eventemitter">#</a></span></h2>
+<p>To access the EventEmitter class, <code>require(&apos;events&apos;).EventEmitter</code>.
+
+</p>
+<p>通过 <code>require(&apos;events&apos;).EventEmitter</code> 获取 EventEmitter 类。
+
+</p>
+<p>When an <code>EventEmitter</code> instance experiences an error, the typical action is
+to emit an <code>&apos;error&apos;</code> event.  Error events are treated as a special case in node.
+If there is no listener for it, then the default action is to print a stack
+trace and exit the program.
+
+</p>
+<p>当 <code>EventEmitter</code> 实例遇到错误，通常的处理方法是产生一个 <code>&apos;error&apos;</code> 事件，node 对错误事件做特殊处理。
+如果程序没有监听错误事件，程序会按照默认行为在打印出 栈追踪信息 (stack trace) 后退出。
+
+</p>
+<p>All EventEmitters emit the event <code>&apos;newListener&apos;</code> when new listeners are
+added and <code>&apos;removeListener&apos;</code> when a listener is removed.
+
+</p>
+<p>EventEmitter 会在添加 listener 时触发 <code>&apos;newListener&apos;</code> 事件，删除 listener 时触发 <code>&apos;removeListener&apos;</code> 事件
+
+</p>
+<h3>emitter.addListener(event, listener)<span><a href="events.html#events_emitter_addlistener_event_listener" id="events_emitter_addlistener_event_listener">#</a></span></h3>
+<h3>emitter.on(event, listener)<span><a href="events.html#events_emitter_on_event_listener" id="events_emitter_on_event_listener">#</a></span></h3>
+<h3>emitter.addListener(event, listener)<span><a href="events.html#events_emitter_addlistener_event_listener_1" id="events_emitter_addlistener_event_listener_1">#</a></span></h3>
+<h3>emitter.on(event, listener)<span><a href="events.html#events_emitter_on_event_listener_1" id="events_emitter_on_event_listener_1">#</a></span></h3>
+<p>Adds a listener to the end of the listeners array for the specified event.
+
+</p>
+<p>添加一个 listener 至特定事件的 listener 数组尾部。
+
+</p>
+<pre><code>server.on(&apos;connection&apos;, function (stream) {
+  console.log(&apos;someone connected!&apos;);
+});</code></pre>
+<p>Returns emitter, so calls can be chained.
+
+</p>
+<p>返回 emitter，方便链式调用。
+
+</p>
+<h3>emitter.once(event, listener)<span><a href="events.html#events_emitter_once_event_listener" id="events_emitter_once_event_listener">#</a></span></h3>
+<p>Adds a <strong>one time</strong> listener for the event. This listener is
+invoked only the next time the event is fired, after which
+it is removed.
+
+</p>
+<p>添加一个 <strong>一次性</strong> listener，这个 listener 只会在下一次事件发生时被触发一次，触发完成后就被删除。
+
+</p>
+<pre><code>server.once(&apos;connection&apos;, function (stream) {
+  console.log(&apos;Ah, we have our first user!&apos;);
+});</code></pre>
+<p>Returns emitter, so calls can be chained.
+
+</p>
+<p>返回 emitter，方便链式调用。
+
+</p>
+<h3>emitter.removeListener(event, listener)<span><a href="events.html#events_emitter_removelistener_event_listener" id="events_emitter_removelistener_event_listener">#</a></span></h3>
+<p>Remove a listener from the listener array for the specified event.
+<strong>Caution</strong>: changes array indices in the listener array behind the listener.
+
+</p>
+<p>从一个事件的 listener 数组中删除一个 listener
+<strong>注意</strong>：此操作会改变 listener 数组中当前 listener 后的所有 listener 在的下标
+
+</p>
+<pre><code>var callback = function(stream) {
+  console.log(&apos;someone connected!&apos;);
+};
+server.on(&apos;connection&apos;, callback);
+// ...
+server.removeListener(&apos;connection&apos;, callback);</code></pre>
+<p>Returns emitter, so calls can be chained.
+
+</p>
+<p>返回 emitter，方便链式调用。
+
+</p>
+<h3>emitter.removeAllListeners([event])<span><a href="events.html#events_emitter_removealllisteners_event" id="events_emitter_removealllisteners_event">#</a></span></h3>
+<p>Removes all listeners, or those of the specified event.
+
+</p>
+<p>删除所有 listener，或者删除某些事件 (event) 的 listener
+
+</p>
+<p>Returns emitter, so calls can be chained.
+
+</p>
+<p>返回 emitter，方便链式调用。
+
+</p>
+<h3>emitter.setMaxListeners(n)<span><a href="events.html#events_emitter_setmaxlisteners_n" id="events_emitter_setmaxlisteners_n">#</a></span></h3>
+<p>By default EventEmitters will print a warning if more than 10 listeners are
+added for a particular event. This is a useful default which helps finding
+memory leaks. Obviously not all Emitters should be limited to 10. This function
+allows that to be increased. Set to zero for unlimited.
+
+</p>
+<p>在默认情况下，EventEmitter 会在多于 10 个 listener 监听某个事件的时候出现警告，此限制在寻找内存泄露时非常有用。
+显然，也不是所有的 Emitter 事件都要被限制在 10 个 listener 以下，在这种情况下可以使用这个函数来改变这个限制。
+
+</p>
+<p>Returns emitter, so calls can be chained.
+
+</p>
+<p>返回 emitter，方便链式调用。
+
+</p>
+<h3>EventEmitter.defaultMaxListeners<span><a href="events.html#events_eventemitter_defaultmaxlisteners" id="events_eventemitter_defaultmaxlisteners">#</a></span></h3>
+<p><code>emitter.setMaxListeners(n)</code> sets the maximum on a per-instance basis.
+This class property lets you set it for <em>all</em> <code>EventEmitter</code> instances,
+current and future, effective immediately. Use with care.
+
+</p>
+<p><code>emitter.setMaxListeners(n)</code> 设置每个 emitter 实例的最大监听数。
+这个类属性为 <strong>所有</strong> <code>EventEmitter</code> 实例设置最大监听数（对所有已创建的实例和今后创建的实例都将立即生效）。
+使用时请注意。
+
+</p>
+<p>Note that <code>emitter.setMaxListeners(n)</code> still has precedence over
+<code>EventEmitter.defaultMaxListeners</code>.
+
+</p>
+<p>请注意，<code>emitter.setMaxListeners(n)</code> 优先于 <code>EventEmitter.defaultMaxListeners</code>。
+
+</p>
+<h3>emitter.listeners(event)<span><a href="events.html#events_emitter_listeners_event" id="events_emitter_listeners_event">#</a></span></h3>
+<p>Returns an array of listeners for the specified event.
+
+</p>
+<p>返回指定事件的 listener 数组
+
+</p>
+<pre><code>server.on(&apos;connection&apos;, function (stream) {
+  console.log(&apos;someone connected!&apos;);
+});
+console.log(util.inspect(server.listeners(&apos;connection&apos;))); // [ [Function] ]</code></pre>
+<h3>emitter.emit(event, [arg1], [arg2], [...])<span><a href="events.html#events_emitter_emit_event_arg1_arg2" id="events_emitter_emit_event_arg1_arg2">#</a></span></h3>
+<p>Execute each of the listeners in order with the supplied arguments.
+
+</p>
+<p>使用提供的参数按顺序执行指定事件的 listener
+
+</p>
+<p>Returns <code>true</code> if event had listeners, <code>false</code> otherwise.
+
+</p>
+<p>若事件有 listener 则返回 <code>true</code> 否则返回 <code>false</code>。
+
+</p>
+<h3>类方法: EventEmitter.listenerCount(emitter, event)<span><a href="events.html#events_eventemitter_listenercount_emitter_event" id="events_eventemitter_listenercount_emitter_event">#</a></span></h3>
+<p>Return the number of listeners for a given event.
+
+</p>
+<p>返回指定事件的 listener 数量
+
+</p>
+<h3>事件: &apos;newListener&apos;<span><a href="events.html#events_newlistener" id="events_newlistener">#</a></span></h3>
+<div><ul>
+<li><code>event</code> <span>String</span> The event name</li>
+<li><p><code>listener</code> <span>Function</span> The event handler function</p>
+</li>
+<li><p><code>event</code> <span>String</span> 事件名</p>
+</li>
+<li><code>listener</code> <span>Function</span> 事件处理函数</li>
+</div></ul>
+<p>This event is emitted any time someone adds a new listener.  It is unspecified
+if <code>listener</code> is in the list returned by <code>emitter.listeners(event)</code>.
+
+</p>
+<p>在添加 listener 时会发生该事件。
+此时无法确定 <code>listener</code> 是否在 <code>emitter.listeners(event)</code> 返回的列表中。
+
+</p>
+<h3>事件: &apos;removeListener&apos;<span><a href="events.html#events_removelistener" id="events_removelistener">#</a></span></h3>
+<div><ul>
+<li><code>event</code> <span>String</span> The event name</li>
+<li><p><code>listener</code> <span>Function</span> The event handler function</p>
+</li>
+<li><p><code>event</code> <span>String</span> 事件名</p>
+</li>
+<li><code>listener</code> <span>Function</span> 事件处理函数</li>
+</div></ul>
+<p>This event is emitted any time someone removes a listener.  It is unspecified
+if <code>listener</code> is in the list returned by <code>emitter.listeners(event)</code>.
+
+
+</p>
+<p>在移除 listener 时会发生该事件。
+此时无法确定 <code>listener</code> 是否在 <code>emitter.listeners(event)</code> 返回的列表中。
+</p>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>

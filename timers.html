@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>定时器 Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/timers.html">
+</head>
+<body class="alt apidoc" id="api-section-timers">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="timers.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="timers.html#timers">定时器</a><ul>
+<li><a href="timers.html#timers_settimeout_callback_delay_arg">setTimeout(callback, delay, [arg], [...])</a></li>
+<li><a href="timers.html#timers_cleartimeout_timeoutid">clearTimeout(timeoutId)</a></li>
+<li><a href="timers.html#timers_setinterval_callback_delay_arg">setInterval(callback, delay, [arg], [...])</a></li>
+<li><a href="timers.html#timers_clearinterval_intervalid">clearInterval(intervalId)</a></li>
+<li><a href="timers.html#timers_unref">unref()</a></li>
+<li><a href="timers.html#timers_ref">ref()</a></li>
+<li><a href="timers.html#timers_setimmediate_callback_arg">setImmediate(callback, [arg], [...])</a></li>
+<li><a href="timers.html#timers_clearimmediate_immediateid">clearImmediate(immediateId)</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>定时器<span><a href="timers.html#timers" id="timers">#</a></span></h1>
+<pre><code>稳定度: 5 - 已锁定</code></pre>
+<p>All of the timer functions are globals.  You do not need to <code>require()</code>
+this module in order to use them.
+
+</p>
+<p>所有的定时器函数都是全局变量. 你使用这些函数时不需要 <code>require()</code>模块.
+
+</p>
+<h2>setTimeout(callback, delay, [arg], [...])<span><a href="timers.html#timers_settimeout_callback_delay_arg" id="timers_settimeout_callback_delay_arg">#</a></span></h2>
+<p>To schedule execution of a one-time <code>callback</code> after <code>delay</code> milliseconds. Returns a
+<code>timeoutId</code> for possible use with <code>clearTimeout()</code>. Optionally you can
+also pass arguments to the callback.
+
+</p>
+<p>调度 <code>delay</code> 毫秒后的一次 <code>callback</code> 执行。返回一个可能被 <code>clearTimeout()</code> 用到的 <code>timeoutId</code>。可选地，您还能给回调传入参数。
+
+</p>
+<p>It is important to note that your callback will probably not be called in exactly
+<code>delay</code> milliseconds - Node.js makes no guarantees about the exact timing of when
+the callback will fire, nor of the ordering things will fire in. The callback will
+be called as close as possible to the time specified.
+
+</p>
+<p>请务必注意，您的回调有可能不会在准确的 <code>delay</code> 毫秒后被调用。Node.js 不保证回调被触发的精确时间和顺序。回调会在尽可能接近所指定时间上被调用。
+
+</p>
+<h2>clearTimeout(timeoutId)<span><a href="timers.html#timers_cleartimeout_timeoutid" id="timers_cleartimeout_timeoutid">#</a></span></h2>
+<p>Prevents a timeout from triggering.
+
+</p>
+<p>阻止一个 timeout 被触发。
+
+</p>
+<h2>setInterval(callback, delay, [arg], [...])<span><a href="timers.html#timers_setinterval_callback_delay_arg" id="timers_setinterval_callback_delay_arg">#</a></span></h2>
+<p>To schedule the repeated execution of <code>callback</code> every <code>delay</code> milliseconds.
+Returns a <code>intervalId</code> for possible use with <code>clearInterval()</code>. Optionally
+you can also pass arguments to the callback.
+
+</p>
+<p>调度每隔 <code>delay</code> 毫秒执行一次的 <code>callback</code>。返回一个可能被 <code>clearInterval()</code> 用到的 <code>intervalId</code>。可选地，您还能给回调传入参数。
+
+</p>
+<h2>clearInterval(intervalId)<span><a href="timers.html#timers_clearinterval_intervalid" id="timers_clearinterval_intervalid">#</a></span></h2>
+<p>Stops a interval from triggering.
+
+</p>
+<p>停止一个 interval 的触发。
+
+</p>
+<h2>unref()<span><a href="timers.html#timers_unref" id="timers_unref">#</a></span></h2>
+<p>The opaque value returned by <code>setTimeout</code> and <code>setInterval</code> also has the method
+<code>timer.unref()</code> which will allow you to create a timer that is active but if
+it is the only item left in the event loop won&apos;t keep the program running.
+If the timer is already <code>unref</code>d calling <code>unref</code> again will have no effect.
+
+</p>
+<p><code>setTimeout</code> 和 <code>setInterval</code> 所返回的值同时具有 <code>timer.unref()</code> 方法，允许您创建一个活动的、但当它是事件循环中仅剩的项目时不会保持程序运行的定时器。如果定时器已被 <code>unref</code>，再次调用 <code>unref</code> 不会产生其它影响。
+
+</p>
+<p>In the case of <code>setTimeout</code> when you <code>unref</code> you create a separate timer that
+will wakeup the event loop, creating too many of these may adversely effect
+event loop performance -- use wisely.
+
+</p>
+<p>在 <code>setTimeout</code> 的情景中当您 <code>unref</code> 您会创建另一个定时器，并唤醒事件循环。创建太多这种定时器可能会影响事件循环的性能，慎用。
+
+</p>
+<h2>ref()<span><a href="timers.html#timers_ref" id="timers_ref">#</a></span></h2>
+<p>If you had previously <code>unref()</code>d a timer you can call <code>ref()</code> to explicitly
+request the timer hold the program open. If the timer is already <code>ref</code>d calling
+<code>ref</code> again will have no effect.
+
+</p>
+<p>如果您之前 <code>unref()</code> 了一个定时器，您可以调用 <code>ref()</code> 来明确要求定时器让程序保持运行。如果定时器已被 <code>ref</code> 那么再次调用 <code>ref</code> 不会产生其它影响。
+
+</p>
+<h2>setImmediate(callback, [arg], [...])<span><a href="timers.html#timers_setimmediate_callback_arg" id="timers_setimmediate_callback_arg">#</a></span></h2>
+<p>To schedule the &quot;immediate&quot; execution of <code>callback</code> after I/O events
+callbacks and before <code>setTimeout</code> and <code>setInterval</code> . Returns an
+<code>immediateId</code> for possible use with <code>clearImmediate()</code>. Optionally you
+can also pass arguments to the callback.
+
+</p>
+<p>调度在所有 I/O 事件回调之后、<code>setTimeout</code> 和 <code>setInterval</code> 之前“立即”执行 <code>callback</code>。返回一个可能被 <code>clearImmediate()</code> 用到的 <code>immediateId</code>。可选地，您还能给回调传入参数。
+
+</p>
+<p>Callbacks for immediates are queued in the order in which they were created.
+The entire callback queue is processed every event loop iteration. If you queue
+an immediate from a inside an executing callback that immediate won&apos;t fire
+until the next event loop iteration.
+
+</p>
+<p>immediate 的回调以它们创建的顺序被加入队列。整个回调队列会在每个事件循环迭代中被处理。如果您在一个正被执行的回调中添加 immediate，那么这个 immediate 在下一个事件循环迭代之前都不会被触发。
+
+</p>
+<h2>clearImmediate(immediateId)<span><a href="timers.html#timers_clearimmediate_immediateid" id="timers_clearimmediate_immediateid">#</a></span></h2>
+<p>Stops an immediate from triggering.
+
+
+</p>
+<p>停止一个 immediate 的触发。</p>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>

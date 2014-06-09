@@ -1,0 +1,1005 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>加密（Crypto） Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/crypto.html">
+</head>
+<body class="alt apidoc" id="api-section-crypto">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="crypto.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="crypto.html#crypto_crypto">加密（Crypto）</a><ul>
+<li><a href="crypto.html#crypto_crypto_getciphers">crypto.getCiphers()</a></li>
+<li><a href="crypto.html#crypto_crypto_gethashes">crypto.getHashes()</a></li>
+<li><a href="crypto.html#crypto_crypto_createcredentials_details">crypto.createCredentials(details)</a></li>
+<li><a href="crypto.html#crypto_crypto_createhash_algorithm">crypto.createHash(algorithm)</a></li>
+<li><a href="crypto.html#crypto_hash">类: Hash</a><ul>
+<li><a href="crypto.html#crypto_hash_update_data_input_encoding">hash.update(data, [input_encoding])</a></li>
+<li><a href="crypto.html#crypto_hash_digest_encoding">hash.digest([encoding])</a></li>
+</ul>
+</li>
+<li><a href="crypto.html#crypto_crypto_createhmac_algorithm_key">crypto.createHmac(algorithm, key)</a></li>
+<li><a href="crypto.html#crypto_class_hmac">Class: Hmac</a><ul>
+<li><a href="crypto.html#crypto_hmac_update_data">hmac.update(data)</a></li>
+<li><a href="crypto.html#crypto_hmac_digest_encoding">hmac.digest([encoding])</a></li>
+</ul>
+</li>
+<li><a href="crypto.html#crypto_crypto_createcipher_algorithm_password">crypto.createCipher(algorithm, password)</a></li>
+<li><a href="crypto.html#crypto_crypto_createcipheriv_algorithm_key_iv">crypto.createCipheriv(algorithm, key, iv)</a></li>
+<li><a href="crypto.html#crypto_class_cipher">Class: Cipher</a><ul>
+<li><a href="crypto.html#crypto_cipher_update_data_input_encoding_output_encoding">cipher.update(data, [input_encoding], [output_encoding])</a></li>
+<li><a href="crypto.html#crypto_cipher_final_output_encoding">cipher.final([output_encoding])</a></li>
+<li><a href="crypto.html#crypto_cipher_setautopadding_auto_padding_true">cipher.setAutoPadding(auto_padding=true)</a></li>
+</ul>
+</li>
+<li><a href="crypto.html#crypto_crypto_createdecipher_algorithm_password">crypto.createDecipher(algorithm, password)</a></li>
+<li><a href="crypto.html#crypto_crypto_createdecipheriv_algorithm_key_iv">crypto.createDecipheriv(algorithm, key, iv)</a></li>
+<li><a href="crypto.html#crypto_class_decipher">Class: Decipher</a><ul>
+<li><a href="crypto.html#crypto_decipher_update_data_input_encoding_output_encoding">decipher.update(data, [input_encoding], [output_encoding])</a></li>
+<li><a href="crypto.html#crypto_decipher_final_output_encoding">decipher.final([output_encoding])</a></li>
+<li><a href="crypto.html#crypto_decipher_setautopadding_auto_padding_true">decipher.setAutoPadding(auto_padding=true)</a></li>
+</ul>
+</li>
+<li><a href="crypto.html#crypto_crypto_createsign_algorithm">crypto.createSign(algorithm)</a></li>
+<li><a href="crypto.html#crypto_class_sign">Class: Sign</a><ul>
+<li><a href="crypto.html#crypto_sign_update_data">sign.update(data)</a></li>
+<li><a href="crypto.html#crypto_sign_sign_private_key_output_format">sign.sign(private_key, [output_format])</a></li>
+</ul>
+</li>
+<li><a href="crypto.html#crypto_crypto_createverify_algorithm">crypto.createVerify(algorithm)</a></li>
+<li><a href="crypto.html#crypto_class_verify">Class: Verify</a><ul>
+<li><a href="crypto.html#crypto_verifier_update_data">verifier.update(data)</a></li>
+<li><a href="crypto.html#crypto_verifier_verify_object_signature_signature_format">verifier.verify(object, signature, [signature_format])</a></li>
+</ul>
+</li>
+<li><a href="crypto.html#crypto_crypto_creatediffiehellman_prime_length">crypto.createDiffieHellman(prime_length)</a></li>
+<li><a href="crypto.html#crypto_crypto_creatediffiehellman_prime_encoding">crypto.createDiffieHellman(prime, [encoding])</a></li>
+<li><a href="crypto.html#crypto_class_diffiehellman">Class: DiffieHellman</a><ul>
+<li><a href="crypto.html#crypto_diffiehellman_generatekeys_encoding">diffieHellman.generateKeys([encoding])</a></li>
+<li><a href="crypto.html#crypto_diffiehellman_computesecret_other_public_key_input_encoding_output_encoding">diffieHellman.computeSecret(other_public_key, [input_encoding], [output_encoding])</a></li>
+<li><a href="crypto.html#crypto_diffiehellman_getprime_encoding">diffieHellman.getPrime([encoding])</a></li>
+<li><a href="crypto.html#crypto_diffiehellman_getgenerator_encoding">diffieHellman.getGenerator([encoding])</a></li>
+<li><a href="crypto.html#crypto_diffiehellman_getpublickey_encoding">diffieHellman.getPublicKey([encoding])</a></li>
+<li><a href="crypto.html#crypto_diffiehellman_getprivatekey_encoding">diffieHellman.getPrivateKey([encoding])</a></li>
+<li><a href="crypto.html#crypto_diffiehellman_setpublickey_public_key_encoding">diffieHellman.setPublicKey(public_key, [encoding])</a></li>
+<li><a href="crypto.html#crypto_diffiehellman_setprivatekey_private_key_encoding">diffieHellman.setPrivateKey(private_key, [encoding])</a></li>
+</ul>
+</li>
+<li><a href="crypto.html#crypto_crypto_getdiffiehellman_group_name">crypto.getDiffieHellman(group_name)</a></li>
+<li><a href="crypto.html#crypto_crypto_pbkdf2_password_salt_iterations_keylen_callback">crypto.pbkdf2(password, salt, iterations, keylen, callback)</a></li>
+<li><a href="crypto.html#crypto_crypto_pbkdf2sync_password_salt_iterations_keylen">crypto.pbkdf2Sync(password, salt, iterations, keylen)</a></li>
+<li><a href="crypto.html#crypto_crypto_randombytes_size_callback">crypto.randomBytes(size, [callback])</a></li>
+<li><a href="crypto.html#crypto_crypto_pseudorandombytes_size_callback">crypto.pseudoRandomBytes(size, [callback])</a></li>
+<li><a href="crypto.html#crypto_crypto_default_encoding">crypto.DEFAULT_ENCODING</a></li>
+<li><a href="crypto.html#crypto_recent_api_changes">Recent API Changes</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>加密（Crypto）<span><a href="crypto.html#crypto_crypto" id="crypto_crypto">#</a></span></h1>
+<pre><code>稳定度: 2 - 不稳定；正在讨论未来版本的API变动。会尽量减少重大变动的发生。详见下文。</code></pre>
+<p>Use <code>require(&apos;crypto&apos;)</code> to access this module.
+
+</p>
+<p>使用 <code>require(&apos;crypto&apos;)</code> 来调用该模块。
+
+</p>
+<p>The crypto module offers a way of encapsulating secure credentials to be
+used as part of a secure HTTPS net or http connection.
+
+</p>
+<p>crypto模块提供在HTTPS或HTTP连接中封装安全凭证的方法.
+
+</p>
+<p>It also offers a set of wrappers for OpenSSL&apos;s hash, hmac, cipher,
+decipher, sign and verify methods.
+
+</p>
+<p>它提供OpenSSL中的一系列哈希方法，包括hmac、cipher、decipher、签名和验证等方法的封装。
+
+</p>
+<h2>crypto.getCiphers()<span><a href="crypto.html#crypto_crypto_getciphers" id="crypto_crypto_getciphers">#</a></span></h2>
+<p>Returns an array with the names of the supported ciphers.
+
+</p>
+<p>返回一个数组，包含支持的加密算法的名字。
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>var ciphers = crypto.getCiphers();
+console.log(ciphers); // [&apos;AES-128-CBC&apos;, &apos;AES-128-CBC-HMAC-SHA1&apos;, ...]</code></pre>
+<h2>crypto.getHashes()<span><a href="crypto.html#crypto_crypto_gethashes" id="crypto_crypto_gethashes">#</a></span></h2>
+<p>Returns an array with the names of the supported hash algorithms.
+
+</p>
+<p>返回一个包含所支持的哈希算法的数组。
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>var hashes = crypto.getHashes();
+console.log(hashes); // [&apos;sha&apos;, &apos;sha1&apos;, &apos;sha1WithRSAEncryption&apos;, ...]</code></pre>
+<h2>crypto.createCredentials(details)<span><a href="crypto.html#crypto_crypto_createcredentials_details" id="crypto_crypto_createcredentials_details">#</a></span></h2>
+<p>Creates a credentials object, with the optional details being a
+dictionary with keys:
+
+</p>
+<p>创建一个加密凭证对象，接受一个可选的参数对象：
+
+</p>
+<ul>
+<li><code>pfx</code> : A string or buffer holding the PFX or PKCS12 encoded private
+key, certificate and CA certificates</li>
+<li><code>key</code> : A string holding the PEM encoded private key</li>
+<li><code>passphrase</code> : A string of passphrase for the private key or pfx</li>
+<li><code>cert</code> : A string holding the PEM encoded certificate</li>
+<li><code>ca</code> : Either a string or list of strings of PEM encoded CA
+certificates to trust.</li>
+<li><code>crl</code> : Either a string or list of strings of PEM encoded CRLs
+(Certificate Revocation List)</li>
+<li><p><code>ciphers</code>: A string describing the ciphers to use or exclude.
+Consult
+<a href="http://www.openssl.org/docs/apps/ciphers.html#CIPHER_LIST_FORMAT">http://www.openssl.org/docs/apps/ciphers.html#CIPHER_LIST_FORMAT</a>
+for details on the format.</p>
+</li>
+<li><p><code>pfx</code> : 一个字符串或者buffer对象，代表经PFX或者PKCS12编码产生的私钥、证书以及CA证书</p>
+</li>
+<li><code>key</code> : 一个字符串，代表经PEM编码产生的私钥</li>
+<li><code>passphrase</code> : 私钥或者pfx的密码</li>
+<li><code>cert</code> : 一个字符串，代表经PEM编码产生的证书</li>
+<li><code>ca</code> : 一个字符串或者字符串数组，表示可信任的经PEM编码产生的CA证书列表</li>
+<li><code>crl</code> : 一个字符串或者字符串数组，表示经PEM编码产生的CRL（证书吊销列表 Certificate Revocation List）</li>
+<li><code>ciphers</code>: 一个字符串，表示需要使用或者排除的加密算法
+可以在
+<a href="http://www.openssl.org/docs/apps/ciphers.html#CIPHER_LIST_FORMAT">http://www.openssl.org/docs/apps/ciphers.html#CIPHER_LIST_FORMAT</a>
+查看更多关于加密算法格式的资料。</li>
+</ul>
+<p>If no &apos;ca&apos; details are given, then node.js will use the default
+publicly trusted list of CAs as given in
+</p>
+<p><a href="http://mxr.mozilla.org/mozilla/source/security/nss/lib/ckfw/builtins/certdata.txt">http://mxr.mozilla.org/mozilla/source/security/nss/lib/ckfw/builtins/certdata.txt</a>.
+
+</p>
+<p>如果没有指定<code>ca</code>，node.js会使用<a href="http://mxr.mozilla.org/mozilla/source/security/nss/lib/ckfw/builtins/certdata.txt">http://mxr.mozilla.org/mozilla/source/security/nss/lib/ckfw/builtins/certdata.txt</a>提供的公共可信任的CA列表。
+
+</p>
+<h2>crypto.createHash(algorithm)<span><a href="crypto.html#crypto_crypto_createhash_algorithm" id="crypto_crypto_createhash_algorithm">#</a></span></h2>
+<p>Creates and returns a hash object, a cryptographic hash with the given
+algorithm which can be used to generate hash digests.
+
+</p>
+<p>创建并返回一个哈希对象，一个使用所给算法的用于生成摘要的加密哈希。
+
+</p>
+<p><code>algorithm</code> is dependent on the available algorithms supported by the
+version of OpenSSL on the platform. Examples are <code>&apos;sha1&apos;</code>, <code>&apos;md5&apos;</code>,
+<code>&apos;sha256&apos;</code>, <code>&apos;sha512&apos;</code>, etc.  On recent releases, <code>openssl
+list-message-digest-algorithms</code> will display the available digest
+algorithms.
+
+</p>
+<p><code>algorithm</code> 取决与平台上所安装的 OpenSSL 版本所支持的算法。比如 <code>&apos;sha1&apos;</code>、<code>&apos;md5&apos;</code>、<code>&apos;sha256&apos;</code>、<code>&apos;sha512&apos;</code> 等等。在最近的发行版本中，<code>openssl list-message-digest-algorithms</code> 会显示可用的摘要算法。
+
+</p>
+<p>Example: this program that takes the sha1 sum of a file
+
+</p>
+<p>例子：这段程序会计算出一个文件的 sha1 摘要值。
+
+</p>
+<pre><code>s.on(&apos;end&apos;, function() {
+  var d = shasum.digest(&apos;hex&apos;);
+  console.log(d + &apos;  &apos; + filename);
+});</code></pre>
+<h2>类: Hash<span><a href="crypto.html#crypto_hash" id="crypto_hash">#</a></span></h2>
+<p>The class for creating hash digests of data.
+
+</p>
+<p>创建数据哈希摘要的类。
+
+</p>
+<p>It is a <a href="stream.html">stream</a> that is both readable and writable.  The
+written data is used to compute the hash.  Once the writable side of
+the stream is ended, use the <code>read()</code> method to get the computed hash
+digest.  The legacy <code>update</code> and <code>digest</code> methods are also supported.
+
+</p>
+<p>它是一个既可读又可写的<a href="stream.html">流</a>。所写入的数据会被用作计算哈希。当流的可写端终止后，使用 <code>read()</code> 方法来获取计算得的哈希摘要。同时也支持旧有的 <code>update</code> 和 <code>digest</code> 方法。
+
+</p>
+<p>Returned by <code>crypto.createHash</code>.
+
+</p>
+<p>通过 <code>crypto.createHash</code> 返回。
+
+</p>
+<h3>hash.update(data, [input_encoding])<span><a href="crypto.html#crypto_hash_update_data_input_encoding" id="crypto_hash_update_data_input_encoding">#</a></span></h3>
+<p>Updates the hash content with the given <code>data</code>, the encoding of which
+is given in <code>input_encoding</code> and can be <code>&apos;utf8&apos;</code>, <code>&apos;ascii&apos;</code> or
+<code>&apos;binary&apos;</code>.  If no encoding is provided, then a buffer is expected.
+
+</p>
+<p>通过提供的数据更新哈希对象，可以通过<code>input_encoding</code>指定编码为<code>&apos;utf8&apos;</code>、<code>&apos;ascii&apos;</code>或者
+<code>&apos;binary&apos;</code>。如果没有指定编码，将作为二进制数据（buffer）处理。
+
+</p>
+<p>This can be called many times with new data as it is streamed.
+
+</p>
+<p>因为它是流式数据，所以可以使用不同的数据调用很多次。
+
+</p>
+<h3>hash.digest([encoding])<span><a href="crypto.html#crypto_hash_digest_encoding" id="crypto_hash_digest_encoding">#</a></span></h3>
+<p>Calculates the digest of all of the passed data to be hashed.  The
+<code>encoding</code> can be <code>&apos;hex&apos;</code>, <code>&apos;binary&apos;</code> or <code>&apos;base64&apos;</code>.  If no encoding
+is provided, then a buffer is returned.
+
+</p>
+<p>计算传入的所有数据的摘要值。<code>encoding</code>可以是<code>&apos;hex&apos;</code>、<code>&apos;binary&apos;</code>或者<code>&apos;base64&apos;</code>，如果没有指定，会返回一个buffer对象。
+
+</p>
+<p>Note: <code>hash</code> object can not be used after <code>digest()</code> method has been
+called.
+
+</p>
+<p>注意：<code>hash</code> 对象在 <code>digest()</code> 方法被调用后将不可用。
+
+</p>
+<h2>crypto.createHmac(algorithm, key)<span><a href="crypto.html#crypto_crypto_createhmac_algorithm_key" id="crypto_crypto_createhmac_algorithm_key">#</a></span></h2>
+<p>Creates and returns a hmac object, a cryptographic hmac with the given
+algorithm and key.
+
+</p>
+<p>创建并返回一个hmac对象，也就是通过给定的加密算法和密钥生成的加密图谱（cryptographic）。
+
+</p>
+<p>It is a <a href="stream.html">stream</a> that is both readable and writable.  The
+written data is used to compute the hmac.  Once the writable side of
+the stream is ended, use the <code>read()</code> method to get the computed
+digest.  The legacy <code>update</code> and <code>digest</code> methods are also supported.
+
+</p>
+<p>它是一个既可读又可写的流（<a href="stream.html">stream</a>）。写入的数据会被用于计算hmac。写入终止后，可以使用<code>read()</code>方法获取计算后的摘要值。之前版本的<code>update</code>和<code>digest</code>方法仍然支持。
+
+</p>
+<p><code>algorithm</code> is dependent on the available algorithms supported by
+OpenSSL - see createHash above.  <code>key</code> is the hmac key to be used.
+
+</p>
+<p><code>algorithm</code>在OpenSSL支持的算法列表中被抛弃了——见上方createHash部分。<code>key</code>是hmac算法用到的密钥。
+
+</p>
+<h2>Class: Hmac<span><a href="crypto.html#crypto_class_hmac" id="crypto_class_hmac">#</a></span></h2>
+<p>Class for creating cryptographic hmac content.
+
+</p>
+<p>用于创建hmac加密图谱（cryptographic）的类。
+
+</p>
+<p>Returned by <code>crypto.createHmac</code>.
+
+</p>
+<p>由<code>crypto.createHmac</code>返回。
+
+</p>
+<h3>hmac.update(data)<span><a href="crypto.html#crypto_hmac_update_data" id="crypto_hmac_update_data">#</a></span></h3>
+<p>Update the hmac content with the given <code>data</code>.  This can be called
+many times with new data as it is streamed.
+
+</p>
+<p>通过提供的数据更新hmac对象。因为它是流式数据，所以可以使用新数据调用很多次。
+
+</p>
+<h3>hmac.digest([encoding])<span><a href="crypto.html#crypto_hmac_digest_encoding" id="crypto_hmac_digest_encoding">#</a></span></h3>
+<p>Calculates the digest of all of the passed data to the hmac.  The
+<code>encoding</code> can be <code>&apos;hex&apos;</code>, <code>&apos;binary&apos;</code> or <code>&apos;base64&apos;</code>.  If no encoding
+is provided, then a buffer is returned.
+
+</p>
+<p>计算传入的所有数据的hmac摘要值。<code>encoding</code>可以是<code>&apos;hex&apos;</code>、<code>&apos;binary&apos;</code>或者<code>&apos;base64&apos;</code>，如果没有指定，会返回一个buffer对象。
+
+</p>
+<p>Note: <code>hmac</code> object can not be used after <code>digest()</code> method has been
+called.
+
+</p>
+<p>注意： <code>hmac</code>对象在调用<code>digest()</code>之后就不再可用了。
+
+</p>
+<h2>crypto.createCipher(algorithm, password)<span><a href="crypto.html#crypto_crypto_createcipher_algorithm_password" id="crypto_crypto_createcipher_algorithm_password">#</a></span></h2>
+<p>Creates and returns a cipher object, with the given algorithm and
+password.
+
+</p>
+<p>用给定的算法和密码，创建并返回一个cipher加密算法的对象。（译者：cipher 就是加密算法的意思， ssl 的 cipher 主要是对称加密算法和不对称加密算法的组合。）
+
+</p>
+<p><code>algorithm</code> is dependent on OpenSSL, examples are <code>&apos;aes192&apos;</code>, etc.  On
+recent releases, <code>openssl list-cipher-algorithms</code> will display the
+available cipher algorithms.  <code>password</code> is used to derive key and IV,
+which must be a <code>&apos;binary&apos;</code> encoded string or a <a href="buffer.html">buffer</a>.
+
+</p>
+<p><code>algorithm</code>算法是依赖OpenSSL库的, 例如: <code>&apos;aes192&apos;</code>算法等。在最近发布的版本， 执行命令 <code>openssl list-cipher-algorithms</code> 就会显示出所有可用的加密算法，<code>password</code>是用来派生key和IV的，它必须是一个 <code>&apos;binary&apos;</code> 2进制格式的字符串或者是一个<a href="buffer.html">buffer</a>。（译者：key表示密钥，IV表示向量在加密过程和解密过程都要使用）
+
+</p>
+<p>It is a <a href="stream.html">stream</a> that is both readable and writable.  The
+written data is used to compute the hash.  Once the writable side of
+the stream is ended, use the <code>read()</code> method to get the computed hash
+digest.  The legacy <code>update</code> and <code>digest</code> methods are also supported.
+
+</p>
+<p>它是一个既可读又可写的<a href="stream.html">流</a>。所写入的数据会被用作计算哈希。当流的可写端终止后，使用 <code>read()</code> 方法来获取计算得的哈希摘要。同时也支持旧有的 <code>update</code> 和 <code>digest</code> 方法。
+
+</p>
+<h2>crypto.createCipheriv(algorithm, key, iv)<span><a href="crypto.html#crypto_crypto_createcipheriv_algorithm_key_iv" id="crypto_crypto_createcipheriv_algorithm_key_iv">#</a></span></h2>
+<p>Creates and returns a cipher object, with the given algorithm, key and
+iv.
+
+</p>
+<p>用给定的算法、密码和向量，创建并返回一个cipher加密算法的对象。
+
+</p>
+<p><code>algorithm</code> is the same as the argument to <code>createCipher()</code>.  <code>key</code> is
+the raw key used by the algorithm.  <code>iv</code> is an <a href="http://en.wikipedia.org/wiki/Initialization_vector">initialization
+vector</a>.
+
+</p>
+<p><code>algorithm</code>算法和<code>createCipher()</code> 方法的参数相同.  <code>key</code>密钥是一个被算法使用的原始密钥，<code>iv</code>是一个<a href="http://en.wikipedia.org/wiki/Initialization_vector">初始化向量</a>。
+
+</p>
+<p><code>key</code> and <code>iv</code> must be <code>&apos;binary&apos;</code> encoded strings or
+<a href="buffer.html">buffers</a>.
+
+</p>
+<p><code>key</code>密钥和<code>iv</code>向量必须是<code>&apos;binary&apos;</code>2进制格式的字符串或<a href="buffer.html">buffers</a>.
+
+</p>
+<h2>Class: Cipher<span><a href="crypto.html#crypto_class_cipher" id="crypto_class_cipher">#</a></span></h2>
+<p>Class for encrypting data.
+
+</p>
+<p>这个类是用来加密数据的。
+
+</p>
+<p>Returned by <code>crypto.createCipher</code> and <code>crypto.createCipheriv</code>.
+
+</p>
+<p>这个类由 <code>crypto.createCipher</code> 和 <code>crypto.createCipheriv</code> 返回。
+
+</p>
+<p>Cipher objects are <a href="stream.html">streams</a> that are both readable and
+writable.  The written plain text data is used to produce the
+encrypted data on the readable side.  The legacy <code>update</code> and <code>final</code>
+methods are also supported.
+
+</p>
+<p>Cipher加密对象是 <a href="stream.html">streams</a>，他是具有 readable 可读和 writable 可写的。写入的纯文本数据是用来在可读流一侧加密数据的。
+以前版本的<code>update</code> 和<code>final</code>方法也还是支持的。
+
+</p>
+<h3>cipher.update(data, [input_encoding], [output_encoding])<span><a href="crypto.html#crypto_cipher_update_data_input_encoding_output_encoding" id="crypto_cipher_update_data_input_encoding_output_encoding">#</a></span></h3>
+<p>Updates the cipher with <code>data</code>, the encoding of which is given in
+<code>input_encoding</code> and can be <code>&apos;utf8&apos;</code>, <code>&apos;ascii&apos;</code> or <code>&apos;binary&apos;</code>.  If no
+encoding is provided, then a buffer is expected.
+
+</p>
+<p>用<code>data</code>参数更新cipher加密对象, 它的编码<code>input_encoding</code>必须是下列给定编码的 <code>&apos;utf8&apos;</code>, <code>&apos;ascii&apos;</code> or <code>&apos;binary&apos;</code> 中一种。如果没有编码参数，那么打他参数必须是一个buffer。
+
+</p>
+<p>The <code>output_encoding</code> specifies the output format of the enciphered
+data, and can be <code>&apos;binary&apos;</code>, <code>&apos;base64&apos;</code> or <code>&apos;hex&apos;</code>.  If no encoding is
+provided, then a buffer is returned.
+
+</p>
+<p>参数 <code>output_encoding</code>输出编码指定了加密数据的输出格式，可以是<code>&apos;binary&apos;</code>, <code>&apos;base64&apos;</code> 或者<code>&apos;hex&apos;</code>，如果没有提供这个参数，buffer将会返回。
+
+</p>
+<p>Returns the enciphered contents, and can be called many times with new
+data as it is streamed.
+
+</p>
+<p>返回加密内容，并且Returns the enciphered contents, 用新数据作为流的话，它可以被调用多次。
+
+</p>
+<h3>cipher.final([output_encoding])<span><a href="crypto.html#crypto_cipher_final_output_encoding" id="crypto_cipher_final_output_encoding">#</a></span></h3>
+<p>Returns any remaining enciphered contents, with <code>output_encoding</code>
+being one of: <code>&apos;binary&apos;</code>, <code>&apos;base64&apos;</code> or <code>&apos;hex&apos;</code>.  If no encoding is
+provided, then a buffer is returned.
+
+</p>
+<p>返回剩余的加密内容，<code>output_encoding</code>为<code>&apos;binary&apos;</code>, <code>&apos;base64&apos;</code> 或 <code>&apos;hex&apos;</code>中的任意一个。 如果没有提供编码格式，则返回一个buffer对象。
+
+</p>
+<p>Note: <code>cipher</code> object can not be used after <code>final()</code> method has been
+called.
+
+</p>
+<p>注: 调用<code>final()</code>函数后<code>cipher</code> 对象不能被使用。
+
+</p>
+<h3>cipher.setAutoPadding(auto_padding=true)<span><a href="crypto.html#crypto_cipher_setautopadding_auto_padding_true" id="crypto_cipher_setautopadding_auto_padding_true">#</a></span></h3>
+<p>You can disable automatic padding of the input data to block size. If
+<code>auto_padding</code> is false, the length of the entire input data must be a
+multiple of the cipher&apos;s block size or <code>final</code> will fail.  Useful for
+non-standard padding, e.g. using <code>0x0</code> instead of PKCS padding. You
+must call this before <code>cipher.final</code>.
+
+</p>
+<p>对于将输入数据自动填充到块大小的功能，你可以将其禁用。如果<code>auto_padding</code>是false， 那么整个输入数据的长度必须是加密器的块大小的整倍数，否则<code>final</code>会失败。这对非标准的填充很有用，例如使用<code>0x0</code>而不是PKCS的填充。这个函数必须在<code>cipher.final</code>之前调用。
+
+</p>
+<h2>crypto.createDecipher(algorithm, password)<span><a href="crypto.html#crypto_crypto_createdecipher_algorithm_password" id="crypto_crypto_createdecipher_algorithm_password">#</a></span></h2>
+<p>Creates and returns a decipher object, with the given algorithm and
+key.  This is the mirror of the <a href="crypto.html#crypto_crypto_createcipher_algorithm_password">createCipher()</a> above.
+
+</p>
+<p>根据给定的算法和密钥，创建并返回一个解密器对象。这是上述<a href="crypto.html#crypto_crypto_createcipher_algorithm_password">createCipher()</a>的一个镜像。
+
+</p>
+<h2>crypto.createDecipheriv(algorithm, key, iv)<span><a href="crypto.html#crypto_crypto_createdecipheriv_algorithm_key_iv" id="crypto_crypto_createdecipheriv_algorithm_key_iv">#</a></span></h2>
+<p>Creates and returns a decipher object, with the given algorithm, key
+and iv.  This is the mirror of the <a href="crypto.html#crypto_crypto_createcipheriv_algorithm_key_iv">createCipheriv()</a> above.
+
+</p>
+<p>Creates and returns a decipher object, with the given algorithm, key
+and iv.  This is the mirror of the <a href="crypto.html#crypto_crypto_createcipheriv_algorithm_key_iv">createCipheriv()</a> above.
+根据给定的算法，密钥和初始化向量，创建并返回一个解密器对象。这是上述<a href="crypto.html#crypto_crypto_createcipheriv_algorithm_key_iv">createCipheriv()</a>的一个镜像。
+
+
+</p>
+<h2>Class: Decipher<span><a href="crypto.html#crypto_class_decipher" id="crypto_class_decipher">#</a></span></h2>
+<p>Class for decrypting data.
+
+</p>
+<p>解密数据的类。
+
+</p>
+<p>Returned by <code>crypto.createDecipher</code> and <code>crypto.createDecipheriv</code>.
+
+</p>
+<p>由<code>crypto.createDecipher</code>和<code>crypto.createDecipheriv</code>返回。
+
+</p>
+<p>Decipher objects are <a href="stream.html">streams</a> that are both readable and
+writable.  The written enciphered data is used to produce the
+plain-text data on the the readable side.  The legacy <code>update</code> and
+<code>final</code> methods are also supported.
+
+</p>
+<p>解密器对象是可读写的<a href="stream.html">流</a>对象。用被写入的加密数据生成可读的平文数据。解码器对象也支持The legacy <code>update</code>和
+<code>final</code>函数。
+
+</p>
+<h3>decipher.update(data, [input_encoding], [output_encoding])<span><a href="crypto.html#crypto_decipher_update_data_input_encoding_output_encoding" id="crypto_decipher_update_data_input_encoding_output_encoding">#</a></span></h3>
+<p>Updates the decipher with <code>data</code>, which is encoded in <code>&apos;binary&apos;</code>,
+<code>&apos;base64&apos;</code> or <code>&apos;hex&apos;</code>.  If no encoding is provided, then a buffer is
+expected.
+
+</p>
+<p>用<code>data</code>来更新解密器，其中<code>data</code>以<code>&apos;binary&apos;</code>,
+<code>&apos;base64&apos;</code> 或 <code>&apos;hex&apos;</code>进行编码。如果没有指明编码方式，则默认<code>data</code>是一个buffer对象。
+
+</p>
+<p>The <code>output_decoding</code> specifies in what format to return the
+deciphered plaintext: <code>&apos;binary&apos;</code>, <code>&apos;ascii&apos;</code> or <code>&apos;utf8&apos;</code>.  If no
+encoding is provided, then a buffer is returned.
+
+</p>
+<p><code>output_decoding</code>指明了用以下哪种编码方式返回解密后的平文：<code>&apos;binary&apos;</code>, <code>&apos;ascii&apos;</code> 或 <code>&apos;utf8&apos;</code>。如果没有指明编码方式，则返回一个buffer对象。
+
+</p>
+<h3>decipher.final([output_encoding])<span><a href="crypto.html#crypto_decipher_final_output_encoding" id="crypto_decipher_final_output_encoding">#</a></span></h3>
+<p>Returns any remaining plaintext which is deciphered, with
+<code>output_encoding</code> being one of: <code>&apos;binary&apos;</code>, <code>&apos;ascii&apos;</code> or <code>&apos;utf8&apos;</code>.  If
+no encoding is provided, then a buffer is returned.
+
+</p>
+<p>返回剩余的加密内容，<code>output_encoding</code>为<code>&apos;binary&apos;</code>, <code>&apos;ascii&apos;</code> 或 <code>&apos;utf8&apos;</code>中的任意一个。如果没有指明编码方式，则返回一个buffer对象。
+
+</p>
+<p>Note: <code>decipher</code> object can not be used after <code>final()</code> method has been
+called.
+
+</p>
+<p>注: 调用<code>final()</code>函数后不能使用<code>decipher</code> 对象。
+
+</p>
+<h3>decipher.setAutoPadding(auto_padding=true)<span><a href="crypto.html#crypto_decipher_setautopadding_auto_padding_true" id="crypto_decipher_setautopadding_auto_padding_true">#</a></span></h3>
+<p>You can disable auto padding if the data has been encrypted without
+standard block padding to prevent <code>decipher.final</code> from checking and
+removing it. Can only work if the input data&apos;s length is a multiple of
+the ciphers block size. You must call this before streaming data to
+<code>decipher.update</code>.
+
+</p>
+<p>如果数据以非标准的块填充方式被加密，那么你可以禁用自动填充来防止<code>decipher.final</code>对数据进行检查和移除。这只有在输入数据的长度是加密器块大小的整倍数时才有效。这个函数必须在将数据流传递给<code>decipher.update</code>之前调用。
+
+</p>
+<h2>crypto.createSign(algorithm)<span><a href="crypto.html#crypto_crypto_createsign_algorithm" id="crypto_crypto_createsign_algorithm">#</a></span></h2>
+<p>Creates and returns a signing object, with the given algorithm.  On
+recent OpenSSL releases, <code>openssl list-public-key-algorithms</code> will
+display the available signing algorithms. Examples are <code>&apos;RSA-SHA256&apos;</code>.
+
+</p>
+<p>根据给定的算法，创建并返回一个signing对象。在最近的OpenSSL发布版本中，<code>openssl list-public-key-algorithms</code>会列出可用的签名算法，例如<code>&apos;RSA-SHA256&apos;</code>。
+
+</p>
+<h2>Class: Sign<span><a href="crypto.html#crypto_class_sign" id="crypto_class_sign">#</a></span></h2>
+<p>Class for generating signatures.
+
+</p>
+<p>生成数字签名的类
+
+</p>
+<p>Returned by <code>crypto.createSign</code>.
+
+</p>
+<p>由<code>crypto.createSign</code>返回。
+
+</p>
+<p>Sign objects are writable <a href="stream.html">streams</a>.  The written data is
+used to generate the signature.  Once all of the data has been
+written, the <code>sign</code> method will return the signature.  The legacy
+<code>update</code> method is also supported.
+
+</p>
+<p>Sign对象是可写的<a href="stream.html">流</a>对象。被写入的数据用来生成数字签名。当所有的数据都被写入后，<code>sign</code> 函数会返回数字签名。Sign对象也支持The legacy
+<code>update</code>函数。
+
+</p>
+<h3>sign.update(data)<span><a href="crypto.html#crypto_sign_update_data" id="crypto_sign_update_data">#</a></span></h3>
+<p>Updates the sign object with data.  This can be called many times
+with new data as it is streamed.
+
+</p>
+<p>用<code>data</code>来更新sign对象。 This can be called many times
+with new data as it is streamed.
+
+</p>
+<h3>sign.sign(private_key, [output_format])<span><a href="crypto.html#crypto_sign_sign_private_key_output_format" id="crypto_sign_sign_private_key_output_format">#</a></span></h3>
+<p>Calculates the signature on all the updated data passed through the
+sign.  <code>private_key</code> is a string containing the PEM encoded private
+key for signing.
+
+</p>
+<p>根据所有传送给sign的更新数据来计算电子签名。<code>private_key</code>是一个包含了签名私钥的字符串，而该私钥是用PEM编码的。
+
+</p>
+<p>Returns the signature in <code>output_format</code> which can be <code>&apos;binary&apos;</code>,
+<code>&apos;hex&apos;</code> or <code>&apos;base64&apos;</code>. If no encoding is provided, then a buffer is
+returned.
+
+</p>
+<p>返回一个数字签名，该签名的格式可以是<code>&apos;binary&apos;</code>,
+<code>&apos;hex&apos;</code>或 <code>&apos;base64&apos;</code>. 如果没有指明编码方式，则返回一个buffer对象。
+
+</p>
+<p>Note: <code>sign</code> object can not be used after <code>sign()</code> method has been
+called.
+
+</p>
+<p>注：调用<code>sign()</code>后不能使用<code>sign</code>对象。
+
+</p>
+<h2>crypto.createVerify(algorithm)<span><a href="crypto.html#crypto_crypto_createverify_algorithm" id="crypto_crypto_createverify_algorithm">#</a></span></h2>
+<p>Creates and returns a verification object, with the given algorithm.
+This is the mirror of the signing object above.
+
+</p>
+<p>根据指明的算法，创建并返回一个验证器对象。这是上述签名器对象的镜像。
+
+</p>
+<h2>Class: Verify<span><a href="crypto.html#crypto_class_verify" id="crypto_class_verify">#</a></span></h2>
+<p>Class for verifying signatures.
+
+</p>
+<p>用来验证数字签名的类。
+
+</p>
+<p>Returned by <code>crypto.createVerify</code>.
+
+</p>
+<p>由 <code>crypto.createVerify</code>返回。
+
+</p>
+<p>Verify objects are writable <a href="stream.html">streams</a>.  The written data
+is used to validate against the supplied signature.  Once all of the
+data has been written, the <code>verify</code> method will return true if the
+supplied signature is valid.  The legacy <code>update</code> method is also
+supported.
+
+</p>
+<p>验证器对象是可写的<a href="stream.html">流</a>对象.  被写入的数据会被用来验证提供的数字签名。在所有的数据被写入后，如果提供的数字签名有效，<code>verify</code>函数会返回真。验证器对象也支持 The legacy <code>update</code>函数。
+
+</p>
+<h3>verifier.update(data)<span><a href="crypto.html#crypto_verifier_update_data" id="crypto_verifier_update_data">#</a></span></h3>
+<p>Updates the verifier object with data.  This can be called many times
+with new data as it is streamed.
+
+</p>
+<p>用数据更新验证器对象。This can be called many times
+with new data as it is streamed.
+
+</p>
+<h3>verifier.verify(object, signature, [signature_format])<span><a href="crypto.html#crypto_verifier_verify_object_signature_signature_format" id="crypto_verifier_verify_object_signature_signature_format">#</a></span></h3>
+<p>Verifies the signed data by using the <code>object</code> and <code>signature</code>.
+<code>object</code> is  a string containing a PEM encoded object, which can be
+one of RSA public key, DSA public key, or X.509 certificate.
+<code>signature</code> is the previously calculated signature for the data, in
+the <code>signature_format</code> which can be <code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code> or <code>&apos;base64&apos;</code>.
+If no encoding is specified, then a buffer is expected.
+
+</p>
+<p>用<code>object</code>和<code>signature</code>来验证被签名的数据。
+<code>object</code>是一个字符串，这个字符串包含了一个被PEM编码的对象，这个对象可以是RSA公钥，DSA公钥或者X.509 证书。
+<code>signature</code>是之前计算出来的数字签名，其中的 <code>signature_format</code>可以是<code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code> 或 <code>&apos;base64&apos;</code>.
+如果没有指明编码方式，那么默认是一个buffer对象。
+
+</p>
+<p>Returns true or false depending on the validity of the signature for
+the data and public key.
+
+</p>
+<p>根据数字签名对于数据和公钥的有效性，返回true或false。
+
+</p>
+<p>Note: <code>verifier</code> object can not be used after <code>verify()</code> method has been
+called.
+
+</p>
+<p>注: 调用<code>verify()</code>函数后不能使用<code>verifier</code>对象。
+
+</p>
+<h2>crypto.createDiffieHellman(prime_length)<span><a href="crypto.html#crypto_crypto_creatediffiehellman_prime_length" id="crypto_crypto_creatediffiehellman_prime_length">#</a></span></h2>
+<p>Creates a Diffie-Hellman key exchange object and generates a prime of
+the given bit length. The generator used is <code>2</code>.
+
+</p>
+<p>创建一个迪菲－赫尔曼密钥交换(Diffie-Hellman key exchange)对象，并根据给定的位长度生成一个质数。所用的生成器是<code>s</code>。
+
+</p>
+<h2>crypto.createDiffieHellman(prime, [encoding])<span><a href="crypto.html#crypto_crypto_creatediffiehellman_prime_encoding" id="crypto_crypto_creatediffiehellman_prime_encoding">#</a></span></h2>
+<p>Creates a Diffie-Hellman key exchange object using the supplied prime.
+The generator used is <code>2</code>. Encoding can be <code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code>, or
+<code>&apos;base64&apos;</code>.  If no encoding is specified, then a buffer is expected.
+
+</p>
+<p>根据给定的质数创建一个迪菲－赫尔曼密钥交换(Diffie-Hellman key exchange)对象。
+所用的生成器是<code>2</code>。编码方式可以是<code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code>或
+<code>&apos;base64&apos;</code>。如果没有指明编码方式，则默认是一个buffer对象。
+
+</p>
+<h2>Class: DiffieHellman<span><a href="crypto.html#crypto_class_diffiehellman" id="crypto_class_diffiehellman">#</a></span></h2>
+<p>The class for creating Diffie-Hellman key exchanges.
+
+</p>
+<p>创建迪菲－赫尔曼密钥交换(Diffie-Hellman key exchanges)的类。
+
+</p>
+<p>Returned by <code>crypto.createDiffieHellman</code>.
+
+</p>
+<p>由<code>crypto.createDiffieHellman</code>返回。
+
+</p>
+<h3>diffieHellman.generateKeys([encoding])<span><a href="crypto.html#crypto_diffiehellman_generatekeys_encoding" id="crypto_diffiehellman_generatekeys_encoding">#</a></span></h3>
+<p>Generates private and public Diffie-Hellman key values, and returns
+the public key in the specified encoding. This key should be
+transferred to the other party. Encoding can be <code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code>,
+or <code>&apos;base64&apos;</code>.  If no encoding is provided, then a buffer is returned.
+
+</p>
+<p>生成迪菲－赫尔曼(Diffie-Hellman)算法的公钥和私钥，并根据指明的编码方式返回公钥。这个公钥可以转交给第三方。编码方式可以是 <code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code>或 <code>&apos;base64&apos;</code>.  如果没有指明编码方式，则返回一个buffer对象。
+
+</p>
+<h3>diffieHellman.computeSecret(other_public_key, [input_encoding], [output_encoding])<span><a href="crypto.html#crypto_diffiehellman_computesecret_other_public_key_input_encoding_output_encoding" id="crypto_diffiehellman_computesecret_other_public_key_input_encoding_output_encoding">#</a></span></h3>
+<p>Computes the shared secret using <code>other_public_key</code> as the other
+party&apos;s public key and returns the computed shared secret. Supplied
+key is interpreted using specified <code>input_encoding</code>, and secret is
+encoded using specified <code>output_encoding</code>. Encodings can be
+<code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code>, or <code>&apos;base64&apos;</code>. If the input encoding is not
+provided, then a buffer is expected.
+
+</p>
+<p>以<code>other_public_key</code>作为第三方公钥来计算共享秘密，并返回这个共享秘密。参数中的密钥会以<code>input_encoding</code>编码方式来解读，而共享密钥则会用<code>output_encoding</code>进行编码。编码方式可以是<code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code>或 <code>&apos;base64&apos;</code>。如果没有提供输入的编码方式，则默认为一个buffer对象。
+
+</p>
+<p>If no output encoding is given, then a buffer is returned.
+
+</p>
+<p>如果没有指明输出的编码方式，则返回一个buffer对象。
+
+</p>
+<h3>diffieHellman.getPrime([encoding])<span><a href="crypto.html#crypto_diffiehellman_getprime_encoding" id="crypto_diffiehellman_getprime_encoding">#</a></span></h3>
+<p>Returns the Diffie-Hellman prime in the specified encoding, which can
+be <code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code>, or <code>&apos;base64&apos;</code>. If no encoding is provided,
+then a buffer is returned.
+
+</p>
+<p>根据指明的编码格式返回迪菲－赫尔曼(Diffie-Hellman)质数，其中编码方式可以是<code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code> 或 <code>&apos;base64&apos;</code>。如果没有指明编码方式，则返回一个buffer对象。
+
+</p>
+<h3>diffieHellman.getGenerator([encoding])<span><a href="crypto.html#crypto_diffiehellman_getgenerator_encoding" id="crypto_diffiehellman_getgenerator_encoding">#</a></span></h3>
+<p>Returns the Diffie-Hellman prime in the specified encoding, which can
+be <code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code>, or <code>&apos;base64&apos;</code>. If no encoding is provided,
+then a buffer is returned.
+
+</p>
+<p>根据指明的编码格式返回迪菲－赫尔曼(Diffie-Hellman)质数，其中编码方式可以是<code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code> 或 <code>&apos;base64&apos;</code>。如果没有指明编码方式，则返回一个buffer对象。
+
+</p>
+<h3>diffieHellman.getPublicKey([encoding])<span><a href="crypto.html#crypto_diffiehellman_getpublickey_encoding" id="crypto_diffiehellman_getpublickey_encoding">#</a></span></h3>
+<p>Returns the Diffie-Hellman public key in the specified encoding, which
+can be <code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code>, or <code>&apos;base64&apos;</code>. If no encoding is provided,
+then a buffer is returned.
+
+</p>
+<p>根据指明的编码格式返回迪菲－赫尔曼(Diffie-Hellman)公钥，其中编码方式可以是<code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code> 或 <code>&apos;base64&apos;</code>。 如果没有指明编码方式，则返回一个buffer对象。
+
+</p>
+<h3>diffieHellman.getPrivateKey([encoding])<span><a href="crypto.html#crypto_diffiehellman_getprivatekey_encoding" id="crypto_diffiehellman_getprivatekey_encoding">#</a></span></h3>
+<p>Returns the Diffie-Hellman private key in the specified encoding,
+which can be <code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code>, or <code>&apos;base64&apos;</code>. If no encoding is
+provided, then a buffer is returned.
+
+</p>
+<p>根据指明的编码格式返回迪菲－赫尔曼(Diffie-Hellman)私钥，其中编码方式可以是<code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code> 或 <code>&apos;base64&apos;</code>。如果没有指明编码方式，则返回一个buffer对象。
+
+</p>
+<h3>diffieHellman.setPublicKey(public_key, [encoding])<span><a href="crypto.html#crypto_diffiehellman_setpublickey_public_key_encoding" id="crypto_diffiehellman_setpublickey_public_key_encoding">#</a></span></h3>
+<p>Sets the Diffie-Hellman public key. Key encoding can be <code>&apos;binary&apos;</code>,
+<code>&apos;hex&apos;</code> or <code>&apos;base64&apos;</code>. If no encoding is provided, then a buffer is
+expected.
+
+</p>
+<p>设置迪菲－赫尔曼(Diffie-Hellman)公钥，编码方式可以是可以是<code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code> 或 <code>&apos;base64&apos;</code>。如果没有指明编码方式，则返回一个buffer对象。
+
+</p>
+<h3>diffieHellman.setPrivateKey(private_key, [encoding])<span><a href="crypto.html#crypto_diffiehellman_setprivatekey_private_key_encoding" id="crypto_diffiehellman_setprivatekey_private_key_encoding">#</a></span></h3>
+<p>Sets the Diffie-Hellman private key. Key encoding can be <code>&apos;binary&apos;</code>,
+<code>&apos;hex&apos;</code> or <code>&apos;base64&apos;</code>. If no encoding is provided, then a buffer is
+expected.
+
+</p>
+<p>设置迪菲－赫尔曼(Diffie-Hellman)私钥，编码方式可以是可以是<code>&apos;binary&apos;</code>, <code>&apos;hex&apos;</code> 或 <code>&apos;base64&apos;</code>。如果没有指明编码方式，则返回一个buffer对象。
+
+</p>
+<h2>crypto.getDiffieHellman(group_name)<span><a href="crypto.html#crypto_crypto_getdiffiehellman_group_name" id="crypto_crypto_getdiffiehellman_group_name">#</a></span></h2>
+<p>Creates a predefined Diffie-Hellman key exchange object.  The
+supported groups are: <code>&apos;modp1&apos;</code>, <code>&apos;modp2&apos;</code>, <code>&apos;modp5&apos;</code> (defined in <a href="http://www.rfc-editor.org/rfc/rfc2412.txt">RFC
+2412</a>) and <code>&apos;modp14&apos;</code>, <code>&apos;modp15&apos;</code>, <code>&apos;modp16&apos;</code>, <code>&apos;modp17&apos;</code>,
+<code>&apos;modp18&apos;</code> (defined in <a href="http://www.rfc-editor.org/rfc/rfc3526.txt">RFC 3526</a>).  The returned object mimics the
+interface of objects created by <a href="crypto.html#crypto_crypto_creatediffiehellman_prime_encoding">crypto.createDiffieHellman()</a>
+above, but will not allow to change the keys (with
+<a href="crypto.html#crypto_diffiehellman_setpublickey_public_key_encoding">diffieHellman.setPublicKey()</a> for example).  The advantage of using
+this routine is that the parties don&apos;t have to generate nor exchange
+group modulus beforehand, saving both processor and communication
+time.
+
+</p>
+<p>创建一个预定义的迪菲－赫尔曼密钥交换(Diffie-Hellman key exchanges)对象。支持以下的D-H组：<code>&apos;modp1&apos;</code>, <code>&apos;modp2&apos;</code>, <code>&apos;modp5&apos;</code> (在<a href="http://www.rfc-editor.org/rfc/rfc2412.txt">RFC
+2412</a>中定义) 和 <code>&apos;modp14&apos;</code>, <code>&apos;modp15&apos;</code>, <code>&apos;modp16&apos;</code>, <code>&apos;modp17&apos;</code>,
+<code>&apos;modp18&apos;</code> (在 <a href="http://www.rfc-editor.org/rfc/rfc3526.txt">RFC 3526</a>中定义)。返回的对象模仿了上述 <a href="crypto.html#crypto_crypto_creatediffiehellman_prime_encoding">crypto.createDiffieHellman()</a>方法所创建的对象的接口，但不会晕允许密钥交换
+(例如像
+<a href="crypto.html#crypto_diffiehellman_setpublickey_public_key_encoding">diffieHellman.setPublicKey()</a>那样)。执行这套流程的好处是双方不需要事先生成或交换组余数，节省了处理和通信时间。
+
+</p>
+<p>Example (obtaining a shared secret):
+
+</p>
+<p>例子 (获取一个共享秘密):
+
+</p>
+<pre><code>/* alice_secret和 bob_secret应该是一样的 */
+console.log(alice_secret == bob_secret);</code></pre>
+<h2>crypto.pbkdf2(password, salt, iterations, keylen, callback)<span><a href="crypto.html#crypto_crypto_pbkdf2_password_salt_iterations_keylen_callback" id="crypto_crypto_pbkdf2_password_salt_iterations_keylen_callback">#</a></span></h2>
+<p>Asynchronous PBKDF2 applies pseudorandom function HMAC-SHA1 to derive
+a key of given length from the given password, salt and iterations.
+The callback gets two arguments <code>(err, derivedKey)</code>.
+
+</p>
+<p>异步PBKDF2提供了一个伪随机函数 HMAC-SHA1，根据给定密码的长度，salt和iterations来得出一个密钥。回调函数得到两个参数 <code>(err, derivedKey)</code>。
+
+</p>
+<h2>crypto.pbkdf2Sync(password, salt, iterations, keylen)<span><a href="crypto.html#crypto_crypto_pbkdf2sync_password_salt_iterations_keylen" id="crypto_crypto_pbkdf2sync_password_salt_iterations_keylen">#</a></span></h2>
+<p>Synchronous PBKDF2 function.  Returns derivedKey or throws error.
+
+</p>
+<p>同步 PBKDF2 函数。返回derivedKey或抛出一个错误。
+
+</p>
+<h2>crypto.randomBytes(size, [callback])<span><a href="crypto.html#crypto_crypto_randombytes_size_callback" id="crypto_crypto_randombytes_size_callback">#</a></span></h2>
+<p>Generates cryptographically strong pseudo-random data. Usage:
+
+</p>
+<p>生成密码学强度的伪随机数据。用法：
+
+</p>
+<pre><code>// 同步
+try {
+  var buf = crypto.randomBytes(256);
+  console.log(&apos;有 %d 字节的随机数据： %s&apos;, buf.length, buf);
+} catch (ex) {
+  // handle error
+}</code></pre>
+<h2>crypto.pseudoRandomBytes(size, [callback])<span><a href="crypto.html#crypto_crypto_pseudorandombytes_size_callback" id="crypto_crypto_pseudorandombytes_size_callback">#</a></span></h2>
+<p>Generates <em>non</em>-cryptographically strong pseudo-random data. The data
+returned will be unique if it is sufficiently long, but is not
+necessarily unpredictable. For this reason, the output of this
+function should never be used where unpredictability is important,
+such as in the generation of encryption keys.
+
+</p>
+<p>生成<em>非</em>密码学强度的伪随机数据。如果数据足够长的话会返回一个唯一的数据，但这个返回值不一定是不可预料的。基于这个原因，当不可预料性很重要时，这个函数的返回值永远都不应该被使用，例如在生成加密的密钥时。
+
+</p>
+<p>Usage is otherwise identical to <code>crypto.randomBytes</code>.
+
+</p>
+<p>用法与 <code>crypto.randomBytes</code>一模一样。
+
+</p>
+<h2>crypto.DEFAULT_ENCODING<span><a href="crypto.html#crypto_crypto_default_encoding" id="crypto_crypto_default_encoding">#</a></span></h2>
+<p>The default encoding to use for functions that can take either strings
+or buffers.  The default value is <code>&apos;buffer&apos;</code>, which makes it default
+to using Buffer objects.  This is here to make the crypto module more
+easily compatible with legacy programs that expected <code>&apos;binary&apos;</code> to be
+the default encoding.
+
+</p>
+<p>对于可以接受字符串或buffer对象的函数的默认编码方式。默认值是<code>&apos;buffer&apos;</code>，所以默认使用Buffer对象。这是为了让crypto模块与默认<code>&apos;binary&apos;</code>为编码方式的遗留程序更容易兼容。
+
+</p>
+<p>Note that new programs will probably expect buffers, so only use this
+as a temporary measure.
+
+</p>
+<p>要注意，新的程序会期待buffer对象，所以使用这个时请只作为暂时的手段。
+
+</p>
+<h2>Recent API Changes<span><a href="crypto.html#crypto_recent_api_changes" id="crypto_recent_api_changes">#</a></span></h2>
+<p>The Crypto module was added to Node before there was the concept of a
+unified Stream API, and before there were Buffer objects for handling
+binary data.
+
+</p>
+<p>早在统一的流API概念出现，以及引入Buffer对象来处理二进制数据之前，Crypto模块就被添加到Node。
+
+</p>
+<p>As such, the streaming classes don&apos;t have the typical methods found on
+other Node classes, and many methods accepted and returned
+Binary-encoded strings by default rather than Buffers.  This was
+changed to use Buffers by default instead.
+
+</p>
+<p>因为这样，与流有关的类中并没有其它Node类的典型函数，而且很多函数接受和返回默认的二进制编码的字符串，而不是Buffer对象。在最近的修改中，这些函数都被改成默认使用Buffer对象。
+
+</p>
+<p>This is a breaking change for some use cases, but not all.
+
+</p>
+<p>这对于某些(但不是全部)使用场景来讲是重大的改变。
+
+</p>
+<p>For example, if you currently use the default arguments to the Sign
+class, and then pass the results to the Verify class, without ever
+inspecting the data, then it will continue to work as before.  Where
+you once got a binary string and then presented the binary string to
+the Verify object, you&apos;ll now get a Buffer, and present the Buffer to
+the Verify object.
+
+</p>
+<p>例如，如果你现在使用Sign类的默认参数，然后在没有检查数据的情况下，将结果传递给Verify类，那么程序会照常工作。在以前，你会拿到一个二进制字符串，然后它传递给Verify对象；而现在，你会得到一个Buffer对象，然后把它传递给Verify对象。
+
+</p>
+<p>However, if you were doing things with the string data that will not
+work properly on Buffers (such as, concatenating them, storing in
+databases, etc.), or you are passing binary strings to the crypto
+functions without an encoding argument, then you will need to start
+providing encoding arguments to specify which encoding you&apos;d like to
+use.  To switch to the previous style of using binary strings by
+default, set the <code>crypto.DEFAULT_ENCODING</code> field to &apos;binary&apos;.  Note
+that new programs will probably expect buffers, so only use this as a
+temporary measure.
+
+</p>
+<p>但是，如果你以前是使用那些在Buffer对象上不能正常工作的字符串数据，或者以默认编码方式将二进制数据传递给加密函数的话，那你就要开始提供编码方式参数来指明你想使用的编码方式了。如果想准换回旧的风格默认使用二进制字符串，那么你需要把<code>crypto.DEFAULT_ENCODING</code>字段设为&apos;binary&apos;。但请注意，因为新的程序很可能会期望buffer对象，所以仅将此当做临时手段。
+
+</p>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>

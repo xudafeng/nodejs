@@ -1,0 +1,26 @@
+{
+  "source": "documentation.markdown",
+  "miscs": [
+    {
+      "textRaw": "关于本文档",
+      "name": "关于本文档",
+      "type": "misc",
+      "desc": "<p>The goal of this documentation is to comprehensively explain the Node.js\nAPI, both from a reference as well as a conceptual point of view.  Each\nsection describes a built-in module or high-level concept.\n\n</p>\n<p>本文档的目标是从参考和概念的角度全面解释 Node.js 的 API，每章节描述一个内置模块或高级概念。\n\n</p>\n<p>Where appropriate, property types, method arguments, and the arguments\nprovided to event handlers are detailed in a list underneath the topic\nheading.\n\n</p>\n<p>在某些情况下，属性类型、方法参数以及事件处理过程（handler）参数 会被列在主标题下的列表中。\n\n</p>\n<p>Every <code>.html</code> document has a corresponding <code>.json</code> document presenting\nthe same information in a structured manner.  This feature is\nexperimental, and added for the benefit of IDEs and other utilities that\nwish to do programmatic things with the documentation.\n\n</p>\n<p>每一个 <code>.html</code> 文件都对应一份内容相同的结构化 <code>.json</code> 文档。这个特性现在还是实验性质的，希望能够为一些需要对文档进行操作的IDE或者其他工具提供帮助。\n\n</p>\n<p>Every <code>.html</code> and <code>.json</code> file is generated based on the corresponding\n<code>.markdown</code> file in the <code>doc/api/</code> folder in node&apos;s source tree.  The\ndocumentation is generated using the <code>tools/doc/generate.js</code> program.\nThe HTML template is located at <code>doc/template.html</code>.\n\n</p>\n<p>每个 <code>.html</code> 和 <code>.json</code> 文件都是基于源码的 <code>doc/api/</code> 目录下的 <code>.markdown</code> 文件生成的。本文档使用 <code>tools/doc/generate.js</code> 这个程序来生产的。 HTML 模板文件为 <code>doc/template.html</code>。\n\n</p>\n",
+      "miscs": [
+        {
+          "textRaw": "稳定度",
+          "name": "稳定度",
+          "type": "misc",
+          "desc": "<p>Throughout the documentation, you will see indications of a section&apos;s\nstability.  The Node.js API is still somewhat changing, and as it\nmatures, certain parts are more reliable than others.  Some are so\nproven, and so relied upon, that they are unlikely to ever change at\nall.  Others are brand new and experimental, or known to be hazardous\nand in the process of being redesigned.\n\n</p>\n<p>在文档中，您可以了解每一个小节的稳定性。Node.js的API会有一些小的改变，当它成熟的时候，会有些部分相比另外一些来说更加可靠。有一部分接受过严格验证，被大量依赖的API几乎是不会改变的。也有一些是新增的、实验性的或者因被证实具有危险性而在重新设计中。\n\n</p>\n<p>The stability indices are as follows:\n\n</p>\n<p>稳定度定义如下\n\n</p>\n<pre><code>稳定度: 5 - 已锁定\n除非发现严重缺陷，该代码不会被更改。请不要对此区域提出更改，更改提议将被拒绝。</code></pre>\n"
+        },
+        {
+          "textRaw": "JSON 输出",
+          "name": "json_输出",
+          "desc": "<pre><code>稳定度: 1 - 实验性</code></pre>\n<p>Every HTML file in the markdown has a corresponding JSON file with the\nsame data.\n\n</p>\n<p>每个通过 markdown 生成的 HTML 文件都对应于一个具有相同数据的 JSON 文件。\n\n</p>\n<p>This feature is new as of node v0.6.12.  It is experimental.\n\n\n</p>\n<p>该特性引入于 node v0.6.12。当前是测试性功能。\n</p>\n",
+          "type": "misc",
+          "displayName": "JSON 输出"
+        }
+      ]
+    }
+  ]
+}

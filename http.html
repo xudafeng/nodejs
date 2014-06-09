@@ -1,0 +1,1556 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>HTTP Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/http.html">
+</head>
+<body class="alt apidoc" id="api-section-http">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="http://jixiangac.com/doc/node/http.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="http.html#http_http_1">HTTP</a><ul>
+<li><a href="http.html#http_http_status_codes_1">http.STATUS_CODES</a></li>
+<li><a href="http.html#http_http_createserver_requestlistener_1">http.createServer([requestListener])</a></li>
+<li><a href="http.html#http_http_createclient_port_host_1">http.createClient([port], [host])</a></li>
+<li><a href="http.html#http_class_http_server_1">Class: http.Server</a><ul>
+<li><a href="http.html#http_event_request_1">Event: &apos;request&apos;</a></li>
+<li><a href="http.html#http_connection_1">事件: &apos;connection&apos;</a></li>
+<li><a href="http.html#http_close_3">事件: &apos;close&apos;</a></li>
+<li><a href="http.html#http_event_checkcontinue_1">Event: &apos;checkContinue&apos;</a></li>
+<li><a href="http.html#http_connect_2">事件: &apos;connect&apos;</a></li>
+<li><a href="http.html#http_event_upgrade_2">Event: &apos;upgrade&apos;</a></li>
+<li><a href="http.html#http_event_clienterror_1">Event: &apos;clientError&apos;</a></li>
+<li><a href="http.html#http_server_listen_port_hostname_backlog_callback_1">server.listen(port, [hostname], [backlog], [callback])</a></li>
+<li><a href="http.html#http_server_listen_path_callback_1">server.listen(path, [callback])</a></li>
+<li><a href="http.html#http_server_listen_handle_callback_1">server.listen(handle, [callback])</a></li>
+<li><a href="http.html#http_server_close_callback_1">server.close([callback])</a></li>
+<li><a href="http.html#http_server_maxheaderscount_1">server.maxHeadersCount</a></li>
+<li><a href="http.html#http_server_settimeout_msecs_callback_1">server.setTimeout(msecs, callback)</a></li>
+<li><a href="http.html#http_server_timeout_1">server.timeout</a></li>
+</ul>
+</li>
+<li><a href="http.html#http_class_http_serverresponse_1">Class: http.ServerResponse</a><ul>
+<li><a href="http.html#http_close_4">事件: &apos;close&apos;</a></li>
+<li><a href="http.html#http_response_writecontinue_1">response.writeContinue()</a></li>
+<li><a href="http.html#http_response_writehead_statuscode_reasonphrase_headers_1">response.writeHead(statusCode, [reasonPhrase], [headers])</a></li>
+<li><a href="http.html#http_response_settimeout_msecs_callback_1">response.setTimeout(msecs, callback)</a></li>
+<li><a href="http.html#http_response_statuscode_1">response.statusCode</a></li>
+<li><a href="http.html#http_response_setheader_name_value_1">response.setHeader(name, value)</a></li>
+<li><a href="http.html#http_response_headerssent_1">response.headersSent</a></li>
+<li><a href="http.html#http_response_senddate_1">response.sendDate</a></li>
+<li><a href="http.html#http_response_getheader_name_1">response.getHeader(name)</a></li>
+<li><a href="http.html#http_response_removeheader_name_1">response.removeHeader(name)</a></li>
+<li><a href="http.html#http_response_write_chunk_encoding_1">response.write(chunk, [encoding])</a></li>
+<li><a href="http.html#http_response_addtrailers_headers_1">response.addTrailers(headers)</a></li>
+<li><a href="http.html#http_response_end_data_encoding_1">response.end([data], [encoding])</a></li>
+</ul>
+</li>
+<li><a href="http.html#http_http_request_options_callback_1">http.request(options, callback)</a></li>
+<li><a href="http.html#http_http_get_options_callback_1">http.get(options, callback)</a></li>
+<li><a href="http.html#http_class_http_agent_1">Class: http.Agent</a><ul>
+<li><a href="http.html#http_new_agent_options_1">new Agent([options])</a></li>
+<li><a href="http.html#http_agent_maxsockets_1">agent.maxSockets</a></li>
+<li><a href="http.html#http_agent_maxfreesockets_1">agent.maxFreeSockets</a></li>
+<li><a href="http.html#http_agent_sockets_1">agent.sockets</a></li>
+<li><a href="http.html#http_agent_freesockets_1">agent.freeSockets</a></li>
+<li><a href="http.html#http_agent_requests_1">agent.requests</a></li>
+<li><a href="http.html#http_agent_destroy_1">agent.destroy()</a></li>
+<li><a href="http.html#http_agent_getname_options_1">agent.getName(options)</a></li>
+</ul>
+</li>
+<li><a href="http.html#http_http_globalagent_1">http.globalAgent</a></li>
+<li><a href="http.html#http_class_http_clientrequest_1">Class: http.ClientRequest</a><ul>
+<li><a href="http.html#http_event_response_1">Event &apos;response&apos;</a></li>
+<li><a href="http.html#http_event_socket_1">Event: &apos;socket&apos;</a></li>
+<li><a href="http.html#http_connect_3">事件: &apos;connect&apos;</a></li>
+<li><a href="http.html#http_event_upgrade_3">Event: &apos;upgrade&apos;</a></li>
+<li><a href="http.html#http_event_continue_1">Event: &apos;continue&apos;</a></li>
+<li><a href="http.html#http_request_write_chunk_encoding_1">request.write(chunk, [encoding])</a></li>
+<li><a href="http.html#http_request_end_data_encoding_1">request.end([data], [encoding])</a></li>
+<li><a href="http.html#http_request_abort_1">request.abort()</a></li>
+<li><a href="http.html#http_request_settimeout_timeout_callback_1">request.setTimeout(timeout, [callback])</a></li>
+<li><a href="http.html#http_request_setnodelay_nodelay_1">request.setNoDelay([noDelay])</a></li>
+<li><a href="http.html#http_request_setsocketkeepalive_enable_initialdelay_1">request.setSocketKeepAlive([enable], [initialDelay])</a></li>
+</ul>
+</li>
+<li><a href="http.html#http_http_incomingmessage_1">http.IncomingMessage</a><ul>
+<li><a href="http.html#http_close_5">事件: &apos;close&apos;</a></li>
+<li><a href="http.html#http_message_httpversion_1">message.httpVersion</a></li>
+<li><a href="http.html#http_message_headers_1">message.headers</a></li>
+<li><a href="http.html#http_message_rawheaders_1">message.rawHeaders</a></li>
+<li><a href="http.html#http_message_trailers_1">message.trailers</a></li>
+<li><a href="http.html#http_message_rawtrailers_1">message.rawTrailers</a></li>
+<li><a href="http.html#http_message_settimeout_msecs_callback_1">message.setTimeout(msecs, callback)</a></li>
+<li><a href="http.html#http_message_method_1">message.method</a></li>
+<li><a href="http.html#http_message_url_1">message.url</a></li>
+<li><a href="http.html#http_message_statuscode_1">message.statusCode</a></li>
+<li><a href="http.html#http_message_socket_1">message.socket</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>HTTP<span><a href="http.html#http_http_1" id="http_http_1">#</a></span></h1>
+<pre><code>稳定度: 3 - 稳定</code></pre>
+<p>To use the HTTP server and client one must <code>require(&apos;http&apos;)</code>.
+
+</p>
+<p>要使用HTTP服务或客户端功能，需引用此模块<code>require(&apos;http&apos;)</code>.
+
+</p>
+<p>The HTTP interfaces in Node are designed to support many features
+of the protocol which have been traditionally difficult to use.
+In particular, large, possibly chunk-encoded, messages. The interface is
+careful to never buffer entire requests or responses--the
+user is able to stream data.
+
+</p>
+<p>Node中的HTTP接口的设计支持许多这个协议中原本用起来很困难的特性.特别是对于很大的或者块编码的消息.这些接口很谨慎,它从来不会完全缓存整个请求(request)或响应(response),这样用户可以在请求(request)或响应(response)中使用数据流.
+
+</p>
+<p>HTTP message headers are represented by an object like this:
+
+</p>
+<p>HTTP 的消息头(Headers)通过如下对象来表示:
+
+</p>
+<pre><code>{ &apos;content-length&apos;: &apos;123&apos;,
+  &apos;content-type&apos;: &apos;text/plain&apos;,
+  &apos;connection&apos;: &apos;keep-alive&apos;,
+  &apos;host&apos;: &apos;mysite.com&apos;,
+  &apos;accept&apos;: &apos;*/*&apos; }</code></pre>
+<p>Keys are lowercased. Values are not modified.
+
+</p>
+<p>其中键为小写字母，值是不能修改的。
+
+</p>
+<p>In order to support the full spectrum of possible HTTP applications, Node&apos;s
+HTTP API is very low-level. It deals with stream handling and message
+parsing only. It parses a message into headers and body but it does not
+parse the actual headers or the body.
+
+</p>
+<p>为了能更加全面地支持HTTP应用，Node的HTTP API是很接近底层，它是可以处理数据流还有只转化消息。它把一个消息写到报文头和报文体，但是它并没有解析报文头或报文体。
+
+</p>
+<p>Defined headers that allow multiple values are concatenated with a <code>,</code>
+character, except for the <code>set-cookie</code> and <code>cookie</code> headers which are
+represented as an array of values.  Headers such as <code>content-length</code>
+which can only have a single value are parsed accordingly, and only a
+single value is represented on the parsed object.
+
+</p>
+<p>定义好的消息头允许多个值以<code>,</code>分割, 除了<code>set-cookie</code>和<code>cookie</code>,因为他们表示值的数组. 消息头,比如 <code>content-length</code>只能有单个值, 并且单个值表示解析好的对象.
+
+</p>
+<p>The raw headers as they were received are retained in the <code>rawHeaders</code>
+property, which is an array of <code>[key, value, key2, value2, ...]</code>.  For
+example, the previous message header object might have a <code>rawHeaders</code>
+list like the following:
+
+</p>
+<p>接收到的原始头信息以数组形式 <code>[key, value, key2, value2, ...]</code> 保存在 <code>rawHeaders</code> 属性中. 例如, 前面提到的消息对象会有 <code>rawHeaders</code> 列表如下:
+
+</p>
+<pre><code>[ &apos;ConTent-Length&apos;, &apos;123456&apos;,
+  &apos;content-LENGTH&apos;, &apos;123&apos;,
+  &apos;content-type&apos;, &apos;text/plain&apos;,
+  &apos;CONNECTION&apos;, &apos;keep-alive&apos;,
+  &apos;Host&apos;, &apos;mysite.com&apos;,
+  &apos;accepT&apos;, &apos;*/*&apos; ]</code></pre>
+<h2>http.STATUS_CODES<span><a href="http.html#http_http_status_codes_1" id="http_http_status_codes_1">#</a></span></h2>
+<div><ul>
+<li><p><span>Object</span></p>
+</li>
+<li><p><span>Object</span></p>
+</li>
+</div></ul>
+<p>A collection of all the standard HTTP response status codes, and the
+short description of each.  For example, <code>http.STATUS_CODES[404] === &apos;Not
+Found&apos;</code>.
+
+</p>
+<p>所以标准HTTP响应码的集合,以及每个响应码的简短描述.例如:<code>http.STATUS_CODES[404]===&apos;Not Found&apos;</code>.
+
+</p>
+<h2>http.createServer([requestListener])<span><a href="http.html#http_http_createserver_requestlistener_1" id="http_http_createserver_requestlistener_1">#</a></span></h2>
+<p>Returns a new web server object.
+
+</p>
+<p>返回一个新的web服务器对象
+
+</p>
+<p>The <code>requestListener</code> is a function which is automatically
+added to the <code>&apos;request&apos;</code> event.
+
+</p>
+<p>参数 <code>requestListener</code> 是一个函数,它将会自动加入到 <code>&apos;request&apos;</code> 事件的监听队列.
+
+</p>
+<h2>http.createClient([port], [host])<span><a href="http.html#http_http_createclient_port_host_1" id="http_http_createclient_port_host_1">#</a></span></h2>
+<p>This function is <strong>deprecated</strong>; please use <a href="http.html#http_http_request_options_callback">http.request()</a> instead.
+Constructs a new HTTP client. <code>port</code> and <code>host</code> refer to the server to be
+connected to.
+
+</p>
+<p>该函数已<strong>弃用</strong>,请用<a href="http.html#http_http_request_options_callback">http.request()</a>代替.
+创建一个新的HTTP客户端. <code>port</code> 和<code>host</code> 表示所连接的服务器.
+
+</p>
+<h2>Class: http.Server<span><a href="http.html#http_class_http_server_1" id="http_class_http_server_1">#</a></span></h2>
+<p>This is an <a href="events.html#events_class_events_eventemitter">EventEmitter</a> with the following events:
+
+</p>
+<p>这是一个包含下列事件的<a href="events.html#events_class_events_eventemitter">EventEmitter</a>:
+
+</p>
+<h3>Event: &apos;request&apos;<span><a href="http.html#http_event_request_1" id="http_event_request_1">#</a></span></h3>
+<p><code>function (request, response) { }</code>
+
+</p>
+<p><code>function (request, response) { }</code>
+
+</p>
+<p>Emitted each time there is a request. Note that there may be multiple requests
+per connection (in the case of keep-alive connections).
+<code>request</code> is an instance of <code>http.IncomingMessage</code> and <code>response</code> is
+an instance of <code>http.ServerResponse</code>
+
+</p>
+<p>每次收到一个请求时触发.注意每个连接又可能有多个请求(在<code>keep-alive</code>的连接中).<code>request</code>是<code>http.IncomingMessage</code>的一个实例.<code>response</code>是<code>http.ServerResponse</code>的一个实例
+
+</p>
+<h3>事件: &apos;connection&apos;<span><a href="http.html#http_connection_1" id="http_connection_1">#</a></span></h3>
+<p><code>function (socket) { }</code>
+
+</p>
+<p><code>function (socket) { }</code>
+
+</p>
+<p>When a new TCP stream is established. <code>socket</code> is an object of type
+<code>net.Socket</code>. Usually users will not want to access this event. In
+particular, the socket will not emit <code>readable</code> events because of how
+the protocol parser attaches to the socket. The <code>socket</code> can also be
+accessed at <code>request.connection</code>.
+
+</p>
+<p>新的TCP流建立时出发。 <code>socket</code>是一个<code>net.Socket</code>对象。
+通常用户无需处理该事件。
+特别注意，协议解析器绑定套接字时采用的方式使套接字不会出发<code>readable</code>事件。
+还可以通过<code>request.connection</code>访问<code>socket</code>。
+
+</p>
+<h3>事件: &apos;close&apos;<span><a href="http.html#http_close_3" id="http_close_3">#</a></span></h3>
+<p><code>function () { }</code>
+
+</p>
+<p><code>function () { }</code>
+
+</p>
+<p>Emitted when the server closes.
+
+</p>
+<p>当此服务器关闭时触发
+
+</p>
+<h3>Event: &apos;checkContinue&apos;<span><a href="http.html#http_event_checkcontinue_1" id="http_event_checkcontinue_1">#</a></span></h3>
+<p><code>function (request, response) { }</code>
+
+</p>
+<p><code>function (request, response) { }</code>
+
+</p>
+<p>Emitted each time a request with an http Expect: 100-continue is received.
+If this event isn&apos;t listened for, the server will automatically respond
+with a 100 Continue as appropriate.
+
+</p>
+<p>每当收到Expect: 100-continue的http请求时触发。
+如果未监听该事件，服务器会酌情自动发送100 Continue响应。
+
+</p>
+<p>Handling this event involves calling <code>response.writeContinue</code> if the client
+should continue to send the request body, or generating an appropriate HTTP
+response (e.g., 400 Bad Request) if the client should not continue to send the
+request body.
+
+</p>
+<p>处理该事件时，如果客户端可以继续发送请求主体则调用<code>response.writeContinue</code>，
+如果不能则生成合适的HTTP响应（例如，400 请求无效）。
+
+</p>
+<p>Note that when this event is emitted and handled, the <code>request</code> event will
+not be emitted.
+
+</p>
+<p>需要注意到, 当这个事件触发并且被处理后, <code>request</code> 时间将不再会触发.
+
+</p>
+<h3>事件: &apos;connect&apos;<span><a href="http.html#http_connect_2" id="http_connect_2">#</a></span></h3>
+<p><code>function (request, socket, head) { }</code>
+
+</p>
+<p><code>function (request, socket, head) { }</code>
+
+</p>
+<p>Emitted each time a client requests a http CONNECT method. If this event isn&apos;t
+listened for, then clients requesting a CONNECT method will have their
+connections closed.
+
+</p>
+<p>每当客户端发起CONNECT请求时出发。如果未监听该事件，客户端发起CONNECT请求时连接会被关闭。
+
+</p>
+<ul>
+<li><code>request</code> is the arguments for the http request, as it is in the request
+event.</li>
+<li><code>socket</code> is the network socket between the server and client.</li>
+<li><p><code>head</code> is an instance of Buffer, the first packet of the tunneling stream,
+this may be empty.</p>
+</li>
+<li><p><code>request</code> 是该HTTP请求的参数，与request事件中的相同。</p>
+</li>
+<li><code>socket</code> 是服务端与客户端之间的网络套接字。</li>
+<li><code>head</code> 是一个Buffer实例，隧道流的第一个包，该参数可能为空。</li>
+</ul>
+<p>After this event is emitted, the request&apos;s socket will not have a <code>data</code>
+event listener, meaning you will need to bind to it in order to handle data
+sent to the server on that socket.
+
+</p>
+<p>在这个事件被分发后，请求的套接字将不会有<code>data</code>事件监听器，也就是说你将需要绑定一个监听器到<code>data</code>事件，来处理在套接字上被发送到服务器的数据。
+
+</p>
+<h3>Event: &apos;upgrade&apos;<span><a href="http.html#http_event_upgrade_2" id="http_event_upgrade_2">#</a></span></h3>
+<p><code>function (request, socket, head) { }</code>
+
+</p>
+<p><code>function (request, socket, head) { }</code>
+
+</p>
+<p>Emitted each time a client requests a http upgrade. If this event isn&apos;t
+listened for, then clients requesting an upgrade will have their connections
+closed.
+
+</p>
+<p>每当一个客户端请求http升级时，该事件被分发。如果这个事件没有被监听，那么这些请求升级的客户端的连接将会被关闭。
+
+</p>
+<ul>
+<li><code>request</code> is the arguments for the http request, as it is in the request
+event.</li>
+<li><code>socket</code> is the network socket between the server and client.</li>
+<li><p><code>head</code> is an instance of Buffer, the first packet of the upgraded stream,
+this may be empty.</p>
+</li>
+<li><p><code>request</code> 是该HTTP请求的参数，与request事件中的相同。</p>
+</li>
+<li><code>socket</code> 是服务端与客户端之间的网络套接字。</li>
+<li><code>head</code> 是一个Buffer实例，升级后流的第一个包，该参数可能为空。</li>
+</ul>
+<p>After this event is emitted, the request&apos;s socket will not have a <code>data</code>
+event listener, meaning you will need to bind to it in order to handle data
+sent to the server on that socket.
+
+</p>
+<p>在这个事件被分发后，请求的套接字将不会有<code>data</code>事件监听器，也就是说你将需要绑定一个监听器到<code>data</code>事件，来处理在套接字上被发送到服务器的数据。
+
+</p>
+<h3>Event: &apos;clientError&apos;<span><a href="http.html#http_event_clienterror_1" id="http_event_clienterror_1">#</a></span></h3>
+<p><code>function (exception, socket) { }</code>
+
+</p>
+<p><code>function (exception, socket) { }</code>
+
+</p>
+<p>If a client connection emits an &apos;error&apos; event - it will forwarded here.
+
+</p>
+<p>如果一个客户端连接触发了一个 &apos;error&apos; 事件, 它就会转发到这里.
+
+</p>
+<p><code>socket</code> is the <code>net.Socket</code> object that the error originated from.
+
+</p>
+<p><code>socket</code> 是导致错误的 <code>net.Socket</code> 对象。
+
+</p>
+<h3>server.listen(port, [hostname], [backlog], [callback])<span><a href="http.html#http_server_listen_port_hostname_backlog_callback_1" id="http_server_listen_port_hostname_backlog_callback_1">#</a></span></h3>
+<p>Begin accepting connections on the specified port and hostname.  If the
+hostname is omitted, the server will accept connections directed to any
+IPv4 address (<code>INADDR_ANY</code>).
+
+</p>
+<p>开始在指定的主机名和端口接收连接。如果省略主机名，服务器会接收指向任意IPv4地址的链接（<code>INADDR_ANY</code>）。
+
+</p>
+<p>To listen to a unix socket, supply a filename instead of port and hostname.
+
+</p>
+<p>监听一个 unix socket, 需要提供一个文件名而不是端口号和主机名。
+
+</p>
+<p>Backlog is the maximum length of the queue of pending connections.
+The actual length will be determined by your OS through sysctl settings such as
+<code>tcp_max_syn_backlog</code> and <code>somaxconn</code> on linux. The default value of this
+parameter is 511 (not 512).
+
+</p>
+<p>积压量 <code>backlog</code> 为连接等待队列的最大长度。实际长度由您的操作系统通过 sysctl 设置决定，比如 Linux 上的 <code>tcp_max_syn_backlog</code> 和 <code>somaxconn</code>。该参数缺省值为 511（不是 512）。
+
+</p>
+<p>This function is asynchronous. The last parameter <code>callback</code> will be added as
+a listener for the <a href="net.html#net_event_listening">&apos;listening&apos;</a> event.  See also <a href="net.html#net_server_listen_port_host_backlog_callback">net.Server.listen(port)</a>.
+
+</p>
+<p>这个函数是异步的。最后一个参数<code>callback</code>会被作为事件监听器添加到 <a href="net.html#net_event_listening">&apos;listening&apos;</a>事件。另见<a href="net.html#net_server_listen_port_host_backlog_callback">net.Server.listen(port)</a>。
+
+</p>
+<h3>server.listen(path, [callback])<span><a href="http.html#http_server_listen_path_callback_1" id="http_server_listen_path_callback_1">#</a></span></h3>
+<p>Start a UNIX socket server listening for connections on the given <code>path</code>.
+
+</p>
+<p>启动一个 UNIX 套接字服务器在所给路径 <code>path</code> 上监听连接。
+
+</p>
+<p>This function is asynchronous. The last parameter <code>callback</code> will be added as
+a listener for the <a href="net.html#net_event_listening">&apos;listening&apos;</a> event.  See also <a href="net.html#net_server_listen_path_callback">net.Server.listen(path)</a>.
+
+</p>
+<p>该函数是异步的.最后一个参数<code>callback</code>将会加入到[<code>listening</code>][]事件的监听队列中.又见<a href="net.html#net_server_listen_path_callback">net.Server.listen(path)</a>.
+
+</p>
+<h3>server.listen(handle, [callback])<span><a href="http.html#http_server_listen_handle_callback_1" id="http_server_listen_handle_callback_1">#</a></span></h3>
+<div><ul>
+<li><code>handle</code> <span>Object</span></li>
+<li><p><code>callback</code> <span>Function</span></p>
+</li>
+<li><p><code>handle</code>处理器 <span>Object</span></p>
+</li>
+<li><code>callback</code>回调函数 <span>Function</span></li>
+</div></ul>
+<p>The <code>handle</code> object can be set to either a server or socket (anything
+with an underlying <code>_handle</code> member), or a <code>{fd: &lt;n&gt;}</code> object.
+
+</p>
+<p><code>handle</code> 变量可以被设置为server 或者 socket(任一以下划线开头的成员 <code>_handle</code>), 或者一个 <code>{fd: &lt;n&gt;}</code> 对象
+
+</p>
+<p>This will cause the server to accept connections on the specified
+handle, but it is presumed that the file descriptor or handle has
+already been bound to a port or domain socket.
+
+</p>
+<p>这将使服务器用指定的句柄接受连接，但它假设文件描述符或者句柄已经被绑定在特定的端口或者域名套接字。
+
+</p>
+<p>Listening on a file descriptor is not supported on Windows.
+
+</p>
+<p>Windows 不支持监听一个文件描述符。
+
+</p>
+<p>This function is asynchronous. The last parameter <code>callback</code> will be added as
+a listener for the <a href="net.html#event_listening_">&apos;listening&apos;</a> event.
+See also <a href="net.html#net_server_listen_handle_callback">net.Server.listen()</a>.
+
+</p>
+<p>这个函数是异步的。最后一个参数<code>callback</code>会被作为事件监听器添加到<a href="net.html#event_listening_">&apos;listening&apos;</a>事件。另见<a href="net.html#net_server_listen_handle_callback">net.Server.listen()</a>。
+
+</p>
+<h3>server.close([callback])<span><a href="http.html#http_server_close_callback_1" id="http_server_close_callback_1">#</a></span></h3>
+<p>Stops the server from accepting new connections.  See <a href="net.html#net_server_close_callback">net.Server.close()</a>.
+
+</p>
+<p>禁止服务端接收新的连接. 查看 <a href="net.html#net_server_close_callback">net.Server.close()</a>.
+
+</p>
+<h3>server.maxHeadersCount<span><a href="http.html#http_server_maxheaderscount_1" id="http_server_maxheaderscount_1">#</a></span></h3>
+<p>Limits maximum incoming headers count, equal to 1000 by default. If set to 0 -
+no limit will be applied.
+
+</p>
+<p>最大请求头数目限制, 默认 1000 个. 如果设置为0, 则代表不做任何限制.
+
+</p>
+<h3>server.setTimeout(msecs, callback)<span><a href="http.html#http_server_settimeout_msecs_callback_1" id="http_server_settimeout_msecs_callback_1">#</a></span></h3>
+<div><ul>
+<li><code>msecs</code> <span>Number</span></li>
+<li><p><code>callback</code> <span>Function</span></p>
+</li>
+<li><p><code>msecs</code> <span>Number</span></p>
+</li>
+<li><code>callback</code> <span>Function</span></li>
+</div></ul>
+<p>Sets the timeout value for sockets, and emits a <code>&apos;timeout&apos;</code> event on
+the Server object, passing the socket as an argument, if a timeout
+occurs.
+
+</p>
+<p>为套接字设定超时值。如果一个超时发生，那么Server对象上会分发一个<code>&apos;timeout&apos;</code>事件，同时将套接字作为参数传递。
+
+</p>
+<p>If there is a <code>&apos;timeout&apos;</code> event listener on the Server object, then it
+will be called with the timed-out socket as an argument.
+
+</p>
+<p>如果在Server对象上有一个<code>&apos;timeout&apos;</code>事件监听器，那么它将被调用，而超时的套接字会作为参数传递给这个监听器。
+
+</p>
+<p>By default, the Server&apos;s timeout value is 2 minutes, and sockets are
+destroyed automatically if they time out.  However, if you assign a
+callback to the Server&apos;s <code>&apos;timeout&apos;</code> event, then you are responsible
+for handling socket timeouts.
+
+</p>
+<p>默认情况下，服务器的超时时间是2分钟，超时后套接字会自动销毁。
+但是如果为‘timeout’事件指定了回调函数，你需要负责处理套接字超时。
+
+</p>
+<h3>server.timeout<span><a href="http.html#http_server_timeout_1" id="http_server_timeout_1">#</a></span></h3>
+<div><ul>
+<li><p><span>Number</span> Default = 120000 (2 minutes)</p>
+</li>
+<li><p><span>Number</span> 默认 120000 (2 分钟)</p>
+</li>
+</div></ul>
+<p>The number of milliseconds of inactivity before a socket is presumed
+to have timed out.
+
+</p>
+<p>一个套接字被判断为超时之前的闲置毫秒数。
+
+</p>
+<p>Note that the socket timeout logic is set up on connection, so
+changing this value only affects <em>new</em> connections to the server, not
+any existing connections.
+
+</p>
+<p>注意套接字的超时逻辑在连接时被设定，所以更改这个值只会影响<em>新创建的</em>连接，而不会影响到现有连接。
+
+</p>
+<p>Set to 0 to disable any kind of automatic timeout behavior on incoming
+connections.
+
+</p>
+<p>设置为0将阻止之后建立的连接的一切自动超时行为。
+
+</p>
+<h2>Class: http.ServerResponse<span><a href="http.html#http_class_http_serverresponse_1" id="http_class_http_serverresponse_1">#</a></span></h2>
+<p>This object is created internally by a HTTP server--not by the user. It is
+passed as the second parameter to the <code>&apos;request&apos;</code> event.
+
+</p>
+<p>The response implements the <a href="stream.html#stream_writable_stream">Writable Stream</a> interface. This is an
+<a href="events.html#events_class_events_eventemitter">EventEmitter</a> with the following events:
+
+</p>
+<h3>事件: &apos;close&apos;<span><a href="http.html#http_close_4" id="http_close_4">#</a></span></h3>
+<p><code>function () { }</code>
+
+</p>
+<p><code>function () { }</code>
+
+</p>
+<p>Indicates that the underlying connection was terminated before
+<code>response.end()</code> was called or able to flush.
+
+</p>
+<h3>response.writeContinue()<span><a href="http.html#http_response_writecontinue_1" id="http_response_writecontinue_1">#</a></span></h3>
+<p>Sends a HTTP/1.1 100 Continue message to the client, indicating that
+the request body should be sent. See the <a href="http.html#http_event_checkcontinue">&apos;checkContinue&apos;</a> event on <code>Server</code>.
+
+</p>
+<h3>response.writeHead(statusCode, [reasonPhrase], [headers])<span><a href="http.html#http_response_writehead_statuscode_reasonphrase_headers_1" id="http_response_writehead_statuscode_reasonphrase_headers_1">#</a></span></h3>
+<p>Sends a response header to the request. The status code is a 3-digit HTTP
+status code, like <code>404</code>. The last argument, <code>headers</code>, are the response headers.
+Optionally one can give a human-readable <code>reasonPhrase</code> as the second
+argument.
+
+</p>
+<p>向请求回复响应头. statusCode是一个三位是的HTTP状态码, 例如 <code>404</code>. 
+最后一个参数, <code>headers</code>, 是响应头的内容.
+可以选择性的，把人类可读的‘原因短句’作为第二个参数。
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>var body = &apos;hello world&apos;;
+response.writeHead(200, {
+  &apos;Content-Length&apos;: body.length,
+  &apos;Content-Type&apos;: &apos;text/plain&apos; });</code></pre>
+<p>This method must only be called once on a message and it must
+be called before <code>response.end()</code> is called.
+
+</p>
+<p>这个方法只能在消息到来后使用一次 而且这必须在<code>response.end()</code>
+之后调用。
+
+</p>
+<p>If you call <code>response.write()</code> or <code>response.end()</code> before calling this, the
+implicit/mutable headers will be calculated and call this function for you.
+
+</p>
+<p>如果你在调用这之前调用了<code>response.write()</code>或者 <code>response.end()</code> , 
+就会调用这个函数，并且 不明/容易混淆 的头将会被使用。
+
+</p>
+<p>Note: that Content-Length is given in bytes not characters. The above example
+works because the string <code>&apos;hello world&apos;</code> contains only single byte characters.
+If the body contains higher coded characters then <code>Buffer.byteLength()</code>
+should be used to determine the number of bytes in a given encoding.
+And Node does not check whether Content-Length and the length of the body
+which has been transmitted are equal or not.
+
+</p>
+<p>注意：Content-Length 是以字节(byte)计，而不是以字符(character)计。之前的例子奏效的原因是字符串&apos;hello world&apos;只包含了单字节的字符。如果body包含了多字节编码的字符，就应当使用Buffer.byteLength()来确定在多字节字符编码情况下字符串的字节数。需要进一步说明的是Node不检查Content-Lenth属性和已传输的body长度是否吻合。
+
+</p>
+<h3>response.setTimeout(msecs, callback)<span><a href="http.html#http_response_settimeout_msecs_callback_1" id="http_response_settimeout_msecs_callback_1">#</a></span></h3>
+<div><ul>
+<li><code>msecs</code> <span>Number</span></li>
+<li><p><code>callback</code> <span>Function</span></p>
+</li>
+<li><p><code>msecs</code> <span>Number</span></p>
+</li>
+<li><code>callback</code> <span>Function</span></li>
+</div></ul>
+<p>Sets the Socket&apos;s timeout value to <code>msecs</code>.  If a callback is
+provided, then it is added as a listener on the <code>&apos;timeout&apos;</code> event on
+the response object.
+
+</p>
+<p>设定套接字的超时时间为<code>msecs</code>。如果提供了回调函数，会将其添加为响应对象的<code>&apos;timeout&apos;</code>事件的监听器。
+
+</p>
+<p>If no <code>&apos;timeout&apos;</code> listener is added to the request, the response, or
+the server, then sockets are destroyed when they time out.  If you
+assign a handler on the request, the response, or the server&apos;s
+<code>&apos;timeout&apos;</code> events, then it is your responsibility to handle timed out
+sockets.
+
+</p>
+<p>如果请求、响应、服务器均未添加<code>&apos;timeout&apos;</code>事件监听，套接字将在超时时被销毁。
+如果监听了请求、响应、服务器之一的<code>&apos;timeout&apos;</code>事件，需要自行处理超时的套接字。
+
+</p>
+<h3>response.statusCode<span><a href="http.html#http_response_statuscode_1" id="http_response_statuscode_1">#</a></span></h3>
+<p>When using implicit headers (not calling <code>response.writeHead()</code> explicitly), this property
+controls the status code that will be sent to the client when the headers get
+flushed.
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>response.statusCode = 404;</code></pre>
+<p>After response header was sent to the client, this property indicates the
+status code which was sent out.
+
+</p>
+<h3>response.setHeader(name, value)<span><a href="http.html#http_response_setheader_name_value_1" id="http_response_setheader_name_value_1">#</a></span></h3>
+<p>Sets a single header value for implicit headers.  If this header already exists
+in the to-be-sent headers, its value will be replaced.  Use an array of strings
+here if you need to send multiple headers with the same name.
+
+</p>
+<p>为默认或者已存在的头设置一条单独的头内容。如果这个头已经存在于
+将被送出的头中，将会覆盖原来的内容。如果我想设置更多的头，
+就使用一个相同名字的字符串数组
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>response.setHeader(&quot;Content-Type&quot;, &quot;text/html&quot;);</code></pre>
+<p>or
+
+</p>
+<p>或者
+
+</p>
+<pre><code>response.setHeader(&quot;Set-Cookie&quot;, [&quot;type=ninja&quot;, &quot;language=javascript&quot;]);</code></pre>
+<h3>response.headersSent<span><a href="http.html#http_response_headerssent_1" id="http_response_headerssent_1">#</a></span></h3>
+<p>Boolean (read-only). True if headers were sent, false otherwise.
+
+</p>
+<p>Boolean值(只读).如果headers发送完毕,则为true,反之为false
+
+</p>
+<h3>response.sendDate<span><a href="http.html#http_response_senddate_1" id="http_response_senddate_1">#</a></span></h3>
+<p>When true, the Date header will be automatically generated and sent in
+the response if it is not already present in the headers. Defaults to true.
+
+</p>
+<p>若为true,则当headers里没有Date值时自动生成Date并发送.默认值为true
+
+</p>
+<p>This should only be disabled for testing; HTTP requires the Date header
+in responses.
+
+</p>
+<p>只有在测试环境才禁用它; 因为 HTTP 要求响应包含 <code>Date</code> 头.
+
+</p>
+<h3>response.getHeader(name)<span><a href="http.html#http_response_getheader_name_1" id="http_response_getheader_name_1">#</a></span></h3>
+<p>Reads out a header that&apos;s already been queued but not sent to the client.  Note
+that the name is case insensitive.  This can only be called before headers get
+implicitly flushed.
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>var contentType = response.getHeader(&apos;content-type&apos;);</code></pre>
+<h3>response.removeHeader(name)<span><a href="http.html#http_response_removeheader_name_1" id="http_response_removeheader_name_1">#</a></span></h3>
+<p>Removes a header that&apos;s queued for implicit sending.
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>response.removeHeader(&quot;Content-Encoding&quot;);</code></pre>
+<h3>response.write(chunk, [encoding])<span><a href="http.html#http_response_write_chunk_encoding_1" id="http_response_write_chunk_encoding_1">#</a></span></h3>
+<p>If this method is called and <code>response.writeHead()</code> has not been called, it will
+switch to implicit header mode and flush the implicit headers.
+
+</p>
+<p>This sends a chunk of the response body. This method may
+be called multiple times to provide successive parts of the body.
+
+</p>
+<p><code>chunk</code> can be a string or a buffer. If <code>chunk</code> is a string,
+the second parameter specifies how to encode it into a byte stream.
+By default the <code>encoding</code> is <code>&apos;utf8&apos;</code>.
+
+</p>
+<p><strong>Note</strong>: This is the raw HTTP body and has nothing to do with
+higher-level multi-part body encodings that may be used.
+
+</p>
+<p>The first time <code>response.write()</code> is called, it will send the buffered
+header information and the first body to the client. The second time
+<code>response.write()</code> is called, Node assumes you&apos;re going to be streaming
+data, and sends that separately. That is, the response is buffered up to the
+first chunk of body.
+
+</p>
+<p>Returns <code>true</code> if the entire data was flushed successfully to the kernel
+buffer. Returns <code>false</code> if all or part of the data was queued in user memory.
+<code>&apos;drain&apos;</code> will be emitted when the buffer is again free.
+
+</p>
+<p>如果所有数据被成功刷新到内核缓冲区，则返回<code>true</code>。如果所有或部分数据在用户内存里还处于队列中，则返回<code>false</code>。当缓冲区再次被释放时，<code>&apos;drain&apos;</code>事件会被分发。
+<code>&apos;drain&apos;</code> will be emitted when the buffer is again free.
+
+</p>
+<h3>response.addTrailers(headers)<span><a href="http.html#http_response_addtrailers_headers_1" id="http_response_addtrailers_headers_1">#</a></span></h3>
+<p>This method adds HTTP trailing headers (a header but at the end of the
+message) to the response.
+
+</p>
+<p>Trailers will <strong>only</strong> be emitted if chunked encoding is used for the
+response; if it is not (e.g., if the request was HTTP/1.0), they will
+be silently discarded.
+
+</p>
+<p>Note that HTTP requires the <code>Trailer</code> header to be sent if you intend to
+emit trailers, with a list of the header fields in its value. E.g.,
+
+</p>
+<pre><code>response.writeHead(200, { &apos;Content-Type&apos;: &apos;text/plain&apos;,
+                          &apos;Trailer&apos;: &apos;Content-MD5&apos; });
+response.write(fileData);
+response.addTrailers({&apos;Content-MD5&apos;: &quot;7895bf4b8828b55ceaf47747b4bca667&quot;});
+response.end();</code></pre>
+<h3>response.end([data], [encoding])<span><a href="http.html#http_response_end_data_encoding_1" id="http_response_end_data_encoding_1">#</a></span></h3>
+<p>This method signals to the server that all of the response headers and body
+have been sent; that server should consider this message complete.
+The method, <code>response.end()</code>, MUST be called on each
+response.
+
+</p>
+<p>If <code>data</code> is specified, it is equivalent to calling <code>response.write(data, encoding)</code>
+followed by <code>response.end()</code>.
+
+</p>
+<h2>http.request(options, callback)<span><a href="http.html#http_http_request_options_callback_1" id="http_http_request_options_callback_1">#</a></span></h2>
+<p>Node maintains several connections per server to make HTTP requests.
+This function allows one to transparently issue requests.
+
+</p>
+<p><code>options</code> can be an object or a string. If <code>options</code> is a string, it is
+automatically parsed with <a href="url.html#url_url_parse_urlstr_parsequerystring_slashesdenotehost">url.parse()</a>.
+
+</p>
+<p><code>options</code> 可以是一个对象或一个字符串。如果 <code>options</code>是一个字符串, 它将自动的使用<a href="url.html#url_url_parse_urlstr_parsequerystring_slashesdenotehost">url.parse()</a>解析。
+
+</p>
+<p>Options:
+
+</p>
+<p>Options:
+
+</p>
+<ul>
+<li><code>host</code>: A domain name or IP address of the server to issue the request to.
+Defaults to <code>&apos;localhost&apos;</code>.</li>
+<li><code>hostname</code>: To support <code>url.parse()</code> <code>hostname</code> is preferred over <code>host</code></li>
+<li><code>port</code>: Port of remote server. Defaults to 80.</li>
+<li><code>localAddress</code>: Local interface to bind for network connections.</li>
+<li><code>socketPath</code>: Unix Domain Socket (use one of host:port or socketPath)</li>
+<li><code>method</code>: A string specifying the HTTP request method. Defaults to <code>&apos;GET&apos;</code>.</li>
+<li><code>path</code>: Request path. Defaults to <code>&apos;/&apos;</code>. Should include query string if any.
+E.G. <code>&apos;/index.html?page=12&apos;</code>. An exception is thrown when the request path
+contains illegal characters. Currently, only spaces are rejected but that
+may change in the future.</li>
+<li><code>headers</code>: An object containing request headers.</li>
+<li><code>auth</code>: Basic authentication i.e. <code>&apos;user:password&apos;</code> to compute an
+Authorization header.</li>
+<li><code>agent</code>: Controls <a href="http.html#http_class_http_agent">Agent</a> behavior. When an Agent is used request will
+default to <code>Connection: keep-alive</code>. Possible values:<ul>
+<li><code>undefined</code> (default): use <a href="http.html#http_http_globalagent">global Agent</a> for this host and port.</li>
+<li><code>Agent</code> object: explicitly use the passed in <code>Agent</code>.</li>
+<li><code>false</code>: opts out of connection pooling with an Agent, defaults request to
+<code>Connection: close</code>.</li>
+</ul>
+</li>
+<li><code>keepAlive</code>: {Boolean} Keep sockets around in a pool to be used
+by other requests in the future. Default = <code>false</code></li>
+<li><p><code>keepAliveMsecs</code>: {Integer} When using HTTP KeepAlive, how often to
+send TCP KeepAlive packets over sockets being kept alive.  Default =
+<code>1000</code>.  Only relevant if <code>keepAlive</code> is set to <code>true</code>.</p>
+</li>
+<li><p><code>host</code>: 要发送请求的服务端域名或IP地址。
+默认为<code>&apos;localhost&apos;</code>。</p>
+</li>
+<li><code>hostname</code>: 要支持<code>url.parse()</code>的话，优先使用<code>hostname</code>而不是<code>host</code></li>
+<li><code>port</code>: 远程服务器的端口。默认为80。</li>
+<li><code>localAddress</code>: 本地接口，用来绑定网络连接。</li>
+<li><code>socketPath</code>: Unix Domain Socket (use one of host:port or socketPath)</li>
+<li><code>method</code>: A string specifying the HTTP request method. Defaults to <code>&apos;GET&apos;</code>.</li>
+<li><code>path</code>: Request path. Defaults to <code>&apos;/&apos;</code>. Should include query string if any.
+E.G. <code>&apos;/index.html?page=12&apos;</code>. An exception is thrown when the request path
+contains illegal characters. Currently, only spaces are rejected but that
+may change in the future.</li>
+<li><code>headers</code>: An object containing request headers.</li>
+<li><code>auth</code>: Basic authentication i.e. <code>&apos;user:password&apos;</code> to compute an
+Authorization header.</li>
+<li><code>agent</code>: Controls <a href="http.html#http_class_http_agent">Agent</a> behavior. When an Agent is used request will
+default to <code>Connection: keep-alive</code>. Possible values:<ul>
+<li><code>undefined</code> (default): use <a href="http.html#http_http_globalagent">global Agent</a> for this host and port.</li>
+<li><code>Agent</code> object: explicitly use the passed in <code>Agent</code>.</li>
+<li><code>false</code>: opts out of connection pooling with an Agent, defaults request to
+<code>Connection: close</code>.</li>
+</ul>
+</li>
+<li><code>keepAlive</code>: {Boolean} Keep sockets around in a pool to be used
+by other requests in the future. Default = <code>false</code></li>
+<li><code>keepAliveMsecs</code>: {Integer} When using HTTP KeepAlive, how often to
+send TCP KeepAlive packets over sockets being kept alive.  Default =
+<code>1000</code>.  Only relevant if <code>keepAlive</code> is set to <code>true</code>.</li>
+</ul>
+<p><code>http.request()</code> returns an instance of the <code>http.ClientRequest</code>
+class. The <code>ClientRequest</code> instance is a writable stream. If one needs to
+upload a file with a POST request, then write to the <code>ClientRequest</code> object.
+
+</p>
+<p><code>http.request()</code> 返回一个 <code>http.ClientRequest</code>类的实例。<code>ClientRequest</code>实例是一个可写流对象。如果需要用POST请求上传一个文件的话，就将其写入到<code>ClientRequest</code>对象。
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>// write data to request body
+req.write(&apos;data\n&apos;);
+req.write(&apos;data\n&apos;);
+req.end();</code></pre>
+<p>Note that in the example <code>req.end()</code> was called. With <code>http.request()</code> one
+must always call <code>req.end()</code> to signify that you&apos;re done with the request -
+even if there is no data being written to the request body.
+
+</p>
+<p>注意，例子里的<code>req.end()</code>被调用了。使用<code>http.request()</code>方法时都必须总是调用<code>req.end()</code>以表明这个请求已经完成，即使响应body里没有任何数据。
+
+</p>
+<p>If any error is encountered during the request (be that with DNS resolution,
+TCP level errors, or actual HTTP parse errors) an <code>&apos;error&apos;</code> event is emitted
+on the returned request object.
+
+</p>
+<p>There are a few special headers that should be noted.
+
+</p>
+<ul>
+<li><p>Sending a &apos;Connection: keep-alive&apos; will notify Node that the connection to
+the server should be persisted until the next request.</p>
+</li>
+<li><p>Sending a &apos;Content-length&apos; header will disable the default chunked encoding.</p>
+</li>
+<li><p>发送 &apos;Content-length&apos; 头将会禁用默认的 chunked 编码.</p>
+</li>
+<li><p>Sending an &apos;Expect&apos; header will immediately send the request headers.
+Usually, when sending &apos;Expect: 100-continue&apos;, you should both set a timeout
+and listen for the <code>continue</code> event. See RFC2616 Section 8.2.3 for more
+information.</p>
+</li>
+<li><p>Sending an Authorization header will override using the <code>auth</code> option
+to compute basic authentication.</p>
+</li>
+</ul>
+<h2>http.get(options, callback)<span><a href="http.html#http_http_get_options_callback_1" id="http_http_get_options_callback_1">#</a></span></h2>
+<p>Since most requests are GET requests without bodies, Node provides this
+convenience method. The only difference between this method and <code>http.request()</code>
+is that it sets the method to GET and calls <code>req.end()</code> automatically.
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>http.get(&quot;http://www.google.com/index.html&quot;, function(res) {
+  console.log(&quot;Got response: &quot; + res.statusCode);
+}).on(&apos;error&apos;, function(e) {
+  console.log(&quot;Got error: &quot; + e.message);
+});</code></pre>
+<h2>Class: http.Agent<span><a href="http.html#http_class_http_agent_1" id="http_class_http_agent_1">#</a></span></h2>
+<p>The HTTP Agent is used for pooling sockets used in HTTP client
+requests.
+
+</p>
+<p>The HTTP Agent also defaults client requests to using
+Connection:keep-alive. If no pending HTTP requests are waiting on a
+socket to become free the socket is closed. This means that Node&apos;s
+pool has the benefit of keep-alive when under load but still does not
+require developers to manually close the HTTP clients using
+KeepAlive.
+
+</p>
+<p>If you opt into using HTTP KeepAlive, you can create an Agent object
+with that flag set to <code>true</code>.  (See the <a href="http.html#http_new_agent_options">constructor
+options</a> below.)  Then, the Agent will keep
+unused sockets in a pool for later use.  They will be explicitly
+marked so as to not keep the Node process running.  However, it is
+still a good idea to explicitly <a href="http.html#http_agent_destroy"><code>destroy()</code></a>
+KeepAlive agents when they are no longer in use, so that the Sockets
+will be shut down.
+
+</p>
+<p>Sockets are removed from the agent&apos;s pool when the socket emits either
+a &quot;close&quot; event or a special &quot;agentRemove&quot; event. This means that if
+you intend to keep one HTTP request open for a long time and don&apos;t
+want it to stay in the pool you can do something along the lines of:
+
+</p>
+<pre><code>http.get(options, function(res) {
+  // Do stuff
+}).on(&quot;socket&quot;, function (socket) {
+  socket.emit(&quot;agentRemove&quot;);
+});</code></pre>
+<p>Alternatively, you could just opt out of pooling entirely using
+<code>agent:false</code>:
+
+</p>
+<pre><code>http.get({
+  hostname: &apos;localhost&apos;,
+  port: 80,
+  path: &apos;/&apos;,
+  agent: false  // create a new agent just for this one request
+}, function (res) {
+  // Do stuff with response
+})</code></pre>
+<h3>new Agent([options])<span><a href="http.html#http_new_agent_options_1" id="http_new_agent_options_1">#</a></span></h3>
+<div><ul>
+<li><code>options</code> <span>Object</span> Set of configurable options to set on the agent.
+Can have the following fields:<ul>
+<li><code>keepAlive</code> <span>Boolean</span> Keep sockets around in a pool to be used by
+other requests in the future. Default = <code>false</code></li>
+<li><code>keepAliveMsecs</code> <span>Integer</span> When using HTTP KeepAlive, how often
+to send TCP KeepAlive packets over sockets being kept alive.
+Default = <code>1000</code>.  Only relevant if <code>keepAlive</code> is set to <code>true</code>.</li>
+<li><code>maxSockets</code> <span>Number</span> Maximum number of sockets to allow per
+host.  Default = <code>Infinity</code>.</li>
+<li><code>maxFreeSockets</code> <span>Number</span> Maximum number of sockets to leave open
+in a free state.  Only relevant if <code>keepAlive</code> is set to <code>true</code>.
+Default = <code>256</code>.</li>
+</ul>
+</li>
+</div></ul>
+<p>The default <code>http.globalAgent</code> that is used by <code>http.request</code> has all
+of these values set to their respective defaults.
+
+</p>
+<p>To configure any of them, you must create your own <code>Agent</code> object.
+
+</p>
+<p>要配置这些值，你必须创建一个你自己的<code>Agent</code>对象。
+
+</p>
+<pre><code>var http = require(&apos;http&apos;);
+var keepAliveAgent = new http.Agent({ keepAlive: true });
+keepAliveAgent.request(options, onResponseCallback);</code></pre>
+<h3>agent.maxSockets<span><a href="http.html#http_agent_maxsockets_1" id="http_agent_maxsockets_1">#</a></span></h3>
+<p>By default set to Infinity. Determines how many concurrent sockets the
+agent can have open per host.
+
+</p>
+<h3>agent.maxFreeSockets<span><a href="http.html#http_agent_maxfreesockets_1" id="http_agent_maxfreesockets_1">#</a></span></h3>
+<p>By default set to 256.  For Agents supporting HTTP KeepAlive, this
+sets the maximum number of sockets that will be left open in the free
+state.
+
+</p>
+<h3>agent.sockets<span><a href="http.html#http_agent_sockets_1" id="http_agent_sockets_1">#</a></span></h3>
+<p>An object which contains arrays of sockets currently in use by the
+Agent.  Do not modify.
+
+</p>
+<h3>agent.freeSockets<span><a href="http.html#http_agent_freesockets_1" id="http_agent_freesockets_1">#</a></span></h3>
+<p>An object which contains arrays of sockets currently awaiting use by
+the Agent when HTTP KeepAlive is used.  Do not modify.
+
+</p>
+<h3>agent.requests<span><a href="http.html#http_agent_requests_1" id="http_agent_requests_1">#</a></span></h3>
+<p>An object which contains queues of requests that have not yet been assigned to
+sockets. Do not modify.
+
+</p>
+<h3>agent.destroy()<span><a href="http.html#http_agent_destroy_1" id="http_agent_destroy_1">#</a></span></h3>
+<p>Destroy any sockets that are currently in use by the agent.
+
+</p>
+<p>销毁被此 agent 正在使用着的所有 sockets.
+
+</p>
+<p>It is usually not necessary to do this.  However, if you are using an
+agent with KeepAlive enabled, then it is best to explicitly shut down
+the agent when you know that it will no longer be used.  Otherwise,
+sockets may hang open for quite a long time before the server
+terminates them.
+
+</p>
+<h3>agent.getName(options)<span><a href="http.html#http_agent_getname_options_1" id="http_agent_getname_options_1">#</a></span></h3>
+<p>Get a unique name for a set of request options, to determine whether a
+connection can be reused.  In the http agent, this returns
+<code>host:port:localAddress</code>.  In the https agent, the name includes the
+CA, cert, ciphers, and other HTTPS/TLS-specific options that determine
+socket reusability.
+
+</p>
+<h2>http.globalAgent<span><a href="http.html#http_http_globalagent_1" id="http_http_globalagent_1">#</a></span></h2>
+<p>Global instance of Agent which is used as the default for all http client
+requests.
+
+</p>
+<h2>Class: http.ClientRequest<span><a href="http.html#http_class_http_clientrequest_1" id="http_class_http_clientrequest_1">#</a></span></h2>
+<p>This object is created internally and returned from <code>http.request()</code>.  It
+represents an <em>in-progress</em> request whose header has already been queued.  The
+header is still mutable using the <code>setHeader(name, value)</code>, <code>getHeader(name)</code>,
+<code>removeHeader(name)</code> API.  The actual header will be sent along with the first
+data chunk or when closing the connection.
+
+</p>
+<p>To get the response, add a listener for <code>&apos;response&apos;</code> to the request object.
+<code>&apos;response&apos;</code> will be emitted from the request object when the response
+headers have been received.  The <code>&apos;response&apos;</code> event is executed with one
+argument which is an instance of <code>http.IncomingMessage</code>.
+
+</p>
+<p>During the <code>&apos;response&apos;</code> event, one can add listeners to the
+response object; particularly to listen for the <code>&apos;data&apos;</code> event.
+
+</p>
+<p>If no <code>&apos;response&apos;</code> handler is added, then the response will be
+entirely discarded.  However, if you add a <code>&apos;response&apos;</code> event handler,
+then you <strong>must</strong> consume the data from the response object, either by
+calling <code>response.read()</code> whenever there is a <code>&apos;readable&apos;</code> event, or
+by adding a <code>&apos;data&apos;</code> handler, or by calling the <code>.resume()</code> method.
+Until the data is consumed, the <code>&apos;end&apos;</code> event will not fire.  Also, until
+the data is read it will consume memory that can eventually lead to a
+&apos;process out of memory&apos; error.
+
+</p>
+<p>Note: Node does not check whether Content-Length and the length of the body
+which has been transmitted are equal or not.
+
+</p>
+<p>The request implements the <a href="stream.html#stream_writable_stream">Writable Stream</a> interface. This is an
+<a href="events.html#events_class_events_eventemitter">EventEmitter</a> with the following events:
+
+</p>
+<h3>Event &apos;response&apos;<span><a href="http.html#http_event_response_1" id="http_event_response_1">#</a></span></h3>
+<p><code>function (response) { }</code>
+
+</p>
+<p><code>function (response) { }</code>
+
+</p>
+<p>Emitted when a response is received to this request. This event is emitted only
+once. The <code>response</code> argument will be an instance of <code>http.IncomingMessage</code>.
+
+</p>
+<p>Options:
+
+</p>
+<p>Options:
+
+</p>
+<ul>
+<li><code>host</code>: A domain name or IP address of the server to issue the request to.</li>
+<li><code>port</code>: Port of remote server.</li>
+<li><p><code>socketPath</code>: Unix Domain Socket (use one of host:port or socketPath)</p>
+</li>
+<li><p><code>host</code>: 请求要发送的域名或服务器的IP地址。</p>
+</li>
+<li><code>port</code>: 远程服务器的端口。</li>
+<li><code>socketPath</code>: Unix Domain Socket （使用host:port或socketPath）</li>
+</ul>
+<h3>Event: &apos;socket&apos;<span><a href="http.html#http_event_socket_1" id="http_event_socket_1">#</a></span></h3>
+<p><code>function (socket) { }</code>
+
+</p>
+<p><code>function (socket) { }</code>
+
+</p>
+<p>Emitted after a socket is assigned to this request.
+
+</p>
+<p>当一个套接字被分配到这个请求之后，该事件被分发。
+
+</p>
+<h3>事件: &apos;connect&apos;<span><a href="http.html#http_connect_3" id="http_connect_3">#</a></span></h3>
+<p><code>function (response, socket, head) { }</code>
+
+</p>
+<p><code>function (response, socket, head) { }</code>
+
+</p>
+<p>Emitted each time a server responds to a request with a CONNECT method. If this
+event isn&apos;t being listened for, clients receiving a CONNECT method will have
+their connections closed.
+
+</p>
+<p>A client server pair that show you how to listen for the <code>connect</code> event.
+
+</p>
+<pre><code>    // make a request over an HTTP tunnel
+    socket.write(&apos;GET / HTTP/1.1\r\n&apos; +
+                 &apos;Host: www.google.com:80\r\n&apos; +
+                 &apos;Connection: close\r\n&apos; +
+                 &apos;\r\n&apos;);
+    socket.on(&apos;data&apos;, function(chunk) {
+      console.log(chunk.toString());
+    });
+    socket.on(&apos;end&apos;, function() {
+      proxy.close();
+    });
+  });
+});</code></pre>
+<h3>Event: &apos;upgrade&apos;<span><a href="http.html#http_event_upgrade_3" id="http_event_upgrade_3">#</a></span></h3>
+<p><code>function (response, socket, head) { }</code>
+
+</p>
+<p><code>function (response, socket, head) { }</code>
+
+</p>
+<p>Emitted each time a server responds to a request with an upgrade. If this
+event isn&apos;t being listened for, clients receiving an upgrade header will have
+their connections closed.
+
+</p>
+<p>A client server pair that show you how to listen for the <code>upgrade</code> event.
+
+</p>
+<pre><code>  req.on(&apos;upgrade&apos;, function(res, socket, upgradeHead) {
+    console.log(&apos;got upgraded!&apos;);
+    socket.end();
+    process.exit(0);
+  });
+});</code></pre>
+<h3>Event: &apos;continue&apos;<span><a href="http.html#http_event_continue_1" id="http_event_continue_1">#</a></span></h3>
+<p><code>function () { }</code>
+
+</p>
+<p><code>function () { }</code>
+
+</p>
+<p>Emitted when the server sends a &apos;100 Continue&apos; HTTP response, usually because
+the request contained &apos;Expect: 100-continue&apos;. This is an instruction that
+the client should send the request body.
+
+</p>
+<h3>request.write(chunk, [encoding])<span><a href="http.html#http_request_write_chunk_encoding_1" id="http_request_write_chunk_encoding_1">#</a></span></h3>
+<p>Sends a chunk of the body.  By calling this method
+many times, the user can stream a request body to a
+server--in that case it is suggested to use the
+<code>[&apos;Transfer-Encoding&apos;, &apos;chunked&apos;]</code> header line when
+creating the request.
+
+</p>
+<p>The <code>chunk</code> argument should be a <a href="buffer.html#buffer_buffer">Buffer</a> or a string.
+
+</p>
+<p><code>chunk</code> 参数必须是 <a href="buffer.html#buffer_buffer">Buffer</a> 或者 string.
+
+</p>
+<p>The <code>encoding</code> argument is optional and only applies when <code>chunk</code> is a string.
+Defaults to <code>&apos;utf8&apos;</code>.
+
+</p>
+<p><code>encoding</code> 参数是可选的, 并且只能在 <code>chunk</code> 是 string 类型的时候才能设置.
+默认是 <code>&apos;utf8&apos;</code>.
+
+</p>
+<h3>request.end([data], [encoding])<span><a href="http.html#http_request_end_data_encoding_1" id="http_request_end_data_encoding_1">#</a></span></h3>
+<p>Finishes sending the request. If any parts of the body are
+unsent, it will flush them to the stream. If the request is
+chunked, this will send the terminating <code>&apos;0\r\n\r\n&apos;</code>.
+
+</p>
+<p>If <code>data</code> is specified, it is equivalent to calling
+<code>request.write(data, encoding)</code> followed by <code>request.end()</code>.
+
+</p>
+<h3>request.abort()<span><a href="http.html#http_request_abort_1" id="http_request_abort_1">#</a></span></h3>
+<p>Aborts a request.  (New since v0.3.8.)
+
+</p>
+<p>终止一个请求. (从 v0.3.8 开始新加.)
+
+</p>
+<h3>request.setTimeout(timeout, [callback])<span><a href="http.html#http_request_settimeout_timeout_callback_1" id="http_request_settimeout_timeout_callback_1">#</a></span></h3>
+<p>Once a socket is assigned to this request and is connected
+<a href="net.html#net_socket_settimeout_timeout_callback">socket.setTimeout()</a> will be called.
+
+</p>
+<h3>request.setNoDelay([noDelay])<span><a href="http.html#http_request_setnodelay_nodelay_1" id="http_request_setnodelay_nodelay_1">#</a></span></h3>
+<p>Once a socket is assigned to this request and is connected
+<a href="net.html#net_socket_setnodelay_nodelay">socket.setNoDelay()</a> will be called.
+
+</p>
+<h3>request.setSocketKeepAlive([enable], [initialDelay])<span><a href="http.html#http_request_setsocketkeepalive_enable_initialdelay_1" id="http_request_setsocketkeepalive_enable_initialdelay_1">#</a></span></h3>
+<p>Once a socket is assigned to this request and is connected
+<a href="net.html#net_socket_setkeepalive_enable_initialdelay">socket.setKeepAlive()</a> will be called.
+
+</p>
+<p>一旦一个套接字被分配到这个请求，而且成功连接，那么<a href="net.html#net_socket_setkeepalive_enable_initialdelay">socket.setKeepAlive()</a>就会被调用。
+
+</p>
+<h2>http.IncomingMessage<span><a href="http.html#http_http_incomingmessage_1" id="http_http_incomingmessage_1">#</a></span></h2>
+<p>An <code>IncomingMessage</code> object is created by <code>http.Server</code> or <code>http.ClientRequest</code>
+and passed as the first argument to the <code>&apos;request&apos;</code> and <code>&apos;response&apos;</code> event
+respectively. It may be used to access response status, headers and data.
+
+</p>
+<p>一个 <code>IncomingMessage</code>对象是由 <code>http.Server</code>或<code>http.ClientRequest</code>创建的，并作为第一参数分别传递给<code>&apos;request&apos;</code>和<code>&apos;response&apos;</code> 事件。它也可以被用来访问应答的状态，头文件和数据。
+
+</p>
+<p>It implements the <a href="stream.html#stream_readable_stream">Readable Stream</a> interface, as well as the
+following additional events, methods, and properties.
+
+</p>
+<p>这个实现了 [可读流][]接口以及以下增加的事件，函数和属性。
+
+</p>
+<h3>事件: &apos;close&apos;<span><a href="http.html#http_close_5" id="http_close_5">#</a></span></h3>
+<p><code>function () { }</code>
+
+</p>
+<p><code>function () { }</code>
+
+</p>
+<p>Indicates that the underlaying connection was terminated before
+<code>response.end()</code> was called or able to flush.
+
+</p>
+<p>表示在<code>response.end()</code>被调用或强制刷新之前，底层的连接已经被终止了。
+
+</p>
+<p>Just like <code>&apos;end&apos;</code>, this event occurs only once per response. See
+[http.ServerResponse][]&apos;s <code>&apos;close&apos;</code> event for more information.
+
+</p>
+<p>跟<code>&apos;end&apos;</code>一样，这个事件对于每个应答只会触发一次。详见[http.ServerResponse][]的 <code>&apos;close&apos;</code>事件。
+
+</p>
+<h3>message.httpVersion<span><a href="http.html#http_message_httpversion_1" id="http_message_httpversion_1">#</a></span></h3>
+<p>In case of server request, the HTTP version sent by the client. In the case of
+client response, the HTTP version of the connected-to server.
+Probably either <code>&apos;1.1&apos;</code> or <code>&apos;1.0&apos;</code>.
+
+</p>
+<p>客户端向服务器发出请求时，客户端发送的HTTP版本；或是服务器向客户端返回应答时，服务器的HTTP版本。通常是 <code>&apos;1.1&apos;</code>或<code>&apos;1.0&apos;</code>。
+
+</p>
+<p>Also <code>response.httpVersionMajor</code> is the first integer and
+<code>response.httpVersionMinor</code> is the second.
+
+</p>
+<h3>message.headers<span><a href="http.html#http_message_headers_1" id="http_message_headers_1">#</a></span></h3>
+<p>The request/response headers object.
+
+</p>
+<p>请求/响应 头对象.
+
+</p>
+<p>Read only map of header names and values. Header names are lower-cased.
+Example:
+
+</p>
+<p>只读的头文件名称和值的映射。头文件名称全小写。示例：
+
+</p>
+<pre><code>// 输出类似这样：
+//
+// { &apos;user-agent&apos;: &apos;curl/7.22.0&apos;,
+//   host: &apos;127.0.0.1:8000&apos;,
+//   accept: &apos;*/*&apos; }
+console.log(request.headers);</code></pre>
+<h3>message.rawHeaders<span><a href="http.html#http_message_rawheaders_1" id="http_message_rawheaders_1">#</a></span></h3>
+<p>The raw request/response headers list exactly as they were received.
+
+</p>
+<p>Note that the keys and values are in the same list.  It is <em>not</em> a
+list of tuples.  So, the even-numbered offsets are key values, and the
+odd-numbered offsets are the associated values.
+
+</p>
+<p>Header names are not lowercased, and duplicates are not merged.
+
+</p>
+<pre><code>// Prints something like:
+//
+// [ &apos;user-agent&apos;,
+//   &apos;this is invalid because there can be only one&apos;,
+//   &apos;User-Agent&apos;,
+//   &apos;curl/7.22.0&apos;,
+//   &apos;Host&apos;,
+//   &apos;127.0.0.1:8000&apos;,
+//   &apos;ACCEPT&apos;,
+//   &apos;*/*&apos; ]
+console.log(request.rawHeaders);</code></pre>
+<h3>message.trailers<span><a href="http.html#http_message_trailers_1" id="http_message_trailers_1">#</a></span></h3>
+<p>The request/response trailers object. Only populated at the &apos;end&apos; event.
+
+</p>
+<h3>message.rawTrailers<span><a href="http.html#http_message_rawtrailers_1" id="http_message_rawtrailers_1">#</a></span></h3>
+<p>The raw request/response trailer keys and values exactly as they were
+received.  Only populated at the &apos;end&apos; event.
+
+</p>
+<h3>message.setTimeout(msecs, callback)<span><a href="http.html#http_message_settimeout_msecs_callback_1" id="http_message_settimeout_msecs_callback_1">#</a></span></h3>
+<div><ul>
+<li><code>msecs</code> <span>Number</span></li>
+<li><p><code>callback</code> <span>Function</span></p>
+</li>
+<li><p><code>msecs</code> <span>Number</span></p>
+</li>
+<li><code>callback</code> <span>Function</span></li>
+</div></ul>
+<p>Calls <code>message.connection.setTimeout(msecs, callback)</code>.
+
+</p>
+<p>调用message.connection.setTimeout(msecs, callback)
+
+</p>
+<h3>message.method<span><a href="http.html#http_message_method_1" id="http_message_method_1">#</a></span></h3>
+<p><strong>Only valid for request obtained from <code>http.Server</code>.</strong>
+
+</p>
+<p><strong>仅对从<code>http.Server</code>获得到的请求(request)有效.</strong>
+
+</p>
+<p>The request method as a string. Read only. Example:
+<code>&apos;GET&apos;</code>, <code>&apos;DELETE&apos;</code>.
+
+</p>
+<p>请求（request）方法如同一个只读的字符串，比如‘GET’、‘DELETE’。
+
+</p>
+<h3>message.url<span><a href="http.html#http_message_url_1" id="http_message_url_1">#</a></span></h3>
+<p><strong>Only valid for request obtained from <code>http.Server</code>.</strong>
+
+</p>
+<p><strong>仅对从<code>http.Server</code>获得到的请求(request)有效.</strong>
+
+</p>
+<p>Request URL string. This contains only the URL that is
+present in the actual HTTP request. If the request is:
+
+</p>
+<p>请求的URL字符串.它仅包含实际HTTP请求中所提供的URL.加入请求如下:
+
+</p>
+<pre><code>GET /status?name=ryan HTTP/1.1\r\n
+Accept: text/plain\r\n
+\r\n</code></pre>
+<p>Then <code>request.url</code> will be:
+
+</p>
+<p>则<code>request.url</code> 为:
+
+</p>
+<pre><code>&apos;/status?name=ryan&apos;</code></pre>
+<p>If you would like to parse the URL into its parts, you can use
+<code>require(&apos;url&apos;).parse(request.url)</code>.  Example:
+
+</p>
+<p>如果你想要将URL分解出来,你可以用<code>require(&apos;url&apos;).parse(request.url)</code>.  例如:
+
+</p>
+<pre><code>node&gt; require(&apos;url&apos;).parse(&apos;/status?name=ryan&apos;)
+{ href: &apos;/status?name=ryan&apos;,
+  search: &apos;?name=ryan&apos;,
+  query: &apos;name=ryan&apos;,
+  pathname: &apos;/status&apos; }</code></pre>
+<p>If you would like to extract the params from the query string,
+you can use the <code>require(&apos;querystring&apos;).parse</code> function, or pass
+<code>true</code> as the second argument to <code>require(&apos;url&apos;).parse</code>.  Example:
+
+</p>
+<p>如果你想要提取出从请求字符串(query string)中的参数,你可以用<code>require(&apos;querystring&apos;).parse</code>函数, 或者将<code>true</code>作为第二个参数传递给<code>require(&apos;url&apos;).parse</code>.  例如:
+
+</p>
+<pre><code>node&gt; require(&apos;url&apos;).parse(&apos;/status?name=ryan&apos;, true)
+{ href: &apos;/status?name=ryan&apos;,
+  search: &apos;?name=ryan&apos;,
+  query: { name: &apos;ryan&apos; },
+  pathname: &apos;/status&apos; }</code></pre>
+<h3>message.statusCode<span><a href="http.html#http_message_statuscode_1" id="http_message_statuscode_1">#</a></span></h3>
+<p><strong>Only valid for response obtained from <code>http.ClientRequest</code>.</strong>
+
+</p>
+<p><strong>仅对从<code>http.ClientRequest</code>获得的响应(response)有效.</strong>
+
+</p>
+<p>The 3-digit HTTP response status code. E.G. <code>404</code>.
+
+</p>
+<p>三位数的HTTP响应状态码. 例如 <code>404</code>.
+
+</p>
+<h3>message.socket<span><a href="http.html#http_message_socket_1" id="http_message_socket_1">#</a></span></h3>
+<p>The <code>net.Socket</code> object associated with the connection.
+
+</p>
+<p>与此连接(connection)关联的<code>net.Socket</code>对象.
+
+</p>
+<p>With HTTPS support, use request.connection.verifyPeer() and
+request.connection.getPeerCertificate() to obtain the client&apos;s
+authentication details.
+
+</p>
+<p>通过https的支持，使用 request.connection.verifyPeer()方法和request.connection.getPeerCertificate()方法来得到客户端的身份信息。
+
+</p>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>

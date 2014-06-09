@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Readline Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/readline.html">
+</head>
+<body class="alt apidoc" id="api-section-readline">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="readline.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="readline.html#readline_readline">Readline</a><ul>
+<li><a href="readline.html#readline_readline_createinterface_options">readline.createInterface(options)</a></li>
+<li><a href="readline.html#readline">类: 接口</a><ul>
+<li><a href="readline.html#readline_rl_setprompt_prompt">rl.setPrompt(prompt)</a></li>
+<li><a href="readline.html#readline_rl_prompt_preservecursor">rl.prompt([preserveCursor])</a></li>
+<li><a href="readline.html#readline_rl_question_query_callback">rl.question(query, callback)</a></li>
+<li><a href="readline.html#readline_rl_pause">rl.pause()</a></li>
+<li><a href="readline.html#readline_rl_resume">rl.resume()</a></li>
+<li><a href="readline.html#readline_rl_close">rl.close()</a></li>
+<li><a href="readline.html#readline_rl_write_data_key">rl.write(data, [key])</a></li>
+</ul>
+</li>
+<li><a href="readline.html#readline_events">Events</a><ul>
+<li><a href="readline.html#readline_event_line">Event: &apos;line&apos;</a></li>
+<li><a href="readline.html#readline_pause">事件: &apos;pause&apos;</a></li>
+<li><a href="readline.html#readline_resume">事件: &apos;resume&apos;</a></li>
+<li><a href="readline.html#readline_close">事件: &apos;close&apos;</a></li>
+<li><a href="readline.html#readline_event_sigint">Event: &apos;SIGINT&apos;</a></li>
+<li><a href="readline.html#readline_event_sigtstp">Event: &apos;SIGTSTP&apos;</a></li>
+<li><a href="readline.html#readline_event_sigcont">Event: &apos;SIGCONT&apos;</a></li>
+</ul>
+</li>
+<li><a href="readline.html#readline_tiny_cli">示例: Tiny CLI</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>Readline<span><a href="readline.html#readline_readline" id="readline_readline">#</a></span></h1>
+<pre><code>稳定度: 2 - 不稳定</code></pre>
+<p>To use this module, do <code>require(&apos;readline&apos;)</code>. Readline allows reading of a
+stream (such as <code>process.stdin</code>) on a line-by-line basis.
+
+</p>
+<p>要使用此模块，需要<code>require(&apos;readline&apos;)</code>.Readline程序允许逐行读取一个流内容(例如<code>process.stdin</code>).
+
+</p>
+<p>Note that once you&apos;ve invoked this module, your node program will not
+terminate until you&apos;ve closed the interface. Here&apos;s how to allow your
+program to gracefully exit:
+
+</p>
+<p>需要注意的是你一旦调用了这个模块，你的node程序将不会终止直到你关闭此接口。下面是如何让你的程序正常退出的方法:
+
+</p>
+<pre><code>  rl.close();
+});</code></pre>
+<h2>readline.createInterface(options)<span><a href="readline.html#readline_readline_createinterface_options" id="readline_readline_createinterface_options">#</a></span></h2>
+<p>Creates a readline <code>Interface</code> instance. Accepts an &quot;options&quot; Object that takes
+the following values:
+
+</p>
+<p>创建一个readline的接口实例. 接受一个Object类型参数，可传递以下几个值:
+
+</p>
+<ul>
+<li><p><code>input</code> - the readable stream to listen to (Required).</p>
+</li>
+<li><p><code>input</code> - 要监听的可读流 (必需).</p>
+</li>
+<li><p><code>output</code> - the writable stream to write readline data to (Required).</p>
+</li>
+<li><p><code>output</code> - 要写入 readline 的可写流 (必须).</p>
+</li>
+<li><p><code>completer</code> - an optional function that is used for Tab autocompletion. See
+below for an example of using this.</p>
+</li>
+<li><p><code>completer</code> - 用于 Tab 自动补全的可选函数。见下面使用的例子。</p>
+</li>
+<li><p><code>terminal</code> - pass <code>true</code> if the <code>input</code> and <code>output</code> streams should be
+treated like a TTY, and have ANSI/VT100 escape codes written to it.
+Defaults to checking <code>isTTY</code> on the <code>output</code> stream upon instantiation.</p>
+</li>
+<li><p><code>terminal</code> - 如果希望 <code>input</code> 和 <code>output</code> 流像 TTY 一样对待，那么传递参数 <code>true</code> ，并且经由 ANSI/VT100 转码。
+默认情况下检查 <code>isTTY</code> 是否在 <code>output</code> 流上实例化。</p>
+</li>
+</ul>
+<p>The <code>completer</code> function is given a the current line entered by the user, and
+is supposed to return an Array with 2 entries:
+
+</p>
+<p>通过用户 <code>completer</code> 函数给定了一个当前行入口，并且期望返回一个包含两个条目的数组：
+
+</p>
+<ol>
+<li><p>An Array with matching entries for the completion.</p>
+</li>
+<li><p>一个匹配当前输入补全的字符串数组.</p>
+</li>
+<li><p>The substring that was used for the matching.</p>
+</li>
+<li><p>一个用于匹配的子字符串。</p>
+</li>
+</ol>
+<p>Which ends up looking something like:
+<code>[[substr1, substr2, ...], originalsubstring]</code>.
+
+</p>
+<p>最终像这种形式:
+<code>[[substr1, substr2, ...], originalsubstring]</code>.
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>function completer(line) {
+  var completions = &apos;.help .error .exit .quit .q&apos;.split(&apos; &apos;)
+  var hits = completions.filter(function(c) { return c.indexOf(line) == 0 })
+  // show all completions if none found
+  return [hits.length ? hits : completions, line]
+}</code></pre>
+<p>Also <code>completer</code> can be run in async mode if it accepts two arguments:
+
+</p>
+<p><code>completer</code> 也可以运行在异步模式下，此时接受两个参数：
+
+</p>
+<pre><code>function completer(linePartial, callback) {
+  callback(null, [[&apos;123&apos;], linePartial]);
+}</code></pre>
+<p><code>createInterface</code> is commonly used with <code>process.stdin</code> and
+<code>process.stdout</code> in order to accept user input:
+
+</p>
+<p>为了接受用户的输入，<code>createInterface</code> 通常跟 <code>process.stdin</code> 和 <code>process.stdout</code> 一块使用：
+
+</p>
+<pre><code>var readline = require(&apos;readline&apos;);
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});</code></pre>
+<p>Once you have a readline instance, you most commonly listen for the
+<code>&quot;line&quot;</code> event.
+
+</p>
+<p>一旦你有一个 readline 实例，你通常会监听 &quot;line&quot; 事件。
+
+</p>
+<p>If <code>terminal</code> is <code>true</code> for this instance then the <code>output</code> stream will get
+the best compatibility if it defines an <code>output.columns</code> property, and fires
+a <code>&quot;resize&quot;</code> event on the <code>output</code> if/when the columns ever change
+(<code>process.stdout</code> does this automatically when it is a TTY).
+
+</p>
+<p>如果这个实例中<code>terminal</code>为<code>true</code>，而且<code>output</code>流定义了一个<code>output.columns</code>属性，那么<code>output</code>流将获得最好的兼容性，并且，当columns变化时(当它是TTY时，<code>process.stdout</code>会自动这样做)，会在<code>output</code>上触发一个 <code>&quot;resize&quot;</code>事件。
+
+</p>
+<h2>类: 接口<span><a href="readline.html#readline" id="readline">#</a></span></h2>
+<p>The class that represents a readline interface with an input and output
+stream.
+
+</p>
+<p>代表一个有输入输出流的 readline 接口的类。
+
+</p>
+<h3>rl.setPrompt(prompt)<span><a href="readline.html#readline_rl_setprompt_prompt" id="readline_rl_setprompt_prompt">#</a></span></h3>
+<p>Sets the prompt, for example when you run <code>node</code> on the command line, you see
+<code>&gt; </code>, which is node&apos;s prompt.
+
+</p>
+<p>设置提示符，例如当你在命令行运行 <code>node</code> 时，你会看到 <code>&gt; </code> ，这就是 node 的提示符。
+
+</p>
+<h3>rl.prompt([preserveCursor])<span><a href="readline.html#readline_rl_prompt_preservecursor" id="readline_rl_prompt_preservecursor">#</a></span></h3>
+<p>Readies readline for input from the user, putting the current <code>setPrompt</code>
+options on a new line, giving the user a new spot to write. Set <code>preserveCursor</code>
+to <code>true</code> to prevent the cursor placement being reset to <code>0</code>.
+
+</p>
+<p>为用户输入准备好readline，将现有的<code>setPrompt</code>选项放到新的一行，让用户有一个新的地方开始输入。将<code>preserveCursor</code>设为<code>true</code>来防止光标位置被重新设定成<code>0</code>。
+
+</p>
+<p>This will also resume the <code>input</code> stream used with <code>createInterface</code> if it has
+been paused.
+
+</p>
+<p>如果暂停，也会使用 <code>createInterface</code> 重置 <code>input</code> 流。
+
+</p>
+<h3>rl.question(query, callback)<span><a href="readline.html#readline_rl_question_query_callback" id="readline_rl_question_query_callback">#</a></span></h3>
+<p>Prepends the prompt with <code>query</code> and invokes <code>callback</code> with the user&apos;s
+response. Displays the query to the user, and then invokes <code>callback</code>
+with the user&apos;s response after it has been typed.
+
+</p>
+<p>预处理 <code>query</code>提示 ，用户应答时调用 <code>callback</code> . 当类型被确定后，将查询结果显示给用户, 然后在用户应答时调用 <code>callback</code>.
+
+</p>
+<p>This will also resume the <code>input</code> stream used with <code>createInterface</code> if
+it has been paused.
+
+</p>
+<p>如果暂停，也会使用 <code>createInterface</code> 重置 <code>input</code> 流。
+
+</p>
+<p>Example usage:
+
+</p>
+<p>使用示例：
+
+</p>
+<pre><code>interface.question(&apos;What is your favorite food?&apos;, function(answer) {
+  console.log(&apos;Oh, so your favorite food is &apos; + answer);
+});</code></pre>
+<h3>rl.pause()<span><a href="readline.html#readline_rl_pause" id="readline_rl_pause">#</a></span></h3>
+<p>Pauses the readline <code>input</code> stream, allowing it to be resumed later if needed.
+
+</p>
+<p>暂停 readline 的输入流 (<code>input</code> stream), 如果有需要稍后还可以恢复。
+
+</p>
+<h3>rl.resume()<span><a href="readline.html#readline_rl_resume" id="readline_rl_resume">#</a></span></h3>
+<p>Resumes the readline <code>input</code> stream.
+
+</p>
+<p>恢复 readline 的输入流 (<code>input</code> stream).
+
+</p>
+<h3>rl.close()<span><a href="readline.html#readline_rl_close" id="readline_rl_close">#</a></span></h3>
+<p>Closes the <code>Interface</code> instance, relinquishing control on the <code>input</code> and
+<code>output</code> streams. The &quot;close&quot; event will also be emitted.
+
+</p>
+<p>关闭接口实例 (<code>Interface</code> instance), 放弃控制输入输出流。&quot;close&quot; 事件会被触发。
+
+</p>
+<h3>rl.write(data, [key])<span><a href="readline.html#readline_rl_write_data_key" id="readline_rl_write_data_key">#</a></span></h3>
+<p>Writes <code>data</code> to <code>output</code> stream. <code>key</code> is an object literal to represent a key
+sequence; available if the terminal is a TTY.
+
+</p>
+<p>将 <code>data</code> 写入到 <code>output</code> 流。<code>key</code> 是一个代表键序列的对象；当终端是一个 TTY 时可用。
+
+</p>
+<p>This will also resume the <code>input</code> stream if it has been paused.
+
+</p>
+<p>如果暂停，也会重置 <code>input</code> 流。
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>rl.write(&apos;Delete me!&apos;);
+// 模仿 ctrl+u快捷键，删除之前所写行 
+rl.write(null, {ctrl: true, name: &apos;u&apos;});</code></pre>
+<h2>Events<span><a href="readline.html#readline_events" id="readline_events">#</a></span></h2>
+<h3>Event: &apos;line&apos;<span><a href="readline.html#readline_event_line" id="readline_event_line">#</a></span></h3>
+<p><code>function (line) {}</code>
+
+</p>
+<p><code>function (line) {}</code>
+
+</p>
+<p>Emitted whenever the <code>input</code> stream receives a <code>\n</code>, usually received when the
+user hits enter, or return. This is a good hook to listen for user input.
+
+</p>
+<p>在 <code>input</code> 流接受了一个 <code>\n</code> 时触发，通常在用户敲击回车或者返回时接收。
+这是一个监听用户输入的利器。
+
+</p>
+<p>Example of listening for <code>line</code>:
+
+</p>
+<p>监听 <code>line</code> 事件的示例:
+
+</p>
+<pre><code>rl.on(&apos;line&apos;, function (cmd) {
+  console.log(&apos;You just typed: &apos;+cmd);
+});</code></pre>
+<h3>事件: &apos;pause&apos;<span><a href="readline.html#readline_pause" id="readline_pause">#</a></span></h3>
+<p><code>function () {}</code>
+
+</p>
+<p><code>function () {}</code>
+
+</p>
+<p>Emitted whenever the <code>input</code> stream is paused.
+
+</p>
+<p>不论何时，只要输入流被暂停就会触发。
+
+</p>
+<p>Also emitted whenever the <code>input</code> stream is not paused and receives the
+<code>SIGCONT</code> event. (See events <code>SIGTSTP</code> and <code>SIGCONT</code>)
+
+</p>
+<p>而在输入流未被暂停，但收到 <code>SIGCONT</code> 信号时也会触发。 (详见 <code>SIGTSTP</code> 和 <code>SIGCONT</code> 事件)
+
+</p>
+<p>Example of listening for <code>pause</code>:
+
+</p>
+<p>监听 <code>pause</code> 事件的示例：
+
+</p>
+<pre><code>rl.on(&apos;pause&apos;, function() {
+  console.log(&apos;Readline 输入暂停.&apos;);
+});</code></pre>
+<h3>事件: &apos;resume&apos;<span><a href="readline.html#readline_resume" id="readline_resume">#</a></span></h3>
+<p><code>function () {}</code>
+
+</p>
+<p><code>function () {}</code>
+
+</p>
+<p>Emitted whenever the <code>input</code> stream is resumed.
+
+</p>
+<p>不论何时，只要输入流重新启用就会触发。
+
+</p>
+<p>Example of listening for <code>resume</code>:
+
+</p>
+<p>监听 <code>resume</code> 事件的示例：
+
+</p>
+<pre><code>rl.on(&apos;resume&apos;, function() {
+  console.log(&apos;Readline 恢复.&apos;);
+});</code></pre>
+<h3>事件: &apos;close&apos;<span><a href="readline.html#readline_close" id="readline_close">#</a></span></h3>
+<p><code>function () {}</code>
+
+</p>
+<p><code>function () {}</code>
+
+</p>
+<p>Emitted when <code>close()</code> is called.
+
+</p>
+<p>当 <code>close()</code> 被调用时触发。
+
+</p>
+<p>Also emitted when the <code>input</code> stream receives its &quot;end&quot; event. The <code>Interface</code>
+instance should be considered &quot;finished&quot; once this is emitted. For example, when
+the <code>input</code> stream receives <code>^D</code>, respectively known as <code>EOT</code>.
+
+</p>
+<p>当 <code>input</code>流接收到&quot;结束&quot;事件时也会被触发. 一旦触发，应当认为<code>Interface</code>实例
+ &quot;结束&quot; . 例如, 当<code>input</code>流接收到<code>^D</code>时, 分别被认为<code>EOT</code>.
+
+</p>
+<p>This event is also called if there is no <code>SIGINT</code> event listener present when
+the <code>input</code> stream receives a <code>^C</code>, respectively known as <code>SIGINT</code>.
+
+</p>
+<p>当 <code>input</code> 流接收到一个 <code>^C</code> 时，即使没有 <code>SIGINT</code> 监听器，也会触发这个事件，分别被称为 <code>SIGINT</code> 。
+
+</p>
+<h3>Event: &apos;SIGINT&apos;<span><a href="readline.html#readline_event_sigint" id="readline_event_sigint">#</a></span></h3>
+<p><code>function () {}</code>
+
+</p>
+<p><code>function () {}</code>
+
+</p>
+<p>Emitted whenever the <code>input</code> stream receives a <code>^C</code>, respectively known as
+<code>SIGINT</code>. If there is no <code>SIGINT</code> event listener present when the <code>input</code>
+stream receives a <code>SIGINT</code>, <code>pause</code> will be triggered.
+
+</p>
+<p>只要 <code>input</code>流 接收到<code>^C</code>就会被触发, 分别被认为<code>SIGINT</code>.当<code>input</code>流接收到<code>SIGINT</code>时, 
+ 如果没有 <code>SIGINT</code> 事件监听器，<code>pause</code> 将会被触发.
+
+</p>
+<p>Example of listening for <code>SIGINT</code>:
+
+</p>
+<p>监听 <code>SIGINT</code> 信号的示例：
+
+</p>
+<pre><code>rl.on(&apos;SIGINT&apos;, function() {
+  rl.question(&apos;Are you sure you want to exit?&apos;, function(answer) {
+    if (answer.match(/^y(es)?$/i)) rl.pause();
+  });
+});</code></pre>
+<h3>Event: &apos;SIGTSTP&apos;<span><a href="readline.html#readline_event_sigtstp" id="readline_event_sigtstp">#</a></span></h3>
+<p><code>function () {}</code>
+
+</p>
+<p><code>function () {}</code>
+
+</p>
+<p><strong>This does not work on Windows.</strong>
+
+</p>
+<p><strong>该功能不支持 windows 操作系统</strong>
+
+</p>
+<p>Emitted whenever the <code>input</code> stream receives a <code>^Z</code>, respectively known as
+<code>SIGTSTP</code>. If there is no <code>SIGTSTP</code> event listener present when the <code>input</code>
+stream receives a <code>SIGTSTP</code>, the program will be sent to the background.
+
+</p>
+<p>只要<code>input</code>流接收到<code>^Z</code>时就被触发, 分别被认为<code>SIGTSTP</code>. 当<code>input</code>流接收到
+ <code>SIGTSTP</code>时，如果没有<code>SIGTSTP</code> 事件监听器 ,程序会被发送到后台 .
+
+</p>
+<p>When the program is resumed with <code>fg</code>, the <code>pause</code> and <code>SIGCONT</code> events will be
+emitted. You can use either to resume the stream.
+
+</p>
+<p>当程序使用参数 <code>fg</code> 重启，<code>pause</code> 和 <code>SIGCONT</code> 事件将会被触发。
+你可以使用两者中任一事件来恢复流。
+
+</p>
+<p>The <code>pause</code> and <code>SIGCONT</code> events will not be triggered if the stream was paused
+before the program was sent to the background.
+
+</p>
+<p>在程序被发送到后台之前，如果流暂停，<code>pause</code> 和 <code>SIGCONT</code> 事件将不会被触发。
+
+</p>
+<p>Example of listening for <code>SIGTSTP</code>:
+
+</p>
+<p>监听 <code>SIGTSTP</code> 的示例：
+
+</p>
+<pre><code>rl.on(&apos;SIGTSTP&apos;, function() {
+  // 这将重载 SIGTSTP并防止程序转到
+  // 后台.
+  console.log(&apos;Caught SIGTSTP.&apos;);
+});</code></pre>
+<h3>Event: &apos;SIGCONT&apos;<span><a href="readline.html#readline_event_sigcont" id="readline_event_sigcont">#</a></span></h3>
+<p><code>function () {}</code>
+
+</p>
+<p><code>function () {}</code>
+
+</p>
+<p><strong>This does not work on Windows.</strong>
+
+</p>
+<p><strong>该功能不支持 windows 操作系统</strong>
+
+</p>
+<p>Emitted whenever the <code>input</code> stream is sent to the background with <code>^Z</code>,
+respectively known as <code>SIGTSTP</code>, and then continued with <code>fg(1)</code>. This event
+only emits if the stream was not paused before sending the program to the
+background.
+
+</p>
+<p>一旦 <code>input</code>流中含有 <code>^Z</code>并被发送到后台就会触发,分别被认为
+ <code>SIGTSTP</code>, 然后继续执行<code>fg(1)</code>. 这一事件只有在流被发送后台之前没有暂停才会触发.
+
+</p>
+<p>Example of listening for <code>SIGCONT</code>:
+
+</p>
+<p>监听 <code>SIGCONT</code> 的示例:
+
+</p>
+<pre><code>rl.on(&apos;SIGCONT&apos;, function() {
+  // `prompt` 将会自动恢复流
+  rl.prompt();
+});</code></pre>
+<h2>示例: Tiny CLI<span><a href="readline.html#readline_tiny_cli" id="readline_tiny_cli">#</a></span></h2>
+<p>Here&apos;s an example of how to use all these together to craft a tiny command
+line interface:
+
+</p>
+<p>这里有一个使用所有方法精心设计的小命令行程序：
+
+</p>
+<pre><code>rl.on(&apos;line&apos;, function(line) {
+  switch(line.trim()) {
+    case &apos;hello&apos;:
+      console.log(&apos;world!&apos;);
+      break;
+    default:
+      console.log(&apos;Say what? I might have heard `&apos; + line.trim() + &apos;`&apos;);
+      break;
+  }
+  rl.prompt();
+}).on(&apos;close&apos;, function() {
+  console.log(&apos;Have a great day!&apos;);
+  process.exit(0);
+});</code></pre>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
