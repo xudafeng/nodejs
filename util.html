@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>utils Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/util.html">
+</head>
+<body class="alt apidoc" id="api-section-util">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="http://jixiangac.com/doc/node/util.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="util.html#util_utils">utils</a><ul>
+<li><a href="util.html#util_util_debuglog_section">util.debuglog(section)</a></li>
+<li><a href="util.html#util_util_format_format">util.format(format, [...])</a></li>
+<li><a href="util.html#util_util_log_string">util.log(string)</a></li>
+<li><a href="util.html#util_util_inspect_object_options">util.inspect(object, [options])</a><ul>
+<li><a href="util.html#util_util_inspect">自定义 <code>util.inspect</code> 颜色</a></li>
+<li><a href="util.html#util_inspect">自定义对象的<code>inspect()</code>方法</a></li>
+</ul>
+</li>
+<li><a href="util.html#util_util_isarray_object">util.isArray(object)</a></li>
+<li><a href="util.html#util_util_isregexp_object">util.isRegExp(object)</a></li>
+<li><a href="util.html#util_util_isdate_object">util.isDate(object)</a></li>
+<li><a href="util.html#util_util_iserror_object">util.isError(object)</a></li>
+<li><a href="util.html#util_util_inherits_constructor_superconstructor">util.inherits(constructor, superConstructor)</a></li>
+<li><a href="util.html#util_util_debug_string">util.debug(string)</a></li>
+<li><a href="util.html#util_util_error">util.error([...])</a></li>
+<li><a href="util.html#util_util_puts">util.puts([...])</a></li>
+<li><a href="util.html#util_util_print">util.print([...])</a></li>
+<li><a href="util.html#util_util_pump_readablestream_writablestream_callback">util.pump(readableStream, writableStream, [callback])</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>utils<span><a href="util.html#util_utils" id="util_utils">#</a></span></h1>
+<pre><code>稳定度: 4 - 冻结</code></pre>
+<p>These functions are in the module <code>&apos;util&apos;</code>. Use <code>require(&apos;util&apos;)</code> to
+access them.
+
+</p>
+<p>如果你想使用模块 <code>&apos;util&apos;</code>中已定义的方法. 只需 <code>require(&apos;util&apos;)</code> 即可使用.
+
+</p>
+<p>The <code>util</code> module is primarily designed to support the needs of Node&apos;s
+internal APIs.  Many of these utilities are useful for your own
+programs.  If you find that these functions are lacking for your
+purposes, however, you are encouraged to write your own utilities.  We
+are not interested in any future additions to the <code>util</code> module that
+are unnecessary for Node&apos;s internal functionality.
+
+</p>
+<p><code>util</code>模块设计的主要目的是为了满足Node内部API的需求
+。这个模块中的很多方法在你编写Node程序的时候都是很有帮助的。如果你觉得提供的这些方法满足不了你的需求，那么我们鼓励你编写自己的实用工具方法。我们
+不希望<code>util</code>模块中添加任何对于Node的内部功能非必要的扩展。
+
+</p>
+<h2>util.debuglog(section)<span><a href="util.html#util_util_debuglog_section" id="util_util_debuglog_section">#</a></span></h2>
+<div><ul>
+<li><code>section</code> <span>String</span> The section of the program to be debugged</li>
+<li><p>Returns: <span>Function</span> The logging function</p>
+</li>
+<li><p><code>section</code> <span>String</span> 被调试的程序节点部分</p>
+</li>
+<li>返回值: <span>Function</span> 日志处理函数</li>
+</div></ul>
+<p>This is used to create a function which conditionally writes to stderr
+based on the existence of a <code>NODE_DEBUG</code> environment variable.  If the
+<code>section</code> name appears in that environment variable, then the returned
+function will be similar to <code>console.error()</code>.  If not, then the
+returned function is a no-op.
+
+</p>
+<p>这个方法是在存在<code>NODE_DEBUG</code>环境变量的基础上，创建一个有条件写到stderr里的函数。如果“节点”的名字出现在这个环境变量里,那么就返回一个功能类似于<code>console.error()</code>的函数.如果不是,那么返回一个空函数.
+
+</p>
+<p>For example:
+
+</p>
+<p>例如：
+
+</p>
+<p>var bar = 123;
+debuglog(&apos;hello from foo [%d]&apos;, bar);
+```
+
+</p>
+<p>If this program is run with <code>NODE_DEBUG=foo</code> in the environment, then
+it will output something like:
+
+</p>
+<p>如果这个程序以<code>NODE_DEBUG=foo</code> 的环境运行，那么它将会输出：
+
+</p>
+<pre><code>FOO 3245: hello from foo [123]</code></pre>
+<p>where <code>3245</code> is the process id.  If it is not run with that
+environment variable set, then it will not print anything.
+
+</p>
+<p><code>3245</code>是进程的ID, 如果程序不以刚才那样设置的环境变量运行，那么将不会输出任何东西。
+
+</p>
+<p>You may separate multiple <code>NODE_DEBUG</code> environment variables with a
+comma.  For example, <code>NODE_DEBUG=fs,net,tls</code>.
+
+</p>
+<p>多个<code>NODE_DEBUG</code>环境变量,你可以用逗号进行分割。例如，<code>NODE_DEBUG= fs, net, tls</code>。
+
+</p>
+<h2>util.format(format, [...])<span><a href="util.html#util_util_format_format" id="util_util_format_format">#</a></span></h2>
+<p>Returns a formatted string using the first argument as a <code>printf</code>-like format.
+
+</p>
+<p>根据第一个参数，返回一个格式化字符串，类似<code>printf</code>的格式化输出。
+
+</p>
+<p>The first argument is a string that contains zero or more <em>placeholders</em>.
+Each placeholder is replaced with the converted value from its corresponding
+argument. Supported placeholders are:
+
+</p>
+<p>第一个参数是一个字符串，包含零个或多个<em>占位符</em>。
+每一个占位符被替换为与其对应的转换后的值。
+支持的占位符有:
+
+</p>
+<ul>
+<li><code>%s</code> - String.</li>
+<li><code>%d</code> - Number (both integer and float).</li>
+<li><code>%j</code> - JSON.  Replaced with the string <code>&apos;[Circular]&apos;</code> if the argument<pre><code>   contains circular references.</code></pre>
+</li>
+<li><p><code>%%</code> - single percent sign (<code>&apos;%&apos;</code>). This does not consume an argument.</p>
+</li>
+<li><p><code>%s</code> - 字符串.</p>
+</li>
+<li><code>%d</code> - 数字 (整型和浮点型).</li>
+<li><code>%j</code> - JSON. 如果这个参数包含循环对象的引用，将会被替换成字符串 <code>&apos;[Circular]&apos;</code>。</li>
+<li><code>%%</code> - 单独一个百分号(<code>&apos;%&apos;</code>)。不会消耗一个参数。</li>
+</ul>
+<p>If the placeholder does not have a corresponding argument, the placeholder is
+not replaced.
+
+</p>
+<p>如果占位符没有相对应的参数，占位符将不会被替换。
+
+</p>
+<pre><code>util.format(&apos;%s:%s&apos;, &apos;foo&apos;); // &apos;foo:%s&apos;</code></pre>
+<p>If there are more arguments than placeholders, the extra arguments are
+converted to strings with <code>util.inspect()</code> and these strings are concatenated,
+delimited by a space.
+
+</p>
+<p>如果有多个参数占位符，额外的参数将会调用<code>util.inspect()</code>转换为字符串。这些字符串被连接在一起，并且以空格分隔。
+
+</p>
+<pre><code>util.format(&apos;%s:%s&apos;, &apos;foo&apos;, &apos;bar&apos;, &apos;baz&apos;); // &apos;foo:bar baz&apos;</code></pre>
+<p>If the first argument is not a format string then <code>util.format()</code> returns
+a string that is the concatenation of all its arguments separated by spaces.
+Each argument is converted to a string with <code>util.inspect()</code>.
+
+</p>
+<p>如果第一个参数是一个非格式化字符串，那么<code>util.format()</code>将会把所有的参数转成字符串，以空格隔开，拼接在一块，并返回该字符串。<code>util.inspect()</code>会把每个参数都转成一个字符串。
+
+</p>
+<pre><code>util.format(1, 2, 3); // &apos;1 2 3&apos;</code></pre>
+<h2>util.log(string)<span><a href="util.html#util_util_log_string" id="util_util_log_string">#</a></span></h2>
+<p>Output with timestamp on <code>stdout</code>.
+
+</p>
+<p>在控制台进行输出，并带有时间戳。
+
+</p>
+<pre><code>示例：require(&apos;util&apos;).log(&apos;Timestamped message.&apos;);</code></pre>
+<h2>util.inspect(object, [options])<span><a href="util.html#util_util_inspect_object_options" id="util_util_inspect_object_options">#</a></span></h2>
+<p>Return a string representation of <code>object</code>, which is useful for debugging.
+
+</p>
+<p>返回一个对象的字符串表现形式, 在代码调试的时候非常有用.
+
+</p>
+<p>An optional <em>options</em> object may be passed that alters certain aspects of the
+formatted string:
+
+</p>
+<p>可以通过加入一些可选选项，来改变对象的格式化输出形式：
+
+</p>
+<ul>
+<li><p><code>showHidden</code> - if <code>true</code> then the object&apos;s non-enumerable properties will be
+shown too. Defaults to <code>false</code>.</p>
+</li>
+<li><p><code>showHidden</code> - 如果设为 <code>true</code>，那么该对象的不可枚举的属性将会被显示出来。默认为<code>false</code>.</p>
+</li>
+<li><p><code>depth</code> - tells <code>inspect</code> how many times to recurse while formatting the
+object. This is useful for inspecting large complicated objects. Defaults to
+<code>2</code>. To make it recurse indefinitely pass <code>null</code>.</p>
+</li>
+<li><p><code>depth</code> - 告诉 <code>inspect</code> 格式化对象的时候递归多少次。这个选项在格式化复杂对象的时候比较有用。 默认为
+<code>2</code>。如果想无穷递归下去，则赋值为<code>null</code>即可。</p>
+</li>
+<li><p><code>colors</code> - if <code>true</code>, then the output will be styled with ANSI color codes.
+Defaults to <code>false</code>. Colors are customizable, see below.</p>
+</li>
+<li><p><code>colors</code> - 如果设为<code>true</code>，将会以<code>ANSI</code>颜色代码风格进行输出.
+默认是<code>false</code>。颜色是可定制的，请看下面：</p>
+</li>
+<li><p><code>customInspect</code> - if <code>false</code>, then custom <code>inspect(depth, opts)</code> functions
+defined on the objects being inspected won&apos;t be called. Defaults to <code>true</code>.</p>
+</li>
+<li><p><code>customInspect</code> - 如果设为 <code>false</code>，那么定义在被检查对象上的<code>inspect(depth, opts)</code> 方法将不会被调用。 默认为<code>true</code>。</p>
+</li>
+</ul>
+<p>Example of inspecting all properties of the <code>util</code> object:
+
+</p>
+<p>示例：检查<code>util</code>对象上的所有属性
+
+</p>
+<pre><code>console.log(util.inspect(util, { showHidden: true, depth: null }));</code></pre>
+<p>Values may supply their own custom <code>inspect(depth, opts)</code> functions, when
+called they receive the current depth in the recursive inspection, as well as
+the options object passed to <code>util.inspect()</code>.
+
+</p>
+<p>当被调用的时候，参数值可以提供自己的自定义<code>inspect(depth, opts)</code>方法。该方法会接收当前的递归检查深度，以及传入<code>util.inspect()</code>的其他参数。
+
+</p>
+<h3>自定义 <code>util.inspect</code> 颜色<span><a href="util.html#util_util_inspect" id="util_util_inspect">#</a></span></h3>
+<!-- type=misc -->
+
+<p>Color output (if enabled) of <code>util.inspect</code> is customizable globally
+via <code>util.inspect.styles</code> and <code>util.inspect.colors</code> objects.
+
+</p>
+<p><code>util.inspect</code>彩色输出(如果启用的话) ，可以通过<code>util.inspect.styles</code> 和 <code>util.inspect.colors</code> 来全局定义。
+
+</p>
+<p><code>util.inspect.styles</code> is a map assigning each style a color
+from <code>util.inspect.colors</code>.
+Highlighted styles and their default values are:
+ <em> <code>number</code> (yellow)
+ </em> <code>boolean</code> (yellow)
+ <em> <code>string</code> (green)
+ </em> <code>date</code> (magenta)
+ <em> <code>regexp</code> (red)
+ </em> <code>null</code> (bold)
+ <em> <code>undefined</code> (grey)
+ </em> <code>special</code> - only function at this time (cyan)
+ * <code>name</code> (intentionally no styling)
+
+</p>
+<p><code>util.inspect.styles</code>是通过<code>util.inspect.colors</code>分配给每个风格颜色的一个映射。
+高亮风格和它们的默认值:
+ <em> <code>number</code> (黄色)
+ </em> <code>boolean</code> (黄色)
+ <em> <code>string</code> (绿色)
+ </em> <code>date</code> (洋红色)
+ <em> <code>regexp</code> (红色)
+ </em> <code>null</code> (粗体)
+ <em> <code>undefined</code> (灰色)
+ </em> <code>special</code> - 在这个时候的唯一方法 (青绿色)
+ * <code>name</code> (无风格)
+
+</p>
+<p>Predefined color codes are: <code>white</code>, <code>grey</code>, <code>black</code>, <code>blue</code>, <code>cyan</code>, 
+<code>green</code>, <code>magenta</code>, <code>red</code> and <code>yellow</code>.
+There are also <code>bold</code>, <code>italic</code>, <code>underline</code> and <code>inverse</code> codes.
+
+</p>
+<p>预定义的颜色代码: <code>white</code>, <code>grey</code>, <code>black</code>, <code>blue</code>, <code>cyan</code>, 
+<code>green</code>, <code>magenta</code>, <code>red</code> 和 <code>yellow</code>。
+还有 <code>bold</code>, <code>italic</code>, <code>underline</code> 和 <code>inverse</code> 代码。
+
+</p>
+<h3>自定义对象的<code>inspect()</code>方法<span><a href="util.html#util_inspect" id="util_inspect">#</a></span></h3>
+<!-- type=misc -->
+
+<p>Objects also may define their own <code>inspect(depth)</code> function which <code>util.inspect()</code>
+will invoke and use the result of when inspecting the object:
+
+</p>
+<p>对象可以定义自己的 <code>inspect(depth)</code>方法；当使用<code>util.inspect()</code>检查该对象的时候，将会执行对象自定义的检查方法。
+
+</p>
+<pre><code>util.inspect(obj);
+  // &quot;{nate}&quot;</code></pre>
+<p>You may also return another Object entirely, and the returned String will be
+formatted according to the returned Object. This is similar to how
+<code>JSON.stringify()</code> works:
+
+</p>
+<p>您也可以返回完全不同的另一个对象，而且返回的字符串将被根据返回的对象格式化。它和<code>JSON.stringify()</code>工作原理类似:
+
+</p>
+<pre><code>util.inspect(obj);
+  // &quot;{ bar: &apos;baz&apos; }&quot;</code></pre>
+<h2>util.isArray(object)<span><a href="util.html#util_util_isarray_object" id="util_util_isarray_object">#</a></span></h2>
+<p>Returns <code>true</code> if the given &quot;object&quot; is an <code>Array</code>. <code>false</code> otherwise.
+
+</p>
+<p>如果给定的对象是<code>数组</code>类型，就返回<code>true</code>，否则返回<code>false</code>
+
+</p>
+<pre><code>util.isArray([])
+  // true
+util.isArray(new Array)
+  // true
+util.isArray({})
+  // false</code></pre>
+<h2>util.isRegExp(object)<span><a href="util.html#util_util_isregexp_object" id="util_util_isregexp_object">#</a></span></h2>
+<p>Returns <code>true</code> if the given &quot;object&quot; is a <code>RegExp</code>. <code>false</code> otherwise.
+
+</p>
+<p>如果给定的对象是<code>RegExp</code>类型，就返回<code>true</code>，否则返回<code>false</code>。
+
+</p>
+<pre><code>util.isRegExp(/some regexp/)
+  // true
+util.isRegExp(new RegExp(&apos;another regexp&apos;))
+  // true
+util.isRegExp({})
+  // false</code></pre>
+<h2>util.isDate(object)<span><a href="util.html#util_util_isdate_object" id="util_util_isdate_object">#</a></span></h2>
+<p>Returns <code>true</code> if the given &quot;object&quot; is a <code>Date</code>. <code>false</code> otherwise.
+
+</p>
+<p>如果给定的对象是<code>Date</code>类型，就返回<code>true</code>，否则返回<code>false</code>。
+
+</p>
+<pre><code>util.isDate(new Date())
+  // true
+util.isDate(Date())
+  // false (没有关键字 &apos;new&apos; 返回一个字符串)
+util.isDate({})
+  // false</code></pre>
+<h2>util.isError(object)<span><a href="util.html#util_util_iserror_object" id="util_util_iserror_object">#</a></span></h2>
+<p>Returns <code>true</code> if the given &quot;object&quot; is an <code>Error</code>. <code>false</code> otherwise.
+
+</p>
+<p>如果给定的对象是<code>Error</code>类型，就返回<code>true</code>，否则返回<code>false</code>。
+
+</p>
+<pre><code>util.isError(new Error())
+  // true
+util.isError(new TypeError())
+  // true
+util.isError({ name: &apos;Error&apos;, message: &apos;an error occurred&apos; })
+  // false</code></pre>
+<h2>util.inherits(constructor, superConstructor)<span><a href="util.html#util_util_inherits_constructor_superconstructor" id="util_util_inherits_constructor_superconstructor">#</a></span></h2>
+<p>Inherit the prototype methods from one
+<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/constructor">constructor</a>
+into another.  The prototype of <code>constructor</code> will be set to a new
+object created from <code>superConstructor</code>.
+
+</p>
+<p>通过<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/constructor">构造函数</a>，继承原型对象上的方法。构造函数的<code>原型</code>将被设置为一个新的
+从<code>超类</code>创建的对象。
+
+</p>
+<p>As an additional convenience, <code>superConstructor</code> will be accessible
+through the <code>constructor.super_</code> property.
+
+</p>
+<p>你可以很方便的通过 <code>constructor.super_</code>来访问到<code>superConstructor</code> 
+
+</p>
+<pre><code>stream.on(&quot;data&quot;, function(data) {
+    console.log(&apos;Received data: &quot;&apos; + data + &apos;&quot;&apos;);
+})
+stream.write(&quot;It works!&quot;); // 输出结果：Received data: &quot;It works!&quot;</code></pre>
+<h2>util.debug(string)<span><a href="util.html#util_util_debug_string" id="util_util_debug_string">#</a></span></h2>
+<pre><code>稳定度: 0 - 已过时: 请使用 console.error() 代替</code></pre>
+<p>Deprecated predecessor of <code>console.error</code>.
+
+</p>
+<p><code>console.error</code>的已过时的前身
+
+</p>
+<h2>util.error([...])<span><a href="util.html#util_util_error" id="util_util_error">#</a></span></h2>
+<pre><code>稳定度: 0 - 已过时: 请使用 console.error() 代替</code></pre>
+<p>Deprecated predecessor of <code>console.error</code>.
+
+</p>
+<p><code>console.error</code>的已过时的前身
+
+</p>
+<h2>util.puts([...])<span><a href="util.html#util_util_puts" id="util_util_puts">#</a></span></h2>
+<p>   稳定度: 0 - 已过时: 请使用 console.log() 代替
+
+</p>
+<p>Deprecated predecessor of <code>console.log</code>.
+
+</p>
+<p><code>console.log</code>的已过时的前身
+
+</p>
+<h2>util.print([...])<span><a href="util.html#util_util_print" id="util_util_print">#</a></span></h2>
+<p>   稳定度: 0 - 已过时: 请使用 console.log() 代替
+
+</p>
+<p>Deprecated predecessor of <code>console.log</code>.
+
+</p>
+<p><code>console.log</code>的已过时的前身
+
+</p>
+<h2>util.pump(readableStream, writableStream, [callback])<span><a href="util.html#util_util_pump_readablestream_writablestream_callback" id="util_util_pump_readablestream_writablestream_callback">#</a></span></h2>
+<p>   稳定度: 0 - 已过时: 请使用readableStream.pipe(writableStream)代替
+
+</p>
+<p>Deprecated predecessor of <code>stream.pipe()</code>.
+
+
+</p>
+<p><code>stream.pipe()</code>的已过时的前身
+</p>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>

@@ -1,0 +1,1038 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>process Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/process.html">
+</head>
+<body class="alt apidoc" id="api-section-process">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="http://jixiangac.com/doc/node/process.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="process.html#process_process">process</a><ul>
+<li><a href="process.html#process_exit_codes">Exit Codes</a></li>
+<li><a href="process.html#process_exit">事件: &apos;exit&apos;</a></li>
+<li><a href="process.html#process_uncaughtexception">事件: &apos;uncaughtException&apos;（未捕获错误）</a></li>
+<li><a href="process.html#process_signal_events">Signal Events</a></li>
+<li><a href="process.html#process_process_stdout">process.stdout</a></li>
+<li><a href="process.html#process_process_stderr">process.stderr</a></li>
+<li><a href="process.html#process_process_stdin">process.stdin</a></li>
+<li><a href="process.html#process_process_argv">process.argv</a></li>
+<li><a href="process.html#process_process_execpath">process.execPath</a></li>
+<li><a href="process.html#process_process_execargv">process.execArgv</a></li>
+<li><a href="process.html#process_process_abort">process.abort()</a></li>
+<li><a href="process.html#process_process_chdir_directory">process.chdir(directory)</a></li>
+<li><a href="process.html#process_process_cwd">process.cwd()</a></li>
+<li><a href="process.html#process_process_env">process.env</a></li>
+<li><a href="process.html#process_process_exit_code">process.exit([code])</a></li>
+<li><a href="process.html#process_process_exitcode">process.exitCode</a></li>
+<li><a href="process.html#process_process_getgid">process.getgid()</a></li>
+<li><a href="process.html#process_process_setgid_id">process.setgid(id)</a></li>
+<li><a href="process.html#process_process_getuid">process.getuid()</a></li>
+<li><a href="process.html#process_process_setuid_id">process.setuid(id)</a></li>
+<li><a href="process.html#process_process_getgroups">process.getgroups()</a></li>
+<li><a href="process.html#process_process_setgroups_groups">process.setgroups(groups)</a></li>
+<li><a href="process.html#process_process_initgroups_user_extra_group">process.initgroups(user, extra_group)</a></li>
+<li><a href="process.html#process_process_version">process.version</a></li>
+<li><a href="process.html#process_process_versions">process.versions</a></li>
+<li><a href="process.html#process_process_config">process.config</a></li>
+<li><a href="process.html#process_process_kill_pid_signal">process.kill(pid, [signal])</a></li>
+<li><a href="process.html#process_process_pid">process.pid</a></li>
+<li><a href="process.html#process_process_title">process.title</a></li>
+<li><a href="process.html#process_process_arch">process.arch</a></li>
+<li><a href="process.html#process_process_platform">process.platform</a></li>
+<li><a href="process.html#process_process_memoryusage">process.memoryUsage()</a></li>
+<li><a href="process.html#process_process_nexttick_callback">process.nextTick(callback)</a></li>
+<li><a href="process.html#process_process_umask_mask">process.umask([mask])</a></li>
+<li><a href="process.html#process_process_uptime">process.uptime()</a></li>
+<li><a href="process.html#process_process_hrtime">process.hrtime()</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>process<span><a href="process.html#process_process" id="process_process">#</a></span></h1>
+<!-- type=global -->
+
+<p>The <code>process</code> object is a global object and can be accessed from anywhere.
+It is an instance of <a href="events.html#events_class_events_eventemitter">EventEmitter</a>.
+
+</p>
+<p><code>process</code>对象是一个全局对象，可以在任何地方访问到它。
+它是<a href="events.html#events_class_events_eventemitter">EventEmitter</a>的一个实例。
+
+</p>
+<h2>Exit Codes<span><a href="process.html#process_exit_codes" id="process_exit_codes">#</a></span></h2>
+<p>Node will normally exit with a <code>0</code> status code when no more async
+operations are pending.  The following status codes are used in other
+cases:
+
+</p>
+<p>Node 执行程序正常情况下会返回 0，这也意味着，包括所有“异步”在内的操作都已结束。（笔者注：linux terminal 下使用 echo $? 查看，win cmd 下使用 echo %ERRORLEVEL% 查看）除此之外的其他返回状态如下：
+
+</p>
+<ul>
+<li><code>1</code> <strong>Uncaught Fatal Exception</strong> - There was an uncaught exception,
+and it was not handled by a domain or an <code>uncaughtException</code> event
+handler.</li>
+<li><code>2</code> - Unused (reserved by Bash for builtin misuse)</li>
+<li><code>3</code> <strong>Internal JavaScript Parse Error</strong> - The JavaScript source code
+internal in Node&apos;s bootstrapping process caused a parse error.  This
+is extremely rare, and generally can only happen during development
+of Node itself.</li>
+<li><code>4</code> <strong>Internal JavaScript Evaluation Failure</strong> - The JavaScript
+source code internal in Node&apos;s bootstrapping process failed to
+return a function value when evaluated.  This is extremely rare, and
+generally can only happen during development of Node itself.</li>
+<li><code>5</code> <strong>Fatal Error</strong> - There was a fatal unrecoverable error in V8.
+Typically a message will be printed to stderr with the prefix <code>FATAL
+ERROR</code>.</li>
+<li><code>6</code> <strong>Non-function Internal Exception Handler</strong> - There was an
+uncaught exception, but the internal fatal exception handler
+function was somehow set to a non-function, and could not be called.</li>
+<li><code>7</code> <strong>Internal Exception Handler Run-Time Failure</strong> - There was an
+uncaught exception, and the internal fatal exception handler
+function itself threw an error while attempting to handle it.  This
+can happen, for example, if a <code>process.on(&apos;uncaughtException&apos;)</code> or
+<code>domain.on(&apos;error&apos;)</code> handler throws an error.</li>
+<li><code>8</code> - Unused.  In previous versions of Node, exit code 8 sometimes
+indicated an uncaught exception.</li>
+<li><code>9</code> - <strong>Invalid Argument</strong> - Either an unknown option was specified,
+or an option requiring a value was provided without a value.</li>
+<li><code>10</code> <strong>Internal JavaScript Run-Time Failure</strong> - The JavaScript
+source code internal in Node&apos;s bootstrapping process threw an error
+when the bootstrapping function was called.  This is extremely rare,
+and generally can only happen during development of Node itself.</li>
+<li><code>12</code> <strong>Invalid Debug Argument</strong> - The <code>--debug</code> and/or <code>--debug-brk</code>
+options were set, but an invalid port number was chosen.</li>
+<li><p><code>&gt;128</code> <strong>Signal Exits</strong> - If Node receives a fatal signal such as
+<code>SIGKILL</code> or <code>SIGHUP</code>, then its exit code will be <code>128</code> plus the
+value of the signal code.  This is a standard Unix practice, since
+exit codes are defined to be 7-bit integers, and signal exits set
+the high-order bit, and then contain the value of the signal code.</p>
+</li>
+<li><p><code>1</code> <strong>未捕获的致命异常(Uncaught Fatal Exception)</strong> - There was an uncaught exception,
+and it was not handled by a domain or an <code>uncaughtException</code> event
+handler.</p>
+</li>
+<li><code>2</code> - 未使用(Unused) (reserved by Bash for builtin misuse)</li>
+<li><code>3</code> <strong>解析错误(Internal JavaScript Parse Error)</strong> - The JavaScript source code
+internal in Node&apos;s bootstrapping process caused a parse error.  This
+is extremely rare, and generally can only happen during development
+of Node itself.</li>
+<li><code>4</code> <strong>评估失败(Internal JavaScript Evaluation Failure)</strong> - The JavaScript
+source code internal in Node&apos;s bootstrapping process failed to
+return a function value when evaluated.  This is extremely rare, and
+generally can only happen during development of Node itself.</li>
+<li><code>5</code> <strong>致命错误(Fatal Error)</strong> - There was a fatal unrecoverable error in V8.
+Typically a message will be printed to stderr with the prefix <code>FATAL
+ERROR</code>.</li>
+<li><code>6</code> <strong>未正确的异常处理(Non-function Internal Exception Handler)</strong> - There was an
+uncaught exception, but the internal fatal exception handler
+function was somehow set to a non-function, and could not be called.</li>
+<li><code>7</code> <strong>异常处理函数运行时失败(Internal Exception Handler Run-Time Failure)</strong> - There was an
+uncaught exception, and the internal fatal exception handler
+function itself threw an error while attempting to handle it.  This
+can happen, for example, if a <code>process.on(&apos;uncaughtException&apos;)</code> or
+<code>domain.on(&apos;error&apos;)</code> handler throws an error.</li>
+<li><code>8</code> - 未使用(Unused).  In previous versions of Node, exit code 8 sometimes
+indicated an uncaught exception.</li>
+<li><code>9</code> - <strong>无效的参数(Invalid Argument)</strong> - Either an unknown option was specified,
+or an option requiring a value was provided without a value.</li>
+<li><code>10</code> <strong>运行时失败(Internal JavaScript Run-Time Failure)</strong> - The JavaScript
+source code internal in Node&apos;s bootstrapping process threw an error
+when the bootstrapping function was called.  This is extremely rare,
+and generally can only happen during development of Node itself.</li>
+<li><code>12</code> <strong>无效的调试参数(Invalid Debug Argument)</strong> - The <code>--debug</code> and/or <code>--debug-brk</code>
+options were set, but an invalid port number was chosen.</li>
+<li><code>&gt;128</code> <strong>信号退出(Signal Exits)</strong> - If Node receives a fatal signal such as
+<code>SIGKILL</code> or <code>SIGHUP</code>, then its exit code will be <code>128</code> plus the
+value of the signal code.  This is a standard Unix practice, since
+exit codes are defined to be 7-bit integers, and signal exits set
+the high-order bit, and then contain the value of the signal code.</li>
+</ul>
+<h2>事件: &apos;exit&apos;<span><a href="process.html#process_exit" id="process_exit">#</a></span></h2>
+<p>Emitted when the process is about to exit.  This is a good hook to perform
+constant time checks of the module&apos;s state (like for unit tests).  The main
+event loop will no longer be run after the &apos;exit&apos; callback finishes, so
+timers may not be scheduled.
+
+</p>
+<p>当进程将要退出时触发。这是一个在固定时间检查模块状态（如单元测试）的好时机。需要注意的是 &apos;exit&apos; 的回调结束后，主事件循环将不再运行，所以计时器也会失效。
+
+</p>
+<p>Example of listening for <code>exit</code>:
+
+</p>
+<p>监听 <code>exit</code> 事件的例子：
+
+</p>
+<pre><code>process.on(&apos;exit&apos;, function() {
+  // 设置一个延迟执行
+  setTimeout(function() {
+    console.log(&apos;主事件循环已停止，所以不会执行&apos;);
+  }, 0);
+  console.log(&apos;退出前执行&apos;);
+});</code></pre>
+<h2>事件: &apos;uncaughtException&apos;（未捕获错误）<span><a href="process.html#process_uncaughtexception" id="process_uncaughtexception">#</a></span></h2>
+<p>Emitted when an exception bubbles all the way back to the event loop. If a
+listener is added for this exception, the default action (which is to print
+a stack trace and exit) will not occur.
+
+</p>
+<p>当一个异常冒泡回归到事件循环中就会触发这个事件，如果建立了一个监听器来监听这个异常，默认的行为（打印堆栈跟踪信息并退出）就不会发生。
+
+</p>
+<p>Example of listening for <code>uncaughtException</code>:
+
+</p>
+<p>监听 <code>uncaughtException</code> 示例:
+
+</p>
+<pre><code>// 故意制造一个异常，而且不catch捕获它.
+nonexistentFunc();
+console.log(&apos;This will not run.&apos;);</code></pre>
+<p>Note that <code>uncaughtException</code> is a very crude mechanism for exception
+handling.
+
+</p>
+<p>注意，<code>uncaughtException</code>未捕获异常是一个非常粗略的异常处理。
+
+</p>
+<p>Don&apos;t use it, use <a href="domain.html">domains</a> instead. If you do use it, restart
+your application after every unhandled exception!
+
+</p>
+<p>尽量不要使用它，使用 <a href="domain.html">domains</a> 来代替它，如果你已经使用了，请在不处理这个异常之后重启你的应用。
+
+</p>
+<p>Do <em>not</em> use it as the node.js equivalent of <code>On Error Resume Next</code>. An
+unhandled exception means your application - and by extension node.js itself -
+is in an undefined state. Blindly resuming means <em>anything</em> could happen.
+
+</p>
+<p>请 <em>不要</em> 象使用node.js的<code>有错误回复执行</code>这样使用.一个未处理异常意味着你的应用和你的扩展Node.js自身是有未知状态的。盲目的恢复意味着<em>任何事情</em>都可能发生。
+
+</p>
+<p>Think of resuming as pulling the power cord when you are upgrading your system.
+Nine out of ten times nothing happens - but the 10th time, your system is bust.
+
+</p>
+<p>你在升级的系统时拉掉了电源线，然后恢复了。可能10次里有9次每一偶问题，但是第10次，你的系统就会崩溃。
+
+</p>
+<p>You have been warned.
+
+</p>
+<p>你已经被警告。
+
+</p>
+<h2>Signal Events<span><a href="process.html#process_signal_events" id="process_signal_events">#</a></span></h2>
+<!--type=event-->
+<!--name=SIGINT, SIGUSR1, etc.-->
+
+<!--type=event-->
+<!--name=SIGINT, SIGUSR1, etc.-->
+
+<p>Emitted when the processes receives a signal. See sigaction(2) for a list of
+standard POSIX signal names such as SIGINT, SIGUSR1, etc.
+
+</p>
+<p>当进程接收到信号时触发。信号列表详见 POSIX 标准的 sigaction（2）如 SIGINT、SIGUSR1 等。
+
+</p>
+<p>Example of listening for <code>SIGINT</code>:
+
+</p>
+<p>监听 <code>SIGINT</code> 信号的示例：
+
+</p>
+<pre><code>// 设置 &apos;SIGINT&apos; 信号触发事件
+process.on(&apos;SIGINT&apos;, function() {
+  console.log(&apos;收到 SIGINT 信号。  退出请使用 Ctrl + D &apos;);
+});</code></pre>
+<p>An easy way to send the <code>SIGINT</code> signal is with <code>Control-C</code> in most terminal
+programs.
+
+</p>
+<p>在大多数终端下，一个发送 <code>SIGINT</code> 信号的简单方法是按下 <code>ctrl + c</code> 。
+
+</p>
+<h2>process.stdout<span><a href="process.html#process_process_stdout" id="process_process_stdout">#</a></span></h2>
+<p>A <code>Writable Stream</code> to <code>stdout</code>.
+
+</p>
+<p>一个指向<code>标准输出流(stdout)</code>的 <code>可写的流(Writable Stream)</code>。
+
+</p>
+<p>Example: the definition of <code>console.log</code>
+
+</p>
+<p>举例: <code>console.log</code> 的实现
+
+</p>
+<pre><code>console.log = function(d) {
+  process.stdout.write(d + &apos;\n&apos;);
+}; </code></pre>
+<p><code>process.stderr</code> and <code>process.stdout</code> are unlike other streams in Node in
+that writes to them are usually blocking.  They are blocking in the case
+that they refer to regular files or TTY file descriptors. In the case they
+refer to pipes, they are non-blocking like other streams.
+
+</p>
+<p>process.stderr 和 process.stdout 不像 Node 中其他的流(Streams) 那样，他们通常是阻塞式的写入。当其引用指向 <code>普通文件</code> 或者 <code>TTY文件描述符</code> 时他们就是阻塞的（注：TTY 可以理解为终端的一种，可联想 PuTTY，详见<a href="http://baike.baidu.com/view/749979.htm">百科</a>）。当他们引用指向管道(pipes)时，他们就同其他的流(Streams)一样是非阻塞的。
+
+</p>
+<p>To check if Node is being run in a TTY context, read the <code>isTTY</code> property
+on <code>process.stderr</code>, <code>process.stdout</code>, or <code>process.stdin</code>:
+
+</p>
+<p>要检查 Node 是否正在运行一个 TTY上下文 中（注：linux 中没有运行在 tty 下的进程是 <code>守护进程</code> ），可以用使用 process.stderr、process.stdout 或 process.stdin 的 isTTY 属性：
+
+</p>
+<pre><code>$ node -p &quot;Boolean(process.stdout.isTTY)&quot;
+true
+$ node -p &quot;Boolean(process.stdout.isTTY)&quot; | cat
+false </code></pre>
+<p>See <a href="tty.html#tty_tty">the tty docs</a> for more information.
+
+</p>
+<p>更多信息，请查看 <a href="tty.html#tty_tty">tty 文档</a>。
+
+</p>
+<h2>process.stderr<span><a href="process.html#process_process_stderr" id="process_process_stderr">#</a></span></h2>
+<p>A writable stream to stderr.
+
+</p>
+<p>一个指向标准错误流(stderr)的 可写的流(Writable Stream)。
+
+</p>
+<p><code>process.stderr</code> and <code>process.stdout</code> are unlike other streams in Node in
+that writes to them are usually blocking.  They are blocking in the case
+that they refer to regular files or TTY file descriptors. In the case they
+refer to pipes, they are non-blocking like other streams.
+
+</p>
+<p>process.stderr 和 process.stdout 不像 Node 中其他的流(Streams) 那样，他们通常是阻塞式的写入。当其引用指向 <code>普通文件</code> 或者 <code>TTY文件描述符</code> 时他们就是阻塞的（注：TTY 可以理解为终端的一种，可联想 PuTTY，详见<a href="http://baike.baidu.com/view/749979.htm">百科</a>）。当他们引用指向管道(pipes)时，他们就同其他的流(Streams)一样是非阻塞的。
+
+</p>
+<h2>process.stdin<span><a href="process.html#process_process_stdin" id="process_process_stdin">#</a></span></h2>
+<p>A <code>Readable Stream</code> for stdin. The stdin stream is paused by default, so one
+must call <code>process.stdin.resume()</code> to read from it.
+
+</p>
+<p>一个指向 标准输入流(stdin) 的可读流(Readable Stream)。标准输入流默认是暂停 (pause) 的，所以必须要调用 process.stdin.resume() 来恢复 (resume) 接收。
+
+</p>
+<p>Example of opening standard input and listening for both events:
+
+</p>
+<p>打开标准输入流，并监听两个事件的示例：
+
+</p>
+<pre><code>process.stdin.on(&apos;end&apos;, function() {
+  process.stdout.write(&apos;end&apos;);
+});
+
+
+// gets 函数的简单实现
+function gets(cb){
+  process.stdin.resume();
+  process.stdin.setEncoding(&apos;utf8&apos;);
+
+  process.stdin.on(&apos;data&apos;, function(chunk) {
+     process.stdin.pause();
+     cb(chunk);
+  });
+}
+
+gets(function(reuslt){
+  console.log(&quot;[&quot;+reuslt+&quot;]&quot;);
+});</code></pre>
+<h2>process.argv<span><a href="process.html#process_process_argv" id="process_process_argv">#</a></span></h2>
+<p>An array containing the command line arguments.  The first element will be
+&apos;node&apos;, the second element will be the name of the JavaScript file.  The
+next elements will be any additional command line arguments.
+
+</p>
+<p>一个包含命令行参数的数组。第一个元素会是 &apos;node&apos;， 第二个元素将是 .Js 文件的名称。接下来的元素依次是命令行传入的参数。
+
+</p>
+<pre><code>// 打印 process.argv
+process.argv.forEach(function(val, index, array) {
+  console.log(index + &apos;: &apos; + val);
+});</code></pre>
+<p>This will generate:
+
+</p>
+<p>输出将会是：
+
+</p>
+<pre><code>$ node process-2.js one two=three four
+0: node
+1: /Users/mjr/work/node/process-2.js
+2: one
+3: two=three
+4: four </code></pre>
+<h2>process.execPath<span><a href="process.html#process_process_execpath" id="process_process_execpath">#</a></span></h2>
+<p>This is the absolute pathname of the executable that started the process.
+
+</p>
+<p>开启当前进程的这个可执行文件的绝对路径。
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>/usr/local/bin/node </code></pre>
+<h2>process.execArgv<span><a href="process.html#process_process_execargv" id="process_process_execargv">#</a></span></h2>
+<p>This is the set of node-specific command line options from the
+executable that started the process.  These options do not show up in
+<code>process.argv</code>, and do not include the node executable, the name of
+the script, or any options following the script name. These options
+are useful in order to spawn child processes with the same execution
+environment as the parent.
+
+</p>
+<p>与 <code>process.argv</code> 类似，不过是用于保存 node特殊(node-specific) 的命令行选项（参数）。这些特殊的选项不会出现在 <code>process.argv</code> 中，而且 process.execArgv 不会保存 <code>process.argv</code> 中保存的参数（如 0:node 1:文件名 2.3.4.参数 等），
+所有文件名之后的参数都会被忽视。这些选项可以用于派生与与父进程相同执行环境的子进程。
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>$ node --harmony script.js --version </code></pre>
+<p>results in process.execArgv:
+
+</p>
+<p>process.execArgv 中的特殊选项:
+
+</p>
+<pre><code>[&apos;--harmony&apos;] </code></pre>
+<p>and process.argv:
+
+</p>
+<p>process.argv 接收到的参数:
+
+</p>
+<pre><code>[&apos;/usr/local/bin/node&apos;, &apos;script.js&apos;, &apos;--version&apos;] </code></pre>
+<h2>process.abort()<span><a href="process.html#process_process_abort" id="process_process_abort">#</a></span></h2>
+<p>This causes node to emit an abort. This will cause node to exit and
+generate a core file.
+
+</p>
+<p>这将导致 Node 触发一个abort事件，这会导致Node退出并且创建一个核心文件。
+
+</p>
+<h2>process.chdir(directory)<span><a href="process.html#process_process_chdir_directory" id="process_process_chdir_directory">#</a></span></h2>
+<p>Changes the current working directory of the process or throws an exception if that fails.
+
+</p>
+<p>改变进程的当前进程的工作目录，若操作失败则抛出异常。 
+
+</p>
+<pre><code>console.log(&apos;当前目录：&apos; + process.cwd());
+try {
+  process.chdir(&apos;/tmp&apos;);
+  console.log(&apos;新目录：&apos; + process.cwd());
+}
+catch (err) {
+  console.log(&apos;chdir: &apos; + err);
+}</code></pre>
+<h2>process.cwd()<span><a href="process.html#process_process_cwd" id="process_process_cwd">#</a></span></h2>
+<p>Returns the current working directory of the process.
+
+</p>
+<p>返回进程当前的工作目录。 
+
+</p>
+<pre><code>console.log(&apos;当前目录：&apos; + process.cwd());</code></pre>
+<h2>process.env<span><a href="process.html#process_process_env" id="process_process_env">#</a></span></h2>
+<p>An object containing the user environment. See environ(7).
+
+</p>
+<p>一个包括用户环境的对象。详细参见 environ(7)。
+
+</p>
+<h2>process.exit([code])<span><a href="process.html#process_process_exit_code" id="process_process_exit_code">#</a></span></h2>
+<p>Ends the process with the specified <code>code</code>.  If omitted, exit uses the
+&apos;success&apos; code <code>0</code>.
+
+</p>
+<p>终止当前进程并返回给定的 <code>code</code>。如果省略了 <code>code</code>，退出是会默认返回成功的状态码(&apos;success&apos; code) 也就是 <code>0</code>。
+
+</p>
+<p>To exit with a &apos;failure&apos; code:
+
+</p>
+<p>退出并返回失败的状态 (&apos;failure&apos; code):
+
+</p>
+<pre><code>process.exit(1); </code></pre>
+<p>The shell that executed node should see the exit code as 1.
+
+</p>
+<p>执行上述代码，用来执行 node 的 shell 就能收到值为 1 的 exit code
+
+</p>
+<h2>process.exitCode<span><a href="process.html#process_process_exitcode" id="process_process_exitcode">#</a></span></h2>
+<p>A number which will be the process exit code, when the process either
+exits gracefully, or is exited via <code>process.exit()</code> without specifying
+a code.
+
+</p>
+<p>当进程既正常退出，或者通过未指定 code 的 <code>process.exit()</code> 退出时，这个属性中所存储的数字将会成为进程退出的错误码 (exit code)。
+
+</p>
+<p>Specifying a code to <code>process.exit(code)</code> will override any previous
+setting of <code>process.exitCode</code>.
+
+</p>
+<p>如果指名了 <code>process.exit(code)</code> 中退出的错误码 (code)，则会覆盖掉 <code>process.exitCode</code> 的设置。
+
+</p>
+<h2>process.getgid()<span><a href="process.html#process_process_getgid" id="process_process_getgid">#</a></span></h2>
+<p>Note: this function is only available on POSIX platforms (i.e. not Windows,
+Android)
+
+</p>
+<p>注意： 该函数仅适用于遵循 POSIX 标准的系统平台如 Unix、Linux等  而 Windows、
+Android 等则不适用。
+
+</p>
+<p>Gets the group identity of the process. (See getgid(2).)
+This is the numerical group id, not the group name.
+
+</p>
+<p>获取进程的群组标识（详见getgid(2)）。获取到的是群组的数字ID，不是群组名称。
+
+</p>
+<pre><code>if (process.getgid) {
+  console.log(&apos;当前 gid: &apos; + process.getgid());
+}</code></pre>
+<h2>process.setgid(id)<span><a href="process.html#process_process_setgid_id" id="process_process_setgid_id">#</a></span></h2>
+<p>Note: this function is only available on POSIX platforms (i.e. not Windows,
+Android)
+
+</p>
+<p>注意： 该函数仅适用于遵循 POSIX 标准的系统平台如 Unix、Linux等  而 Windows、
+Android 等则不适用。
+
+</p>
+<p>Sets the group identity of the process. (See setgid(2).)  This accepts either
+a numerical ID or a groupname string. If a groupname is specified, this method
+blocks while resolving it to a numerical ID.
+
+</p>
+<p>设置进程的群组标识（详见getgid(2)）。参数可以是一个数字ID或者群组名字符串。如果指定了一个群组名，这个方法会阻塞等待将群组名解析为数字ID。 
+
+</p>
+<pre><code>if (process.getgid &amp;&amp; process.setgid) {
+  console.log(&apos;当前 gid: &apos; + process.getgid());
+  try {
+    process.setgid(501);
+    console.log(&apos;新 gid: &apos; + process.getgid());
+  }
+  catch (err) {
+    console.log(&apos;设置 gid 失败: &apos; + err);
+  }
+}</code></pre>
+<h2>process.getuid()<span><a href="process.html#process_process_getuid" id="process_process_getuid">#</a></span></h2>
+<p>Note: this function is only available on POSIX platforms (i.e. not Windows,
+Android)
+
+</p>
+<p>注意： 该函数仅适用于遵循 POSIX 标准的系统平台如 Unix、Linux等  而 Windows、
+Android 等则不适用。
+
+</p>
+<p>Gets the user identity of the process. (See getuid(2).)
+This is the numerical userid, not the username.
+
+</p>
+<p>获取执行进程的用户ID（详见getgid(2)）。这是用户的数字ID，不是用户名。
+
+</p>
+<pre><code>if (process.getuid) {
+  console.log(&apos;当前 uid: &apos; + process.getuid());
+}</code></pre>
+<h2>process.setuid(id)<span><a href="process.html#process_process_setuid_id" id="process_process_setuid_id">#</a></span></h2>
+<p>Note: this function is only available on POSIX platforms (i.e. not Windows,
+Android)
+
+</p>
+<p>注意： 该函数仅适用于遵循 POSIX 标准的系统平台如 Unix、Linux等  而 Windows、
+Android 等则不适用。
+
+</p>
+<p>Sets the user identity of the process. (See setuid(2).)  This accepts either
+a numerical ID or a username string.  If a username is specified, this method
+blocks while resolving it to a numerical ID.
+
+</p>
+<p>设置执行进程的用户ID（详见getgid(2)）。参数可以使一个数字ID或者用户名字符串。如果指定了一个用户名，那么该方法会阻塞等待将用户名解析为数字ID。
+
+</p>
+<pre><code>if (process.getuid &amp;&amp; process.setuid) {
+  console.log(&apos;当前 uid: &apos; + process.getuid());
+  try {
+    process.setuid(501);
+    console.log(&apos;新 uid: &apos; + process.getuid());
+  }
+  catch (err) {
+    console.log(&apos;设置 uid 失败: &apos; + err);
+  }
+}</code></pre>
+<h2>process.getgroups()<span><a href="process.html#process_process_getgroups" id="process_process_getgroups">#</a></span></h2>
+<p>Note: this function is only available on POSIX platforms (i.e. not Windows,
+Android)
+
+</p>
+<p>注意： 该函数仅适用于遵循 POSIX 标准的系统平台如 Unix、Linux等  而 Windows、
+Android 等则不适用。
+
+</p>
+<p>Returns an array with the supplementary group IDs. POSIX leaves it unspecified
+if the effective group ID is included but node.js ensures it always is.
+
+</p>
+<p>返回一个保存补充组ID(supplementary group ID)的数组。POSIX 标准没有指名 如果有效组 ID（effective group ID）被包括在内的情况，而在 node.js 中则确保它始终是。（POSIX leaves it unspecified if the effective group ID is included but node.js ensures it always is.  ）
+
+</p>
+<h2>process.setgroups(groups)<span><a href="process.html#process_process_setgroups_groups" id="process_process_setgroups_groups">#</a></span></h2>
+<p>Note: this function is only available on POSIX platforms (i.e. not Windows,
+Android)
+
+</p>
+<p>注意： 该函数仅适用于遵循 POSIX 标准的系统平台如 Unix、Linux等  而 Windows、
+Android 等则不适用。
+
+</p>
+<p>Sets the supplementary group IDs. This is a privileged operation, meaning you
+need to be root or have the CAP_SETGID capability.
+
+</p>
+<p>设置补充分组的ID标识. 这是一个特殊的操作, 意味着你必须拥有root或者CAP_SETGID权限才可以。（译者：CAP_SETGID表示设定程序允许普通用户使用setgid函数,这与文件的setgid权限位无关）
+
+</p>
+<p>The list can contain group IDs, group names or both.
+
+</p>
+<p>这个列表可以包括分组的ID表示，或分组名或两者都有。
+
+</p>
+<h2>process.initgroups(user, extra_group)<span><a href="process.html#process_process_initgroups_user_extra_group" id="process_process_initgroups_user_extra_group">#</a></span></h2>
+<p>Note: this function is only available on POSIX platforms (i.e. not Windows,
+Android)
+
+</p>
+<p>注意： 该函数仅适用于遵循 POSIX 标准的系统平台如 Unix、Linux等  而 Windows、
+Android 等则不适用。
+
+</p>
+<p>Reads /etc/group and initializes the group access list, using all groups of
+which the user is a member. This is a privileged operation, meaning you need
+to be root or have the CAP_SETGID capability.
+
+</p>
+<p>读取 /etc/group 并且初始化group分组访问列表，使用改成员所在的所有分组， 这是一个特殊的操作, 意味着你必须拥有root或者CAP_SETGID权限才可以。
+
+</p>
+<p><code>user</code> is a user name or user ID. <code>extra_group</code> is a group name or group ID.
+
+</p>
+<p><code>user</code> 是一个用户名或者用户ID. <code>extra_group</code>是分组的组名或者分组ID。
+
+</p>
+<p>Some care needs to be taken when dropping privileges. Example:
+
+</p>
+<p>有时候，当你在注销权限 (dropping privileges) 的时候需要注意。例如： 
+
+</p>
+<pre><code>console.log(process.getgroups());         // [ 0 ]
+process.initgroups(&apos;bnoordhuis&apos;, 1000);   // switch user
+console.log(process.getgroups());         // [ 27, 30, 46, 1000, 0 ]
+process.setgid(1000);                     // drop root gid
+console.log(process.getgroups());         // [ 27, 30, 46, 1000 ]</code></pre>
+<h2>process.version<span><a href="process.html#process_process_version" id="process_process_version">#</a></span></h2>
+<p>A compiled-in property that exposes <code>NODE_VERSION</code>.
+
+</p>
+<p>一个暴露编译时存储版本信息的内置变量 <code>NODE_VERSION</code> 的属性。
+
+</p>
+<pre><code>console.log(&apos;版本: &apos; + process.version);</code></pre>
+<h2>process.versions<span><a href="process.html#process_process_versions" id="process_process_versions">#</a></span></h2>
+<p>A property exposing version strings of node and its dependencies.
+
+</p>
+<p>一个暴露存储 node 以及其依赖包 版本信息的属性。
+
+</p>
+<pre><code>console.log(process.versions); </code></pre>
+<p>Will print something like:
+
+</p>
+<p>输出：
+
+</p>
+<pre><code>{ http_parser: &apos;1.0&apos;,
+  node: &apos;0.10.4&apos;,
+  v8: &apos;3.14.5.8&apos;,
+  ares: &apos;1.9.0-DEV&apos;,
+  uv: &apos;0.10.3&apos;,
+  zlib: &apos;1.2.3&apos;,
+  modules: &apos;11&apos;,
+  openssl: &apos;1.0.1e&apos; }</code></pre>
+<h2>process.config<span><a href="process.html#process_process_config" id="process_process_config">#</a></span></h2>
+<p>An Object containing the JavaScript representation of the configure options
+that were used to compile the current node executable. This is the same as
+the &quot;config.gypi&quot; file that was produced when running the <code>./configure</code> script.
+
+</p>
+<p>一个包含用来编译当前 node.exe 的配置选项的对象。内容与运行 <code>./configure</code> 脚本生成的 &quot;config.gypi&quot; 文件相同。
+
+</p>
+<p>An example of the possible output looks like:
+
+</p>
+<p>最可能的输出示例如下：
+
+</p>
+<pre><code>{ target_defaults:
+   { cflags: [],
+     default_configuration: &apos;Release&apos;,
+     defines: [],
+     include_dirs: [],
+     libraries: [] },
+  variables:
+   { host_arch: &apos;x64&apos;,
+     node_install_npm: &apos;true&apos;,
+     node_prefix: &apos;&apos;,
+     node_shared_cares: &apos;false&apos;,
+     node_shared_http_parser: &apos;false&apos;,
+     node_shared_libuv: &apos;false&apos;,
+     node_shared_v8: &apos;false&apos;,
+     node_shared_zlib: &apos;false&apos;,
+     node_use_dtrace: &apos;false&apos;,
+     node_use_openssl: &apos;true&apos;,
+     node_shared_openssl: &apos;false&apos;,
+     strict_aliasing: &apos;true&apos;,
+     target_arch: &apos;x64&apos;,
+     v8_use_snapshot: &apos;true&apos; } }</code></pre>
+<h2>process.kill(pid, [signal])<span><a href="process.html#process_process_kill_pid_signal" id="process_process_kill_pid_signal">#</a></span></h2>
+<p>Send a signal to a process. <code>pid</code> is the process id and <code>signal</code> is the
+string describing the signal to send.  Signal names are strings like
+&apos;SIGINT&apos; or &apos;SIGUSR1&apos;.  If omitted, the signal will be &apos;SIGTERM&apos;.
+See kill(2) for more information.
+
+</p>
+<p>向进程发送一个信号。 <code>pid</code> 是进程的 id 而 <code>signal</code> 则是描述信号的字符串名称。信号的名称都形似 &apos;SIGINT&apos; 或者 &apos;SIGUSR1&apos;。如果没有指定参数则会默认发送 &apos;SIGTERM&apos; 信号，更多信息请查看 kill(2) 。
+
+</p>
+<p>Note that just because the name of this function is <code>process.kill</code>, it is
+really just a signal sender, like the <code>kill</code> system call.  The signal sent
+may do something other than kill the target process.
+
+</p>
+<p>值得注意的是，这个函数的名称虽然是 <code>process.kill</code>， 但就像 <code>kill</code> 系统调用（详见《Unix高级编程》）一样，它仅仅只是一个信号发送器。而信号的发送不仅仅只是用来杀死（kill）目标进程。
+
+</p>
+<p>Example of sending a signal to yourself:
+
+</p>
+<p>向当前进程发送信号的示例：
+
+</p>
+<pre><code>process.kill(process.pid, &apos;SIGHUP&apos;); </code></pre>
+<h2>process.pid<span><a href="process.html#process_process_pid" id="process_process_pid">#</a></span></h2>
+<p>The PID of the process.
+
+</p>
+<p>当前进程的 PID 
+
+</p>
+<pre><code>console.log(&apos;当前进程 id: &apos; + process.pid);</code></pre>
+<h2>process.title<span><a href="process.html#process_process_title" id="process_process_title">#</a></span></h2>
+<p>Getter/setter to set what is displayed in &apos;ps&apos;.
+
+</p>
+<p>获取/设置 (Getter/setter) &apos;ps&apos; 中显示的进程名。
+
+</p>
+<p>When used as a setter, the maximum length is platform-specific and probably
+short.
+
+</p>
+<p>当设置该属性时，所能设置的字符串最大长度视具体平台而定，如果超过的话会自动截断。
+
+</p>
+<p>On Linux and OS X, it&apos;s limited to the size of the binary name plus the
+length of the command line arguments because it overwrites the argv memory.
+
+</p>
+<p>在 Linux 和 OS X 上，它受限于名称的字节长度加上命令行参数的长度，因为它有覆盖参数内存(argv memory)。
+
+</p>
+<p>v0.8 allowed for longer process title strings by also overwriting the environ
+memory but that was potentially insecure/confusing in some (rather obscure)
+cases.
+
+</p>
+<p>v0.8 版本允许更长的进程标题字符串，也支持覆盖环境内存，但是存在潜在的不安全和混乱（很难说清楚）。
+
+</p>
+<h2>process.arch<span><a href="process.html#process_process_arch" id="process_process_arch">#</a></span></h2>
+<p>What processor architecture you&apos;re running on: <code>&apos;arm&apos;</code>, <code>&apos;ia32&apos;</code>, or <code>&apos;x64&apos;</code>.
+
+</p>
+<p>返回当前 CPU 处理器的架构：&apos;arm&apos;、&apos;ia32&apos; 或者 &apos;x64&apos;.
+
+</p>
+<pre><code>console.log(&apos;当前CPU架构是：&apos; + process.arch);</code></pre>
+<h2>process.platform<span><a href="process.html#process_process_platform" id="process_process_platform">#</a></span></h2>
+<p>What platform you&apos;re running on:
+<code>&apos;darwin&apos;</code>, <code>&apos;freebsd&apos;</code>, <code>&apos;linux&apos;</code>, <code>&apos;sunos&apos;</code> or <code>&apos;win32&apos;</code>
+
+</p>
+<p>返回当前程序运行的平台：<code>&apos;darwin&apos;</code>, <code>&apos;freebsd&apos;</code>, <code>&apos;linux&apos;</code>, <code>&apos;sunos&apos;</code> 或者 <code>&apos;win32&apos;</code>
+
+</p>
+<pre><code>console.log(&apos;当前系统平台是： &apos; + process.platform);</code></pre>
+<h2>process.memoryUsage()<span><a href="process.html#process_process_memoryusage" id="process_process_memoryusage">#</a></span></h2>
+<p>Returns an object describing the memory usage of the Node process
+measured in bytes.
+
+</p>
+<p>返回一个对象，它描述了Node进程的内存使用情况单位是bytes。 
+
+</p>
+<pre><code>console.log(util.inspect(process.memoryUsage())); </code></pre>
+<p>This will generate:
+
+</p>
+<p>输出将会是：
+
+</p>
+<pre><code>{ rss: 4935680,
+  heapTotal: 1826816,
+  heapUsed: 650472 } </code></pre>
+<p><code>heapTotal</code> and <code>heapUsed</code> refer to V8&apos;s memory usage.
+
+</p>
+<p><code>heapTotal</code> 和 <code>heapUsed</code> 是根据 V8引擎的内存使用情况来的
+
+</p>
+<h2>process.nextTick(callback)<span><a href="process.html#process_process_nexttick_callback" id="process_process_nexttick_callback">#</a></span></h2>
+<div><ul>
+<li><p><code>callback</code> <span>Function</span></p>
+</li>
+<li><p><code>callback</code> <span>Function</span></p>
+</li>
+</div></ul>
+<p>Once the current event loop turn runs to completion, call the callback
+function.
+
+</p>
+<p>在事件循环的下一次循环中调用 callback 回调函数。
+
+</p>
+<p>This is <em>not</em> a simple alias to <code>setTimeout(fn, 0)</code>, it&apos;s much more
+efficient.  It runs before any additional I/O events (including
+timers) fire in subsequent ticks of the event loop.
+
+</p>
+<p>这 <em>不是</em> <code>setTimeout(fn, 0)</code> 函数的一个简单别名，因为它的效率高多了。该函数能在任何 I/O 事前之前调用我们的回调函数。但是这个函数在层次超过某个限制的时候，也会出现瑕疵，详细见 <code>process.maxTickDepth</code>。
+
+</p>
+<pre><code>console.log(&apos;开始&apos;);
+process.nextTick(function() {
+  console.log(&apos;nextTick 回调&apos;);
+});
+console.log(&apos;已设定&apos;);
+// 输出:
+// 开始
+// 已设定
+// nextTick 回调</code></pre>
+<p>This is important in developing APIs where you want to give the user the
+chance to assign event handlers after an object has been constructed,
+but before any I/O has occurred.
+
+</p>
+<p>如果你想要在【对象创建】之后而【I/O 操作】发生之前执行某些操作，那么这个函数对你而言就十分重要了。
+
+</p>
+<pre><code>// thing.startDoingStuff() 现在被调用了, 而不是之前.</code></pre>
+<p>It is very important for APIs to be either 100% synchronous or 100%
+asynchronous.  Consider this example:
+
+</p>
+<p>【注意！！】保证你的函数一定是同步执行或者一定是异步执行，这非常重要！！参考如下的例子：
+
+</p>
+<pre><code>  fs.stat(&apos;file&apos;, cb);
+} </code></pre>
+<p>This API is hazardous.  If you do this:
+
+</p>
+<p>这样执行是很危险。如果你还不清楚上述行为的危害请看下面的例子：
+
+</p>
+<pre><code>maybeSync(true, function() {
+  foo();
+});
+bar(); </code></pre>
+<p>then it&apos;s not clear whether <code>foo()</code> or <code>bar()</code> will be called first.
+
+</p>
+<p>那么，使用刚才那个不知道是同步还是异步的操作，在编程的时候你就会发现，你不能确定到底是 foo() 先执行，还是 bar() 先执行。
+
+</p>
+<p>This approach is much better:
+
+</p>
+<p>用下面的方法就可以更好的解决：
+
+</p>
+<pre><code>  fs.stat(&apos;file&apos;, cb);
+} </code></pre>
+<p>Note: the nextTick queue is completely drained on each pass of the
+event loop <strong>before</strong> additional I/O is processed.  As a result,
+recursively setting nextTick callbacks will block any I/O from
+happening, just like a <code>while(true);</code> loop.
+
+</p>
+<p>注意：nextTick 的队列会在完全执行完毕之后才调用 I/O 操作 (the nextTick queue is completely drained on each pass of the event loop <strong>before</strong> additional I/O is processed.) 。因此，递归设置 nextTick 的回调就像一个 <code>while(true) ;</code> 循环一样，将会阻止任何 I/O 操作的发生。
+
+</p>
+<h2>process.umask([mask])<span><a href="process.html#process_process_umask_mask" id="process_process_umask_mask">#</a></span></h2>
+<p>Sets or reads the process&apos;s file mode creation mask. Child processes inherit
+the mask from the parent process. Returns the old mask if <code>mask</code> argument is
+given, otherwise returns the current mask.
+
+</p>
+<p>设置或者读取进程的文件模式的创建掩码。子进程从父进程中继承这个掩码。如果设定了参数 mask 那么返回旧的掩码，否则返回当前的掩码。
+
+</p>
+<pre><code>oldmask = process.umask(newmask);
+console.log(&apos;原掩码: &apos; + oldmask.toString(8) + &apos;\n&apos;
+            &apos;新掩码: &apos; + newmask.toString(8));</code></pre>
+<h2>process.uptime()<span><a href="process.html#process_process_uptime" id="process_process_uptime">#</a></span></h2>
+<p>Number of seconds Node has been running.
+
+</p>
+<p>返回 Node 程序已运行的秒数。
+
+</p>
+<h2>process.hrtime()<span><a href="process.html#process_process_hrtime" id="process_process_hrtime">#</a></span></h2>
+<p>Returns the current high-resolution real time in a <code>[seconds, nanoseconds]</code>
+tuple Array. It is relative to an arbitrary time in the past. It is not
+related to the time of day and therefore not subject to clock drift. The
+primary use is for measuring performance between intervals.
+
+</p>
+<p>返回当前的高分辨时间，形式为 <code>[秒，纳秒]</code> 的元组数组。它是相对于在过去的任意时间。该值与日期无关，因此不受时钟漂移的影响。主要用途是可以通过精确的时间间隔，来衡量程序的性能。
+
+</p>
+<p>You may pass in the result of a previous call to <code>process.hrtime()</code> to get
+a diff reading, useful for benchmarks and measuring intervals:
+
+</p>
+<p>你可以将前一个 <code>process.hrtime()</code> 的结果传递给当前的 <code>process.hrtime()</code> 函数，结果会返回一个比较值，用于基准和衡量时间间隔。
+
+</p>
+<pre><code>  console.log(&apos;基准相差 %d 纳秒&apos;, diff[0] * 1e9 + diff[1]);
+  // 基准相差 1000000527 纳秒
+}, 1000);</code></pre>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>

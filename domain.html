@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>域 Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/domain.html">
+</head>
+<body class="alt apidoc" id="api-section-domain">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="http://jixiangac.com/doc/node/domain.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="domain.html#domain">域</a><ul>
+<li><a href="domain.html#domain_1">警告: 不要忽视错误!</a></li>
+<li><a href="domain.html#domain_error">对Error(错误)对象的内容添加</a></li>
+<li><a href="domain.html#domain_2">隐式绑定</a></li>
+<li><a href="domain.html#domain_3">显式绑定</a></li>
+<li><a href="domain.html#domain_domain_create">domain.create()</a></li>
+<li><a href="domain.html#domain_domain">类: Domain</a><ul>
+<li><a href="domain.html#domain_domain_run_fn">domain.run(fn)</a></li>
+<li><a href="domain.html#domain_domain_members">domain.members</a></li>
+<li><a href="domain.html#domain_domain_add_emitter">domain.add(emitter)</a></li>
+<li><a href="domain.html#domain_domain_remove_emitter">domain.remove(emitter)</a></li>
+<li><a href="domain.html#domain_domain_bind_callback">domain.bind(callback)</a><ul>
+<li><a href="domain.html#domain_4">例子</a></li>
+</ul>
+</li>
+<li><a href="domain.html#domain_domain_intercept_callback">domain.intercept(callback)</a><ul>
+<li><a href="domain.html#domain_5">例子</a></li>
+</ul>
+</li>
+<li><a href="domain.html#domain_domain_enter">domain.enter()</a></li>
+<li><a href="domain.html#domain_domain_exit">domain.exit()</a></li>
+<li><a href="domain.html#domain_domain_dispose">domain.dispose()</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>域<span><a href="domain.html#domain" id="domain">#</a></span></h1>
+<pre><code>稳定度: 2 - 不稳定</code></pre>
+<p>Domains provide a way to handle multiple different IO operations as a
+single group.  If any of the event emitters or callbacks registered to a
+domain emit an <code>error</code> event, or throw an error, then the domain object
+will be notified, rather than losing the context of the error in the
+<code>process.on(&apos;uncaughtException&apos;)</code> handler, or causing the program to
+exit immediately with an error code.
+
+</p>
+<p>Domains 提供了一种方式，即以一个单一的组的形式来处理多个不同的IO操作。如果任何一个注册到domain的事件触发器或回调触发了一个‘error’事件，或者抛出一个错误，那么domain对象将会被通知到。而不是直接让这个错误的上下文从`process.on（&apos;uncaughtException&apos;）&apos;处理程序中丢失掉，也不会致使程序因为这个错误伴随着错误码立即退出。
+
+</p>
+<h2>警告: 不要忽视错误!<span><a href="domain.html#domain_1" id="domain_1">#</a></span></h2>
+<!-- type=misc -->
+
+<p>Domain error handlers are not a substitute for closing down your
+process when an error occurs.
+
+</p>
+<p>Domain error处理程序不是一个在错误发生时，关闭你的进程的替代品
+
+</p>
+<p>By the very nature of how <code>throw</code> works in JavaScript, there is almost
+never any way to safely &quot;pick up where you left off&quot;, without leaking
+references, or creating some other sort of undefined brittle state.
+
+</p>
+<p>基于&apos;抛出（throw）&apos;在JavaScript中工作的方式，几乎从来没有任何方式能够在‘不泄露引用，不造成一些其他种类的未定义的脆弱状态’的前提下，安全的“从你离开的地方重新拾起（pick up where you left off）”，
+
+</p>
+<p>The safest way to respond to a thrown error is to shut down the
+process.  Of course, in a normal web server, you might have many
+connections open, and it is not reasonable to abruptly shut those down
+because an error was triggered by someone else.
+
+</p>
+<p>响应一个被抛出错误的最安全方式就是关闭进程。当然，在一个正常的Web服务器中，你可能会有很多活跃的连接。由于其他触发的错误你去突然关闭这些连接是不合理。
+
+</p>
+<p>The better approach is send an error response to the request that
+triggered the error, while letting the others finish in their normal
+time, and stop listening for new requests in that worker.
+
+</p>
+<p>更好的方法是发送错误响应给那个触发错误的请求，在保证其他人正常完成工作时，停止监听那个触发错误的人的新请求。
+
+</p>
+<p>In this way, <code>domain</code> usage goes hand-in-hand with the cluster module,
+since the master process can fork a new worker when a worker
+encounters an error.  For node programs that scale to multiple
+machines, the terminating proxy or service registry can take note of
+the failure, and react accordingly.
+
+</p>
+<p>在这种方式中，<code>域</code>使用伴随着集群模块，由于主过程可以叉新工人时，一个工人发生了一个错误。节点程序规模的多
+机，终止代理或服务注册可以注意一下失败，并做出相应的反应。
+
+</p>
+<p>For example, this is not a good idea:
+
+</p>
+<p>举例来说，以下就不是一个好想法：
+
+</p>
+<p>var d = require(&apos;domain&apos;).create();
+d.on(&apos;error&apos;, function(er) {
+  // 这个错误不会导致进程崩溃，但是情况会更糟糕！
+  // 虽然我们阻止了进程突然重启动，但是我们已经发生了资源泄露
+  // 这种事情的发生会让我们发疯。
+  // 不如调用 process.on(&apos;uncaughtException&apos;)!
+  console.log(&apos;error, but oh well&apos;, er.message);
+});
+d.run(function() {
+  require(&apos;http&apos;).createServer(function(req, res) {
+    handleRequest(req, res);
+  }).listen(PORT);
+});
+</p>
+<pre><code>
+By using the context of a domain, and the resilience of separating our
+program into multiple worker processes, we can react more
+appropriately, and handle errors with much greater safety.
+
+通过对域的上下文的使用，以及将我们的程序分隔成多个工作进程的反射，我们可以做出更加恰当的反应和更加安全的处理。
+
+```javascript
+// 好一些的做法！
+
+var cluster = require(&apos;cluster&apos;);
+var PORT = +process.env.PORT || 1337;
+
+var cluster = require(&apos;cluster&apos;);
+var PORT = +process.env.PORT || 1337;
+
+if (cluster.isMaster) {
+  // In real life, you&apos;d probably use more than just 2 workers,
+  // and perhaps not put the master and worker in the same file.
+  //
+  // You can also of course get a bit fancier about logging, and
+  // implement whatever custom logic you need to prevent DoS
+  // attacks and other bad behavior.
+  //
+  // See the options in the cluster documentation.
+  //
+  // The important thing is that the master does very little,
+  // increasing our resilience to unexpected errors.
+
+if (cluster.isMaster) {
+  // 在工作环境中，你可能会使用到不止一个工作分支
+  // 而且可能不会把主干和分支放在同一个文件中
+  //
+  //你当然可以通过日志进行猜测，并且对你需要防止的DoS攻击等不良行为实施自定义的逻辑
+  //
+  // 看集群文件的选项
+  //
+  // 最重要的是主干非常小，增加了我们抵抗以外错误的可能性。
+
+  cluster.fork();
+  cluster.fork();
+
+  cluster.fork();
+  cluster.fork();
+
+  cluster.on(&apos;disconnect&apos;, function(worker) {
+    console.error(&apos;disconnect!&apos;);
+    cluster.fork();
+  });
+
+  cluster.on(&apos;disconnect&apos;, function(worker) {
+    console.error(&apos;disconnect!&apos;);
+    cluster.fork();
+  });
+
+} else {
+  // the worker
+  //
+  // This is where we put our bugs!
+
+} else {
+  // 工作进程
+  //
+  // 这是我们出错的地方
+
+  var domain = require(&apos;domain&apos;);
+
+  var domain = require(&apos;domain&apos;);
+
+  // See the cluster documentation for more details about using
+  // worker processes to serve requests.  How it works, caveats, etc.
+
+  //看集群文件对于使用工作进程处理请求的更多细节，它是如何工作的，它的警告等等。
+
+  var server = require(&apos;http&apos;).createServer(function(req, res) {
+    var d = domain.create();
+    d.on(&apos;error&apos;, function(er) {
+      console.error(&apos;error&apos;, er.stack);
+
+  var server = require(&apos;http&apos;).createServer(function(req, res) {
+    var d = domain.create();
+    d.on(&apos;error&apos;, function(er) {
+      console.error(&apos;error&apos;, er.stack);
+
+    // 因为req和res在这个域存在之前就被创建，
+    // 所以我们需要显式添加它们。
+    // 详见下面关于显式和隐式绑定的解释。
+    d.add(req);
+    d.add(res);
+
+    // Now run the handler function in the domain.
+    d.run(function() {
+      handleRequest(req, res);
+    });
+  });
+  server.listen(PORT);
+}
+
+    // 现在在域里面运行处理器函数。
+    d.run(function() {
+      handleRequest(req, res);
+    });
+  });
+  server.listen(PORT);
+}
+
+    // 这个部分不是很重要。只是一个简单的路由例子。
+    // 你会想把你的超级给力的应用逻辑放在这里。
+    function handleRequest(req, res) {
+      switch(req.url) {
+        case &apos;/error&apos;:
+          // 我们干了一些异步的东西，然后。。。
+          setTimeout(function() {
+            // 呃。。。
+            flerb.bark();
+          });
+          break;
+        default:
+          res.end(&apos;ok&apos;);
+      }
+    }</code></pre>
+<h2>对Error(错误)对象的内容添加<span><a href="domain.html#domain_error" id="domain_error">#</a></span></h2>
+<!-- type=misc -->
+
+<p>Any time an Error object is routed through a domain, a few extra fields
+are added to it.
+
+</p>
+<p>每一次一个Error对象被导向经过一个域，它会添加几个新的字段。
+
+</p>
+<ul>
+<li><code>error.domain</code> The domain that first handled the error.</li>
+<li><code>error.domainEmitter</code> The event emitter that emitted an &apos;error&apos; event
+with the error object.</li>
+<li><code>error.domainBound</code> The callback function which was bound to the
+domain, and passed an error as its first argument.</li>
+<li><p><code>error.domainThrown</code> A boolean indicating whether the error was
+thrown, emitted, or passed to a bound callback function.</p>
+</li>
+<li><p><code>error.domain</code> 第一个处理这个错误的域。</p>
+</li>
+<li><code>error.domainEmitter</code> 用这个错误对象触发&apos;error&apos;事件的事件分发器。</li>
+<li><code>error.domainBound</code> 回调函数，该回调函数被绑定到域，并且一个错误会作为第一参数传递给这个回调函数。</li>
+<li><code>error.domainThrown</code> 一个布尔值表明这个错误是否被抛出，分发或者传递给一个绑定的回调函数。</li>
+</ul>
+<h2>隐式绑定<span><a href="domain.html#domain_2" id="domain_2">#</a></span></h2>
+<!--type=misc-->
+
+<p>If domains are in use, then all <strong>new</strong> EventEmitter objects (including
+Stream objects, requests, responses, etc.) will be implicitly bound to
+the active domain at the time of their creation.
+
+</p>
+<p>如果多个域正在被使用，那么所有的<strong>新</strong>EventEmitter对象（包括Stream对象，请求，应答等等）会被隐式绑定到它们被创建时的有效域。
+
+</p>
+<p>Additionally, callbacks passed to lowlevel event loop requests (such as
+to fs.open, or other callback-taking methods) will automatically be
+bound to the active domain.  If they throw, then the domain will catch
+the error.
+
+</p>
+<p>而且，被传递到低层事件分发请求的回调函数（例如fs.open，或者其它接受回调函数的函数）会自动绑定到有效域。如果这些回调函数抛出错误，那么这个域会捕捉到这个错误。
+
+</p>
+<p>In order to prevent excessive memory usage, Domain objects themselves
+are not implicitly added as children of the active domain.  If they
+were, then it would be too easy to prevent request and response objects
+from being properly garbage collected.
+
+</p>
+<p>为了防止内存的过度使用，Domain对象自己不会作为有效域的子对象被隐式添加到有效域。因为如果这样做的话，会很容易影响到请求和应答对象的正常垃圾回收。
+
+</p>
+<p>If you <em>want</em> to nest Domain objects as children of a parent Domain,
+then you must explicitly add them.
+
+</p>
+<p>如果你<em>想</em>在一个父Domain对象里嵌套子Domain对象，那么你需要显式地添加它们。
+
+</p>
+<p>Implicit binding routes thrown errors and <code>&apos;error&apos;</code> events to the
+Domain&apos;s <code>error</code> event, but does not register the EventEmitter on the
+Domain, so <code>domain.dispose()</code> will not shut down the EventEmitter.
+Implicit binding only takes care of thrown errors and <code>&apos;error&apos;</code> events.
+
+</p>
+<p>隐式绑定将被抛出的错误和<code>&apos;error&apos;</code>事件导向到Domain对象的<code>error</code>事件，但不会注册到Domain对象上的EventEmitter对象，所以<code>domain.dispose()</code>不会令EventEmitter对象停止运作。隐式绑定只关心被抛出的错误和 <code>&apos;error&apos;</code>事件。
+
+</p>
+<h2>显式绑定<span><a href="domain.html#domain_3" id="domain_3">#</a></span></h2>
+<!--type=misc-->
+
+<p>Sometimes, the domain in use is not the one that ought to be used for a
+specific event emitter.  Or, the event emitter could have been created
+in the context of one domain, but ought to instead be bound to some
+other domain.
+
+</p>
+<p>有时，正在使用的域并不是某个事件分发器所应属的域。又或者，事件分发器在一个域内被创建，但是应该被绑定到另一个域。
+
+</p>
+<p>For example, there could be one domain in use for an HTTP server, but
+perhaps we would like to have a separate domain to use for each request.
+
+</p>
+<p>例如，对于一个HTTP服务器，可以有一个正在使用的域，但我们可能希望对每一个请求使用一个不同的域。
+
+</p>
+<p>That is possible via explicit binding.
+
+</p>
+<p>这可以通过显示绑定来达到。
+
+</p>
+<p>For example:
+
+</p>
+<p>例如：
+
+</p>
+<pre><code>serverDomain.run(function() {
+  // 服务器在serverDomain的作用域内被创建
+  http.createServer(function(req, res) {
+    // req和res同样在serverDomain的作用域内被创建
+    // 但是，我们想对于每一个请求使用一个不一样的域。
+    // 所以我们首先创建一个域，然后将req和res添加到这个域上。
+    var reqd = domain.create();
+    reqd.add(req);
+    reqd.add(res);
+    reqd.on(&apos;error&apos;, function(er) {
+      console.error(&apos;Error&apos;, er, req.url);
+      try {
+        res.writeHead(500);
+        res.end(&apos;Error occurred, sorry.&apos;);
+      } catch (er) {
+        console.error(&apos;Error sending 500&apos;, er, req.url);
+      }
+    });
+  }).listen(1337);    
+});
+```</code></pre>
+<h2>domain.create()<span><a href="domain.html#domain_domain_create" id="domain_domain_create">#</a></span></h2>
+<div><ul>
+<li><p>return: <span>Domain</span></p>
+</li>
+<li><p>return: <span>Domain</span></p>
+</li>
+</div></ul>
+<p>Returns a new Domain object.
+
+</p>
+<p>返回一个新的Domain对象。
+
+</p>
+<h2>类: Domain<span><a href="domain.html#domain_domain" id="domain_domain">#</a></span></h2>
+<p>The Domain class encapsulates the functionality of routing errors and
+uncaught exceptions to the active Domain object.
+
+</p>
+<p>Domain类封装了将错误和没有被捕捉的异常导向到有效对象的功能。
+
+</p>
+<p>Domain is a child class of <a href="events.html#events_class_events_eventemitter">EventEmitter</a>.  To handle the errors that it
+catches, listen to its <code>error</code> event.
+
+</p>
+<p>Domain是 <a href="events.html#events_class_events_eventemitter">EventEmitter</a>类的一个子类。监听它的<code>error</code>事件来处理它捕捉到的错误。
+
+</p>
+<h3>domain.run(fn)<span><a href="domain.html#domain_domain_run_fn" id="domain_domain_run_fn">#</a></span></h3>
+<div><ul>
+<li><p><code>fn</code> <span>Function</span></p>
+</li>
+<li><p><code>fn</code> <span>Function</span></p>
+</li>
+</div></ul>
+<p>Run the supplied function in the context of the domain, implicitly
+binding all event emitters, timers, and lowlevel requests that are
+created in that context.
+
+</p>
+<p>在域的上下文里运行提供的函数，隐式地绑定所有该上下文里创建的事件分发器，计时器和低层请求。
+
+</p>
+<p>This is the most basic way to use a domain.
+
+</p>
+<p>这是使用一个域的最基本的方式。
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>var d = domain.create();
+d.on(&apos;error&apos;, function(er) {
+  console.error(&apos;Caught error!&apos;, er);
+});
+d.run(function() {
+  process.nextTick(function() {
+    setTimeout(function() { // 模拟几个不同的异步的东西
+      fs.open(&apos;non-existent file&apos;, &apos;r&apos;, function(er, fd) {
+        if (er) throw er;
+        // 继续。。。
+      });
+    }, 100);
+  });
+});</code></pre>
+<p>In this example, the <code>d.on(&apos;error&apos;)</code> handler will be triggered, rather
+than crashing the program.
+
+</p>
+<p>在这个例子里， <code>d.on(&apos;error&apos;)</code> 处理器会被触发，而不是导致程序崩溃。
+
+</p>
+<h3>domain.members<span><a href="domain.html#domain_domain_members" id="domain_domain_members">#</a></span></h3>
+<div><ul>
+<li><p><span>Array</span></p>
+</li>
+<li><p><span>Array</span></p>
+</li>
+</div></ul>
+<p>An array of timers and event emitters that have been explicitly added
+to the domain.
+
+</p>
+<p>一个数组，里面的元素是被显式添加到域里的计时器和事件分发器。
+
+</p>
+<h3>domain.add(emitter)<span><a href="domain.html#domain_domain_add_emitter" id="domain_domain_add_emitter">#</a></span></h3>
+<div><ul>
+<li><p><code>emitter</code> <span>EventEmitter | Timer</span> emitter or timer to be added to the domain</p>
+</li>
+<li><p><code>emitter</code> <span>EventEmitter | Timer</span> 被添加到域里的时间分发器或计时器</p>
+</li>
+</div></ul>
+<p>Explicitly adds an emitter to the domain.  If any event handlers called by
+the emitter throw an error, or if the emitter emits an <code>error</code> event, it
+will be routed to the domain&apos;s <code>error</code> event, just like with implicit
+binding.
+
+</p>
+<p>显式地将一个分发器添加到域。如果这个分发器调用的任意一个事件处理器抛出一个错误，或是这个分发器分发了一个<code>error</code>事，那么它会被导向到这个域的<code>error</code>事件，就像隐式绑定所做的一样。
+
+</p>
+<p>This also works with timers that are returned from <code>setInterval</code> and
+<code>setTimeout</code>.  If their callback function throws, it will be caught by
+the domain &apos;error&apos; handler.
+
+</p>
+<p>这对于从<code>setInterval</code>和<code>setTimeout</code>返回的计时器同样适用。如果这些计时器的回调函数抛出错误，它将会被这个域的<code>error</code>处理器捕捉到。
+
+</p>
+<p>If the Timer or EventEmitter was already bound to a domain, it is removed
+from that one, and bound to this one instead.
+
+</p>
+<p>如果这个Timer或EventEmitter对象已经被绑定到另外一个域，那么它将会从那个域被移除，然后绑定到当前的域。
+
+</p>
+<h3>domain.remove(emitter)<span><a href="domain.html#domain_domain_remove_emitter" id="domain_domain_remove_emitter">#</a></span></h3>
+<div><ul>
+<li><p><code>emitter</code> <span>EventEmitter | Timer</span> emitter or timer to be removed from the domain</p>
+</li>
+<li><p><code>emitter</code> <span>EventEmitter | Timer</span> 要从域里被移除的分发器或计时器</p>
+</li>
+</div></ul>
+<p>The opposite of <code>domain.add(emitter)</code>.  Removes domain handling from the
+specified emitter.
+
+</p>
+<p>与<code>domain.add(emitter)</code>函数恰恰相反，这个函数将域处理从指明的分发器里移除。
+
+</p>
+<h3>domain.bind(callback)<span><a href="domain.html#domain_domain_bind_callback" id="domain_domain_bind_callback">#</a></span></h3>
+<div><ul>
+<li><code>callback</code> <span>Function</span> The callback function</li>
+<li><p>return: <span>Function</span> The bound function</p>
+</li>
+<li><p><code>callback</code> <span>Function</span> 回调函数</p>
+</li>
+<li>return: <span>Function</span> 被绑定的函数</li>
+</div></ul>
+<p>The returned function will be a wrapper around the supplied callback
+function.  When the returned function is called, any errors that are
+thrown will be routed to the domain&apos;s <code>error</code> event.
+
+</p>
+<p>返回的函数会是一个对于所提供的回调函数的包装函数。当这个被返回的函数被调用时，所有被抛出的错误都会被导向到这个域的<code>error</code>事件。
+
+</p>
+<h4>例子<span><a href="domain.html#domain_4" id="domain_4">#</a></span></h4>
+<pre><code>d.on(&apos;error&apos;, function(er) {
+  // 有个地方发生了一个错误。
+  // 如果我们现在抛出这个错误，它会让整个程序崩溃
+  // 并给出行号和栈信息。
+});</code></pre>
+<h3>domain.intercept(callback)<span><a href="domain.html#domain_domain_intercept_callback" id="domain_domain_intercept_callback">#</a></span></h3>
+<div><ul>
+<li><code>callback</code> <span>Function</span> The callback function</li>
+<li><p>return: <span>Function</span> The intercepted function</p>
+</li>
+<li><p><code>callback</code> <span>Function</span> 回调函数</p>
+</li>
+<li>return: <span>Function</span> 被拦截的函数</li>
+</div></ul>
+<p>This method is almost identical to <code>domain.bind(callback)</code>.  However, in
+addition to catching thrown errors, it will also intercept <code>Error</code>
+objects sent as the first argument to the function.
+
+</p>
+<p>这个函数与<code>domain.bind(callback)</code>几乎一模一样。但是，除了捕捉被抛出的错误外，它还会拦截作为第一参数被传递到这个函数的<code>Error</code>对象。
+
+</p>
+<p>In this way, the common <code>if (er) return callback(er);</code> pattern can be replaced
+with a single error handler in a single place.
+
+</p>
+<p>在这种方式下，常见的&apos;if(er) return callback(er);&apos;的方式可以被一个单独地方的单独的错误处理所取代。
+
+</p>
+<h4>例子<span><a href="domain.html#domain_5" id="domain_5">#</a></span></h4>
+<pre><code>d.on(&apos;error&apos;, function(er) {
+  // 有个地方发生了一个错误。
+  // 如果我们现在抛出这个错误，它会让整个程序崩溃
+  // 并给出行号和栈信息。
+});</code></pre>
+<h3>domain.enter()<span><a href="domain.html#domain_domain_enter" id="domain_domain_enter">#</a></span></h3>
+<p>The <code>enter</code> method is plumbing used by the <code>run</code>, <code>bind</code>, and <code>intercept</code>
+methods to set the active domain. It sets <code>domain.active</code> and <code>process.domain</code>
+to the domain, and implicitly pushes the domain onto the domain stack managed
+by the domain module (see <code>domain.exit()</code> for details on the domain stack). The
+call to <code>enter</code> delimits the beginning of a chain of asynchronous calls and I/O
+operations bound to a domain.
+
+</p>
+<p><code>enter</code>函数对于<code>run</code>，<code>bind</code>和<code>intercept</code>来说就像它们的管道系统：它们使用<code>enter</code>函数来设置有效域。<code>enter</code>函数对于域设定了<code>domain.active</code>和 <code>process.domain</code>
+，还隐式地将域推入了由域模块管理的域栈（关于域栈的细节详见<code>domain.exit()</code>）。<code>enter</code>函数的调用，分隔了异步调用链以及绑定到一个域的I/O操作的结束或中断。
+
+</p>
+<p>Calling <code>enter</code> changes only the active domain, and does not alter the domain
+itself. <code>Enter</code> and <code>exit</code> can be called an arbitrary number of times on a
+single domain.
+
+</p>
+<p>调用<code>enter</code>仅仅改变活动的域，而不改变域本身。
+<code>Enter</code> 和 <code>exit</code>在一个单独的域可以被调用任意多次。
+
+</p>
+<p>If the domain on which <code>enter</code> is called has been disposed, <code>enter</code> will return
+without setting the domain.
+
+</p>
+<p>如果域的<code>enter</code>已经设置，<code>enter</code>将不设置域就返回。
+
+</p>
+<h3>domain.exit()<span><a href="domain.html#domain_domain_exit" id="domain_domain_exit">#</a></span></h3>
+<p>The <code>exit</code> method exits the current domain, popping it off the domain stack.
+Any time execution is going to switch to the context of a different chain of
+asynchronous calls, it&apos;s important to ensure that the current domain is exited.
+The call to <code>exit</code> delimits either the end of or an interruption to the chain
+of asynchronous calls and I/O operations bound to a domain.
+
+</p>
+<p><code>exit</code>函数退出当前的域，将当前域从域的栈里移除。每当当程序的执行流程准要切换到一个不同的异步调用链的上下文时，要保证退出当前的域。<code>exit</code>函数的调用，分隔了异步调用链以及绑定到一个域的I/O操作的结束或中断。
+
+
+</p>
+<p>If there are multiple, nested domains bound to the current execution context,
+<code>exit</code> will exit any domains nested within this domain.
+
+</p>
+<p>如果有多个嵌套的域绑定到当前的执行上下文，
+<code>退出</code>将退出在这个域里的所有的嵌套。
+
+</p>
+<p>Calling <code>exit</code> changes only the active domain, and does not alter the domain
+itself. <code>Enter</code> and <code>exit</code> can be called an arbitrary number of times on a
+single domain.
+
+</p>
+<p>调用<code>exit</code>只会改变有效域，而不会改变域自身。在一个单一域上，<code>Enter</code>和<code>exit</code>可以被调用任意次。
+
+</p>
+<p>If the domain on which <code>exit</code> is called has been disposed, <code>exit</code> will return
+without exiting the domain.
+
+</p>
+<p>如果在这个域名下<code>exit </code>已经被设置，<code>exit </code>将不退出域返回。
+
+</p>
+<h3>domain.dispose()<span><a href="domain.html#domain_domain_dispose" id="domain_domain_dispose">#</a></span></h3>
+<pre><code>稳定度: 0 - 已过时。请通过设置在域上的错误事件处理器，显式地东失败的IO操作中恢复。</code></pre>
+<p>Once <code>dispose</code> has been called, the domain will no longer be used by callbacks
+bound into the domain via <code>run</code>, <code>bind</code>, or <code>intercept</code>, and a <code>dispose</code> event
+is emitted.
+
+</p>
+<p>一旦<code>dispose</code>被调用，通过<code>run</code>，<code>bind</code>或<code>intercept</code>绑定到这个域的回调函数将不再使用这个域，并且一个<code>dispose</code>事件会被分发。
+
+</p>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>

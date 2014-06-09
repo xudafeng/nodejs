@@ -1,0 +1,1103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>网络 Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/net.html">
+</head>
+<body class="alt apidoc" id="api-section-net">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="http://jixiangac.com/doc/node/net.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="net.html#net">网络</a><ul>
+<li><a href="net.html#net_net_createserver_options_connectionlistener">net.createServer([options], [connectionListener])</a></li>
+<li><a href="net.html#net_net_connect_options_connectionlistener">net.connect(options, [connectionListener])</a></li>
+<li><a href="net.html#net_net_createconnection_options_connectionlistener">net.createConnection(options, [connectionListener])</a></li>
+<li><a href="net.html#net_net_connect_options_connectionlistener_1">net.connect(options, [connectionListener])</a></li>
+<li><a href="net.html#net_net_createconnection_options_connectionlistener_1">net.createConnection(options, [connectionListener])</a></li>
+<li><a href="net.html#net_net_connect_port_host_connectlistener">net.connect(port, [host], [connectListener])</a></li>
+<li><a href="net.html#net_net_createconnection_port_host_connectlistener">net.createConnection(port, [host], [connectListener])</a></li>
+<li><a href="net.html#net_net_connect_port_host_connectlistener_1">net.connect(port, [host], [connectListener])</a></li>
+<li><a href="net.html#net_net_createconnection_port_host_connectlistener_1">net.createConnection(port, [host], [connectListener])</a></li>
+<li><a href="net.html#net_net_connect_path_connectlistener">net.connect(path, [connectListener])</a></li>
+<li><a href="net.html#net_net_createconnection_path_connectlistener">net.createConnection(path, [connectListener])</a></li>
+<li><a href="net.html#net_net_connect_path_connectlistener_1">net.connect(path, [connectListener])</a></li>
+<li><a href="net.html#net_net_createconnection_path_connectlistener_1">net.createConnection(path, [connectListener])</a></li>
+<li><a href="net.html#net_net_server">类: net.Server</a><ul>
+<li><a href="net.html#net_server_listen_port_host_backlog_callback">server.listen(port, [host], [backlog], [callback])</a></li>
+<li><a href="net.html#net_server_listen_path_callback">server.listen(path, [callback])</a></li>
+<li><a href="net.html#net_server_listen_handle_callback">server.listen(handle, [callback])</a></li>
+<li><a href="net.html#net_server_close_callback">server.close([callback])</a></li>
+<li><a href="net.html#net_server_address">server.address()</a></li>
+<li><a href="net.html#net_server_unref">server.unref()</a></li>
+<li><a href="net.html#net_server_ref">server.ref()</a></li>
+<li><a href="net.html#net_server_maxconnections">server.maxConnections</a></li>
+<li><a href="net.html#net_server_connections">server.connections</a></li>
+<li><a href="net.html#net_server_getconnections_callback">server.getConnections(callback)</a></li>
+<li><a href="net.html#net_listening">事件: &apos;listening&apos;</a></li>
+<li><a href="net.html#net_connection">事件: &apos;connection&apos;</a></li>
+<li><a href="net.html#net_close">事件: &apos;close&apos;</a></li>
+<li><a href="net.html#net_error">事件: &apos;error&apos;</a></li>
+</ul>
+</li>
+<li><a href="net.html#net_net_socket">类: net.Socket</a><ul>
+<li><a href="net.html#net_new_net_socket_options">new net.Socket([options])</a></li>
+<li><a href="net.html#net_socket_connect_port_host_connectlistener">socket.connect(port, [host], [connectListener])</a></li>
+<li><a href="net.html#net_socket_connect_path_connectlistener">socket.connect(path, [connectListener])</a></li>
+<li><a href="net.html#net_socket_connect_port_host_connectlistener_1">socket.connect(port, [host], [connectListener])</a></li>
+<li><a href="net.html#net_socket_connect_path_connectlistener_1">socket.connect(path, [connectListener])</a></li>
+<li><a href="net.html#net_socket_buffersize">socket.bufferSize</a></li>
+<li><a href="net.html#net_socket_setencoding_encoding">socket.setEncoding([encoding])</a></li>
+<li><a href="net.html#net_socket_write_data_encoding_callback">socket.write(data, [encoding], [callback])</a></li>
+<li><a href="net.html#net_socket_end_data_encoding">socket.end([data], [encoding])</a></li>
+<li><a href="net.html#net_socket_destroy">socket.destroy()</a></li>
+<li><a href="net.html#net_socket_pause">socket.pause()</a></li>
+<li><a href="net.html#net_socket_resume">socket.resume()</a></li>
+<li><a href="net.html#net_socket_settimeout_timeout_callback">socket.setTimeout(timeout, [callback])</a></li>
+<li><a href="net.html#net_socket_setnodelay_nodelay">socket.setNoDelay([noDelay])</a></li>
+<li><a href="net.html#net_socket_setkeepalive_enable_initialdelay">socket.setKeepAlive([enable], [initialDelay])</a></li>
+<li><a href="net.html#net_socket_address">socket.address()</a></li>
+<li><a href="net.html#net_socket_unref">socket.unref()</a></li>
+<li><a href="net.html#net_socket_ref">socket.ref()</a></li>
+<li><a href="net.html#net_socket_remoteaddress">socket.remoteAddress</a></li>
+<li><a href="net.html#net_socket_remoteport">socket.remotePort</a></li>
+<li><a href="net.html#net_socket_localaddress">socket.localAddress</a></li>
+<li><a href="net.html#net_socket_localport">socket.localPort</a></li>
+<li><a href="net.html#net_socket_bytesread">socket.bytesRead</a></li>
+<li><a href="net.html#net_socket_byteswritten">socket.bytesWritten</a></li>
+<li><a href="net.html#net_lookup">事件: &apos;lookup&apos;</a></li>
+<li><a href="net.html#net_connect">事件: &apos;connect&apos;</a></li>
+<li><a href="net.html#net_data">事件: &apos;data&apos;</a></li>
+<li><a href="net.html#net_end">事件: &apos;end&apos;</a></li>
+<li><a href="net.html#net_timeout">事件: &apos;timeout&apos;</a></li>
+<li><a href="net.html#net_drain">事件: &apos;drain&apos;</a></li>
+<li><a href="net.html#net_error_1">事件: &apos;error&apos;</a></li>
+<li><a href="net.html#net_close_1">事件: &apos;close&apos;</a></li>
+</ul>
+</li>
+<li><a href="net.html#net_net_isip_input">net.isIP(input)</a></li>
+<li><a href="net.html#net_net_isipv4_input">net.isIPv4(input)</a></li>
+<li><a href="net.html#net_net_isipv6_input">net.isIPv6(input)</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>网络<span><a href="net.html#net" id="net">#</a></span></h1>
+<pre><code>稳定度: 3 - 稳定</code></pre>
+<p>The <code>net</code> module provides you with an asynchronous network wrapper. It contains
+methods for creating both servers and clients (called streams). You can include
+this module with <code>require(&apos;net&apos;);</code>
+
+</p>
+<p><code>net</code> 模块封装了异步网络功能，提供了一些方法来创建服务器和客户端（称之为流）。您可以用 <code>require(&apos;net&apos;)</code> 来引入这个模块。
+
+</p>
+<h2>net.createServer([options], [connectionListener])<span><a href="net.html#net_net_createserver_options_connectionlistener" id="net_net_createserver_options_connectionlistener">#</a></span></h2>
+<p>Creates a new TCP server. The <code>connectionListener</code> argument is
+automatically set as a listener for the <a href="net.html#net_event_connection">&apos;connection&apos;</a> event.
+
+</p>
+<p>创建一个新的 TCP 服务器。参数 <code>connectionListener</code> 会被自动作为 <a href="net.html#net_event_connection">&apos;connection&apos;</a> 事件的监听器。
+
+</p>
+<p><code>options</code> is an object with the following defaults:
+
+</p>
+<p><code>options</code> 是一个包含下列缺省值的对象：
+
+</p>
+<pre><code>{ allowHalfOpen: false
+}</code></pre>
+<p>If <code>allowHalfOpen</code> is <code>true</code>, then the socket won&apos;t automatically send a FIN
+packet when the other end of the socket sends a FIN packet. The socket becomes
+non-readable, but still writable. You should call the <code>end()</code> method explicitly.
+See <a href="net.html#net_event_end">&apos;end&apos;</a> event for more information.
+
+</p>
+<p>如果允许半开连接 <code>allowHalfOpen</code> 被设置为 <code>true</code>，则当另一端的套接字发送 FIN 报文时套接字并不会自动发送 FIN 报文。套接字会变为不可读，但仍然可写。您应当明确地调用 <code>end()</code> 方法。详见 <a href="net.html#net_event_end">&apos;end&apos;</a> 事件。
+
+</p>
+<p>Here is an example of an echo server which listens for connections
+on port 8124:
+
+</p>
+<p>下面是一个监听 8124 端口连接的应答服务器的例子：
+
+</p>
+<pre><code>var net = require(&apos;net&apos;);
+var server = net.createServer(function(c) { // &apos;connection&apos; 监听器
+  console.log(&apos;服务器已连接&apos;);
+  c.on(&apos;end&apos;, function() {
+    console.log(&apos;服务器已断开&apos;);
+  });
+  c.write(&apos;hello\r\n&apos;);
+  c.pipe(c);
+});
+server.listen(8124, function() { // &apos;listening&apos; 监听器
+  console.log(&apos;服务器已绑定&apos;);
+});</code></pre>
+<p>Test this by using <code>telnet</code>:
+
+</p>
+<p>使用 <code>telnet</code> 测试：
+
+</p>
+<pre><code>telnet localhost 8124</code></pre>
+<p>To listen on the socket <code>/tmp/echo.sock</code> the third line from the last would
+just be changed to
+
+</p>
+<p>要监听套接字 <code>/tmp/echo.sock</code> 仅需更改倒数第三行代码：
+
+</p>
+<pre><code>server.listen(&apos;/tmp/echo.sock&apos;, function() { // &apos;listening&apos; 监听器</code></pre>
+<p>Use <code>nc</code> to connect to a UNIX domain socket server:
+
+</p>
+<p>使用 <code>nc</code> 连接到一个 UNIX domain 套接字服务器：
+
+</p>
+<pre><code>nc -U /tmp/echo.sock</code></pre>
+<h2>net.connect(options, [connectionListener])<span><a href="net.html#net_net_connect_options_connectionlistener" id="net_net_connect_options_connectionlistener">#</a></span></h2>
+<h2>net.createConnection(options, [connectionListener])<span><a href="net.html#net_net_createconnection_options_connectionlistener" id="net_net_createconnection_options_connectionlistener">#</a></span></h2>
+<h2>net.connect(options, [connectionListener])<span><a href="net.html#net_net_connect_options_connectionlistener_1" id="net_net_connect_options_connectionlistener_1">#</a></span></h2>
+<h2>net.createConnection(options, [connectionListener])<span><a href="net.html#net_net_createconnection_options_connectionlistener_1" id="net_net_createconnection_options_connectionlistener_1">#</a></span></h2>
+<p>Constructs a new socket object and opens the socket to the given location.
+When the socket is established, the <a href="net.html#net_event_connect">&apos;connect&apos;</a> event will be emitted.
+
+</p>
+<p>构建一个新的套接字对象并打开所给位置的套接字。当套接字就绪时会触发 <a href="net.html#net_event_connect">&apos;connect&apos;</a> 事件。
+
+</p>
+<p>For TCP sockets, <code>options</code> argument should be an object which specifies:
+
+</p>
+<p>对于 TCP 套接字，选项 <code>options</code> 参数应为一个指定下列参数的对象：
+
+</p>
+<ul>
+<li><p><code>port</code>: Port the client should connect to (Required).</p>
+</li>
+<li><p><code>port</code>：客户端连接到的端口（必须）</p>
+</li>
+<li><p><code>host</code>: Host the client should connect to. Defaults to <code>&apos;localhost&apos;</code>.</p>
+</li>
+<li><p><code>host</code>：客户端连接到的主机，缺省为 <code>&apos;localhost&apos;</code></p>
+</li>
+<li><p><code>localAddress</code>: Local interface to bind to for network connections.</p>
+</li>
+<li><p><code>localAddress</code>：网络连接绑定的本地接口</p>
+</li>
+<li><p><code>family</code> : Version of IP stack. Defaults to <code>4</code>.</p>
+</li>
+<li><p><code>family</code>：IP 栈版本，缺省为 <code>4</code></p>
+</li>
+</ul>
+<p>For UNIX domain sockets, <code>options</code> argument should be an object which specifies:
+
+</p>
+<p>对于 UNIX domain 套接字，选项 <code>options</code> 参数应当为一个指定下列参数的对象：
+
+</p>
+<ul>
+<li><p><code>path</code>: Path the client should connect to (Required).</p>
+</li>
+<li><p><code>path</code>：客户端连接到的路径（必须）</p>
+</li>
+</ul>
+<p>Common options are:
+
+</p>
+<p>通用选项：
+
+</p>
+<ul>
+<li><p><code>allowHalfOpen</code>: if <code>true</code>, the socket won&apos;t automatically send
+a FIN packet when the other end of the socket sends a FIN packet.
+Defaults to <code>false</code>.  See <a href="net.html#net_event_end">&apos;end&apos;</a> event for more information.</p>
+</li>
+<li><p><code>allowHalfOpen</code>：允许半开连接，如果被设置为 <code>true</code>，则当另一端的套接字发送 FIN 报文时套接字并不会自动发送 FIN 报文。缺省为 <code>false</code>。详见 <a href="net.html#net_event_end">&apos;end&apos;</a> 事件。</p>
+</li>
+</ul>
+<p>The <code>connectListener</code> parameter will be added as an listener for the
+<a href="net.html#net_event_connect">&apos;connect&apos;</a> event.
+
+</p>
+<p> <code>connectListener</code> 用于 <a href="net.html#net_event_connect">&apos;connect&apos;</a> 事件的监听器
+
+</p>
+<p>Here is an example of a client of echo server as described previously:
+
+</p>
+<p>下面是一个上述应答服务器的客户端的例子：
+
+</p>
+<pre><code>var net = require(&apos;net&apos;);
+var client = net.connect({port: 8124},
+    function() { //&apos;connect&apos; 监听器
+  console.log(&apos;client connected&apos;);
+  client.write(&apos;world!\r\n&apos;);
+});
+client.on(&apos;data&apos;, function(data) {
+  console.log(data.toString());
+  client.end();
+});
+client.on(&apos;end&apos;, function() {
+  console.log(&apos;客户端断开连接&apos;);
+});</code></pre>
+<p>To connect on the socket <code>/tmp/echo.sock</code> the second line would just be
+changed to
+
+</p>
+<p>要连接到套接字 <code>/tmp/echo.sock</code>，仅需将第二行改为
+
+</p>
+<pre><code>var client = net.connect({path: &apos;/tmp/echo.sock&apos;},</code></pre>
+<h2>net.connect(port, [host], [connectListener])<span><a href="net.html#net_net_connect_port_host_connectlistener" id="net_net_connect_port_host_connectlistener">#</a></span></h2>
+<h2>net.createConnection(port, [host], [connectListener])<span><a href="net.html#net_net_createconnection_port_host_connectlistener" id="net_net_createconnection_port_host_connectlistener">#</a></span></h2>
+<h2>net.connect(port, [host], [connectListener])<span><a href="net.html#net_net_connect_port_host_connectlistener_1" id="net_net_connect_port_host_connectlistener_1">#</a></span></h2>
+<h2>net.createConnection(port, [host], [connectListener])<span><a href="net.html#net_net_createconnection_port_host_connectlistener_1" id="net_net_createconnection_port_host_connectlistener_1">#</a></span></h2>
+<p>Creates a TCP connection to <code>port</code> on <code>host</code>. If <code>host</code> is omitted,
+<code>&apos;localhost&apos;</code> will be assumed.
+The <code>connectListener</code> parameter will be added as an listener for the
+<a href="net.html#net_event_connect">&apos;connect&apos;</a> event.
+
+</p>
+<p>创建一个 <code>host</code> 主机 <code>port</code> 端口的 TCP 连接。如果省略 <code>host</code> 则假定为 <code>&apos;localhost&apos;</code>。<code>connectListener</code> 参数会被用作 <a href="net.html#net_event_connect">&apos;connect&apos;</a> 事件的监听器。
+
+</p>
+<h2>net.connect(path, [connectListener])<span><a href="net.html#net_net_connect_path_connectlistener" id="net_net_connect_path_connectlistener">#</a></span></h2>
+<h2>net.createConnection(path, [connectListener])<span><a href="net.html#net_net_createconnection_path_connectlistener" id="net_net_createconnection_path_connectlistener">#</a></span></h2>
+<h2>net.connect(path, [connectListener])<span><a href="net.html#net_net_connect_path_connectlistener_1" id="net_net_connect_path_connectlistener_1">#</a></span></h2>
+<h2>net.createConnection(path, [connectListener])<span><a href="net.html#net_net_createconnection_path_connectlistener_1" id="net_net_createconnection_path_connectlistener_1">#</a></span></h2>
+<p>Creates unix socket connection to <code>path</code>.
+The <code>connectListener</code> parameter will be added as an listener for the
+<a href="net.html#net_event_connect">&apos;connect&apos;</a> event.
+
+</p>
+<p>创建一个到路径 <code>path</code> 的 UNIX 套接字连接。<code>connectListener</code> 参数会被用作 <a href="net.html#net_event_connect">&apos;connect&apos;</a> 事件的监听器。
+
+</p>
+<h2>类: net.Server<span><a href="net.html#net_net_server" id="net_net_server">#</a></span></h2>
+<p>This class is used to create a TCP or UNIX server.
+A server is a <code>net.Socket</code> that can listen for new incoming connections.
+
+</p>
+<p>该类用于创建一个 TCP 或 UNIX 服务器。服务器本质上是一个可监听传入连接的 <code>net.Socket</code>。
+
+</p>
+<h3>server.listen(port, [host], [backlog], [callback])<span><a href="net.html#net_server_listen_port_host_backlog_callback" id="net_server_listen_port_host_backlog_callback">#</a></span></h3>
+<p>Begin accepting connections on the specified <code>port</code> and <code>host</code>.  If the
+<code>host</code> is omitted, the server will accept connections directed to any
+IPv4 address (<code>INADDR_ANY</code>). A port value of zero will assign a random port.
+
+</p>
+<p>在指定端口 <code>port</code> 和主机 <code>host</code> 上开始接受连接。如果省略 <code>host</code> 则服务器会接受来自所有 IPv4 地址（<code>INADDR_ANY</code>）的连接；端口为 0 则会使用分随机分配的端口。
+
+</p>
+<p>Backlog is the maximum length of the queue of pending connections.
+The actual length will be determined by your OS through sysctl settings such as
+<code>tcp_max_syn_backlog</code> and <code>somaxconn</code> on linux. The default value of this
+parameter is 511 (not 512).
+
+</p>
+<p>积压量 <code>backlog</code> 为连接等待队列的最大长度。实际长度由您的操作系统通过 sysctl 设置决定，比如 Linux 上的 <code>tcp_max_syn_backlog</code> 和 <code>somaxconn</code>。该参数缺省值为 511（不是 512）。
+
+</p>
+<p>This function is asynchronous.  When the server has been bound,
+<a href="net.html#net_event_listening">&apos;listening&apos;</a> event will be emitted.  The last parameter <code>callback</code>
+will be added as an listener for the <a href="net.html#net_event_listening">&apos;listening&apos;</a> event.
+
+</p>
+<p>这是一个异步函数。当服务器已被绑定时会触发 <a href="net.html#net_event_listening">&apos;listening&apos;</a> 事件。最后一个参数 <code>callback</code> 会被用作 <a href="net.html#net_event_listening">&apos;listening&apos;</a> 事件的监听器。
+
+</p>
+<p>One issue some users run into is getting <code>EADDRINUSE</code> errors. This means that
+another server is already running on the requested port. One way of handling this
+would be to wait a second and then try again. This can be done with
+
+</p>
+<p>有些用户会遇到的情况是遇到 &apos;EADDINUSE&apos; 错误。这表示另一个服务器已经运行在所请求的端口上。一个处理这种情况的方法是等待一段时间再重试
+
+</p>
+<pre><code>server.on(&apos;error&apos;, function (e) {
+  if (e.code == &apos;EADDRINUSE&apos;) {
+    console.log(&apos;地址被占用，重试中...&apos;);
+    setTimeout(function () {
+      server.close();
+      server.listen(PORT, HOST);
+    }, 1000);
+  }
+});</code></pre>
+<p>(Note: All sockets in Node set <code>SO_REUSEADDR</code> already)
+
+</p>
+<p>（注意：Node 中的所有套接字已设置了 <code>SO_REUSEADDR</code>）
+
+</p>
+<h3>server.listen(path, [callback])<span><a href="net.html#net_server_listen_path_callback" id="net_server_listen_path_callback">#</a></span></h3>
+<p>Start a UNIX socket server listening for connections on the given <code>path</code>.
+
+</p>
+<p>启动一个 UNIX 套接字服务器在所给路径 <code>path</code> 上监听连接。
+
+</p>
+<p>This function is asynchronous.  When the server has been bound,
+<a href="net.html#net_event_listening">&apos;listening&apos;</a> event will be emitted.  The last parameter <code>callback</code>
+will be added as an listener for the <a href="net.html#net_event_listening">&apos;listening&apos;</a> event.
+
+</p>
+<p>这是一个异步函数。当服务器已被绑定时会触发 <a href="net.html#net_event_listening">&apos;listening&apos;</a> 事件。最后一个参数 <code>callback</code> 会被用作 <a href="net.html#net_event_listening">&apos;listening&apos;</a> 事件的监听器。
+
+</p>
+<h3>server.listen(handle, [callback])<span><a href="net.html#net_server_listen_handle_callback" id="net_server_listen_handle_callback">#</a></span></h3>
+<div><ul>
+<li><code>handle</code> <span>Object</span></li>
+<li><p><code>callback</code> <span>Function</span></p>
+</li>
+<li><p><code>handle</code>处理器 <span>Object</span></p>
+</li>
+<li><code>callback</code>回调函数 <span>Function</span></li>
+</div></ul>
+<p>The <code>handle</code> object can be set to either a server or socket (anything
+with an underlying <code>_handle</code> member), or a <code>{fd: &lt;n&gt;}</code> object.
+
+</p>
+<p><code>handle</code> 变量可以被设置为server 或者 socket(任一以下划线开头的成员 <code>_handle</code>), 或者一个 <code>{fd: &lt;n&gt;}</code> 对象
+
+</p>
+<p>This will cause the server to accept connections on the specified
+handle, but it is presumed that the file descriptor or handle has
+already been bound to a port or domain socket.
+
+</p>
+<p>这将使服务器用指定的句柄接受连接，但它假设文件描述符或者句柄已经被绑定在特定的端口或者域名套接字。
+
+</p>
+<p>Listening on a file descriptor is not supported on Windows.
+
+</p>
+<p>Windows 不支持监听一个文件描述符。
+
+</p>
+<p>This function is asynchronous.  When the server has been bound,
+<a href="net.html#event_listening_">&apos;listening&apos;</a> event will be emitted.
+the last parameter <code>callback</code> will be added as an listener for the
+<a href="net.html#event_listening_">&apos;listening&apos;</a> event.
+
+</p>
+<p>这是一个异步函数。当服务器已被绑定时会触发 <a href="net.html#event_listening_">&apos;listening&apos;</a> 事件。最后一个参数 <code>callback</code> 会被用作 <a href="net.html#event_listening_">&apos;listening&apos;</a> 事件的监听器。
+
+</p>
+<h3>server.close([callback])<span><a href="net.html#net_server_close_callback" id="net_server_close_callback">#</a></span></h3>
+<p>Stops the server from accepting new connections and keeps existing
+connections. This function is asynchronous, the server is finally
+closed when all connections are ended and the server emits a <code>&apos;close&apos;</code>
+event. Optionally, you can pass a callback to listen for the <code>&apos;close&apos;</code>
+event.
+
+</p>
+<p>用于停止服务器接受新连接，但保持已存在的连接。这是一个异步函数，
+服务器将在所有的连接都结束后关闭，并且服务器发送 <code>&apos;close&apos;</code>事件
+你可以有选择的传入回调函数来监听 <code>&apos;close&apos;</code>事件。
+
+</p>
+<h3>server.address()<span><a href="net.html#net_server_address" id="net_server_address">#</a></span></h3>
+<p>Returns the bound address, the address family name and port of the server
+as reported by the operating system.
+Useful to find which port was assigned when giving getting an OS-assigned address.
+Returns an object with three properties, e.g.
+<code>{ port: 12346, family: &apos;IPv4&apos;, address: &apos;127.0.0.1&apos; }</code>
+
+</p>
+<p>返回操作系统报告的绑定的地址，协议族和端口。
+对查找操作系统分配的地址哪个端口已被分配非常有用， 如.
+<code>{ port: 12346, family: &apos;IPv4&apos;, address: &apos;127.0.0.1&apos; }</code>
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>// 获得随机端口
+server.listen(function() {
+  address = server.address();
+  console.log(&quot;opened server on %j&quot;, address);
+});</code></pre>
+<p>Don&apos;t call <code>server.address()</code> until the <code>&apos;listening&apos;</code> event has been emitted.
+
+</p>
+<p>在 <code>&apos;listening&apos;</code> 事件发生前请勿调用 <code>server.address()</code>。
+
+</p>
+<h3>server.unref()<span><a href="net.html#net_server_unref" id="net_server_unref">#</a></span></h3>
+<p>Calling <code>unref</code> on a server will allow the program to exit if this is the only
+active server in the event system. If the server is already <code>unref</code>d calling
+<code>unref</code> again will have no effect.
+
+</p>
+<p>如果这是事件系统中唯一一个活动的服务器，调用 <code>unref</code> 将允许程序退出。如果服务器已被 <code>unref</code>，则再次调用 <code>unref</code> 并不会产生影响。
+
+</p>
+<h3>server.ref()<span><a href="net.html#net_server_ref" id="net_server_ref">#</a></span></h3>
+<p>Opposite of <code>unref</code>, calling <code>ref</code> on a previously <code>unref</code>d server will <em>not</em>
+let the program exit if it&apos;s the only server left (the default behavior). If
+the server is <code>ref</code>d calling <code>ref</code> again will have no effect.
+
+</p>
+<p>与 <code>unref</code> 相反，如果这是仅剩的服务器，在一个之前被 <code>unref</code> 了的服务器上调用 <code>ref</code> 将不会让程序退出（缺省行为）。如果服务器已经被 <code>ref</code>，则再次调用 <code>ref</code> 并不会产生影响。
+
+</p>
+<h3>server.maxConnections<span><a href="net.html#net_server_maxconnections" id="net_server_maxconnections">#</a></span></h3>
+<p>Set this property to reject connections when the server&apos;s connection count gets
+high.
+
+</p>
+<p>设置这个选项能在当服务器连接数超过数量时拒绝连接。
+
+</p>
+<p>It is not recommended to use this option once a socket has been sent to a child
+with <code>child_process.fork()</code>.
+
+</p>
+<p>这个选项不推荐使用在套接字已经用 <code>child_process.fork()</code>发送给子进程。
+
+</p>
+<h3>server.connections<span><a href="net.html#net_server_connections" id="net_server_connections">#</a></span></h3>
+<p>This function is <strong>deprecated</strong>; please use [server.getConnections()][] instead.
+The number of concurrent connections on the server.
+
+</p>
+<p>这个函数已被 <strong>废弃</strong>; 请用 [server.getConnections()][] 代替.
+服务器的当前活动连接的数量。
+
+</p>
+<p>This becomes <code>null</code> when sending a socket to a child with
+<code>child_process.fork()</code>. To poll forks and get current number of active
+connections use asynchronous <code>server.getConnections</code> instead.
+
+</p>
+<p>当用<code>child_process.fork()</code>发送一个套接字给子进程时，它将是 <code>null</code> 。
+要轮询子进程来获取当前活动的连接请用 <code>server.getConnections</code> 代替.
+
+</p>
+<p><code>net.Server</code> is an <a href="events.html#events_class_events_eventemitter">EventEmitter</a> with the following events:
+
+</p>
+<p><code>net.Server</code> 是一个包含下列事件的 <a href="events.html#events_class_events_eventemitter">EventEmitter</a> :
+
+</p>
+<h3>server.getConnections(callback)<span><a href="net.html#net_server_getconnections_callback" id="net_server_getconnections_callback">#</a></span></h3>
+<p>Asynchronously get the number of concurrent connections on the server. Works
+when sockets were sent to forks.
+
+</p>
+<p>异步获取服务器当前活跃的连接数. 
+用于套接字呗发送给子进程。
+
+</p>
+<p>Callback should take two arguments <code>err</code> and <code>count</code>.
+
+</p>
+<p>回调函数需要两个参数 <code>err</code> 和 <code>count</code>.
+
+</p>
+<h3>事件: &apos;listening&apos;<span><a href="net.html#net_listening" id="net_listening">#</a></span></h3>
+<p>Emitted when the server has been bound after calling <code>server.listen</code>.
+
+</p>
+<p>在服务器调用 <code>server.listen</code>绑定后触发。
+
+</p>
+<h3>事件: &apos;connection&apos;<span><a href="net.html#net_connection" id="net_connection">#</a></span></h3>
+<div><ul>
+<li><p><span>Socket object</span> The connection object</p>
+</li>
+<li><p><span>Socket object</span> 连接对象</p>
+</li>
+</div></ul>
+<p>Emitted when a new connection is made. <code>socket</code> is an instance of
+<code>net.Socket</code>.
+
+</p>
+<p>在一个新连接被创建时触发。 <code>socket</code> 是一个<code>net.Socket</code>的实例。
+
+</p>
+<h3>事件: &apos;close&apos;<span><a href="net.html#net_close" id="net_close">#</a></span></h3>
+<p>Emitted when the server closes. Note that if connections exist, this
+event is not emitted until all connections are ended.
+
+</p>
+<p>当服务被关闭时触发. 注意：如果当前仍有活动连接，他个事件将等到所有连接都结束后才触发。
+
+</p>
+<h3>事件: &apos;error&apos;<span><a href="net.html#net_error" id="net_error">#</a></span></h3>
+<div><ul>
+<li><p><span>Error Object</span></p>
+</li>
+<li><p><span>Error Object</span></p>
+</li>
+</div></ul>
+<p>Emitted when an error occurs.  The <code>&apos;close&apos;</code> event will be called directly
+following this event.  See example in discussion of <code>server.listen</code>.
+
+</p>
+<p>当一个错误发生时触发。  <code>&apos;close&apos;</code> 事件将直接被下列时间调用。
+请查看讨论 <code>server.listen</code>的例子。
+
+</p>
+<h2>类: net.Socket<span><a href="net.html#net_net_socket" id="net_net_socket">#</a></span></h2>
+<p>This object is an abstraction of a TCP or UNIX socket.  <code>net.Socket</code>
+instances implement a duplex Stream interface.  They can be created by the
+user and used as a client (with <code>connect()</code>) or they can be created by Node
+and passed to the user through the <code>&apos;connection&apos;</code> event of a server.
+
+</p>
+<p>这个对象是一个TCP或UNIX套接字的抽象。  <code>net.Socket</code>
+实例实现了一个双工流接口。 他们可以被用户使用在客户端(使用 <code>connect()</code>) 
+或者它们可以由 Node创建，并通过 <code>&apos;connection&apos;</code>服务器事件传递给用户。
+
+</p>
+<h3>new net.Socket([options])<span><a href="net.html#net_new_net_socket_options" id="net_new_net_socket_options">#</a></span></h3>
+<p>Construct a new socket object.
+
+</p>
+<p>构造一个新的套接字对象。
+
+</p>
+<p><code>options</code> is an object with the following defaults:
+
+</p>
+<p><code>options</code> 是一个包含下列缺省值的对象：
+
+</p>
+<pre><code>{ fd: null
+  type: null
+  allowHalfOpen: false
+}</code></pre>
+<p><code>fd</code> allows you to specify the existing file descriptor of socket. <code>type</code>
+specified underlying protocol. It can be <code>&apos;tcp4&apos;</code>, <code>&apos;tcp6&apos;</code>, or <code>&apos;unix&apos;</code>.
+About <code>allowHalfOpen</code>, refer to <code>createServer()</code> and <code>&apos;end&apos;</code> event.
+
+</p>
+<p><code>fd</code> 允许你指定一个存在的文件描述符和套接字。
+ <code>type</code> 指定一个优先的协议。 他可以是 <code>&apos;tcp4&apos;</code>, <code>&apos;tcp6&apos;</code>, 或 <code>&apos;unix&apos;</code>.
+关于 <code>allowHalfOpen</code>, 参见 <code>createServer()</code> 和 <code>&apos;end&apos;</code> 事件。
+
+</p>
+<h3>socket.connect(port, [host], [connectListener])<span><a href="net.html#net_socket_connect_port_host_connectlistener" id="net_socket_connect_port_host_connectlistener">#</a></span></h3>
+<h3>socket.connect(path, [connectListener])<span><a href="net.html#net_socket_connect_path_connectlistener" id="net_socket_connect_path_connectlistener">#</a></span></h3>
+<h3>socket.connect(port, [host], [connectListener])<span><a href="net.html#net_socket_connect_port_host_connectlistener_1" id="net_socket_connect_port_host_connectlistener_1">#</a></span></h3>
+<h3>socket.connect(path, [connectListener])<span><a href="net.html#net_socket_connect_path_connectlistener_1" id="net_socket_connect_path_connectlistener_1">#</a></span></h3>
+<p>Opens the connection for a given socket. If <code>port</code> and <code>host</code> are given,
+then the socket will be opened as a TCP socket, if <code>host</code> is omitted,
+<code>localhost</code> will be assumed. If a <code>path</code> is given, the socket will be
+opened as a unix socket to that path.
+
+</p>
+<p>使用传入的套接字打开一个连接 如果 <code>port</code> 和 <code>host</code> 都被传入，
+那么套接字将会被已TCP套接字打开，如果 <code>host</code> 被省略,
+默认为<code>localhost</code> . 如果 <code>path</code> 被传入,
+套接字将会被已指定路径UNIX套接字打开。
+
+</p>
+<p>Normally this method is not needed, as <code>net.createConnection</code> opens the
+socket. Use this only if you are implementing a custom Socket.
+
+</p>
+<p>一般情况下这个函数是不需要使用, 比如用 <code>net.createConnection</code> 打开套接字.
+只有在您实现了自定义套接字时候才需要。
+
+</p>
+<p>This function is asynchronous. When the <a href="net.html#net_event_connect">&apos;connect&apos;</a> event is emitted the
+socket is established. If there is a problem connecting, the <code>&apos;connect&apos;</code> event
+will not be emitted, the <code>&apos;error&apos;</code> event will be emitted with the exception.
+
+</p>
+<p>这是一个异步函数。 当 <a href="net.html#net_event_connect">&apos;connect&apos;</a> 触发了的套接字是established状态
+.或者在连接的时候出现了一个问题, <code>&apos;connect&apos;</code> 事件不会被触发，
+而 <code>&apos;error&apos;</code> 事件会触发并发送异常信息。
+
+</p>
+<p>The <code>connectListener</code> parameter will be added as an listener for the
+<a href="net.html#net_event_connect">&apos;connect&apos;</a> event.
+
+</p>
+<p> <code>connectListener</code> 用于 <a href="net.html#net_event_connect">&apos;connect&apos;</a> 事件的监听器
+
+</p>
+<h3>socket.bufferSize<span><a href="net.html#net_socket_buffersize" id="net_socket_buffersize">#</a></span></h3>
+<p><code>net.Socket</code> has the property that <code>socket.write()</code> always works. This is to
+help users get up and running quickly. The computer cannot always keep up
+with the amount of data that is written to a socket - the network connection
+simply might be too slow. Node will internally queue up the data written to a
+socket and send it out over the wire when it is possible. (Internally it is
+polling on the socket&apos;s file descriptor for being writable).
+
+</p>
+<p>是一个<code>net.Socket</code> 的属性，用于 <code>socket.write()</code> . 
+用于帮助用户获取更快的运行速度。 计算机不能一直处于大量数据被写入状态 ——
+网络链接可能会变得过慢。 Node 在内部会排队等候数据被写入套接字并确保传输连接上的数据完好。
+(内部实现为：轮询套接字的文件描述符等待它为可写).
+
+</p>
+<p>The consequence of this internal buffering is that memory may grow. This
+property shows the number of characters currently buffered to be written.
+(Number of characters is approximately equal to the number of bytes to be
+written, but the buffer may contain strings, and the strings are lazily
+encoded, so the exact number of bytes is not known.)
+
+</p>
+<p>内部缓冲的可能后果是内存使用会增加。这个属性表示了现在处于缓冲区等待被写入的字符数。（字符的数目约等于要被写入的字节数，但是缓冲区可能包含字符串，而字符串是惰性编码的，所以确切的字节数是未知的。）
+
+</p>
+<p>Users who experience large or growing <code>bufferSize</code> should attempt to
+&quot;throttle&quot; the data flows in their program with <code>pause()</code> and <code>resume()</code>.
+
+</p>
+<p>遇到数值很大或者增长很快的<code>bufferSize</code>的时候，用户应该尝试用<code>pause()</code>和<code>resume()</code>来控制数据流。
+
+</p>
+<h3>socket.setEncoding([encoding])<span><a href="net.html#net_socket_setencoding_encoding" id="net_socket_setencoding_encoding">#</a></span></h3>
+<p>Set the encoding for the socket as a Readable Stream. See
+<a href="stream.html#stream_stream_setencoding_encoding">stream.setEncoding()</a> for more information.
+
+</p>
+<p>设置套接字的编码为一个可读流. 
+更多信息请查看 <a href="stream.html#stream_stream_setencoding_encoding">stream.setEncoding()</a> 
+
+</p>
+<h3>socket.write(data, [encoding], [callback])<span><a href="net.html#net_socket_write_data_encoding_callback" id="net_socket_write_data_encoding_callback">#</a></span></h3>
+<p>Sends data on the socket. The second parameter specifies the encoding in the
+case of a string--it defaults to UTF8 encoding.
+
+</p>
+<p>在套接字上发送数据。第二参数指明了使用字符串时的编码方式-默认为UTF8编码。
+
+</p>
+<p>Returns <code>true</code> if the entire data was flushed successfully to the kernel
+buffer. Returns <code>false</code> if all or part of the data was queued in user memory.
+<code>&apos;drain&apos;</code> will be emitted when the buffer is again free.
+
+</p>
+<p>如果所有数据被成功刷新到内核缓冲区，则返回<code>true</code>。如果所有或部分数据在用户内存里还处于队列中，则返回<code>false</code>。当缓冲区再次被释放时，<code>&apos;drain&apos;</code>事件会被分发。
+<code>&apos;drain&apos;</code> will be emitted when the buffer is again free.
+
+</p>
+<p>The optional <code>callback</code> parameter will be executed when the data is finally
+written out - this may not be immediately.
+
+</p>
+<p>当数据最终被完整写入时，可选的<code>callback</code>参数会被执行 - 但不一定是马上执行。
+
+</p>
+<h3>socket.end([data], [encoding])<span><a href="net.html#net_socket_end_data_encoding" id="net_socket_end_data_encoding">#</a></span></h3>
+<p>Half-closes the socket. i.e., it sends a FIN packet. It is possible the
+server will still send some data.
+
+</p>
+<p>半关闭套接字 如., 它发送一个 FIN 包 .可能服务器仍在发送数据。
+
+</p>
+<p>If <code>data</code> is specified, it is equivalent to calling
+<code>socket.write(data, encoding)</code> followed by <code>socket.end()</code>.
+
+</p>
+<p>如果 <code>data</code>被传入, 等同于调用
+<code>socket.write(data, encoding)</code> 然后调用 <code>socket.end()</code>.
+
+</p>
+<h3>socket.destroy()<span><a href="net.html#net_socket_destroy" id="net_socket_destroy">#</a></span></h3>
+<p>Ensures that no more I/O activity happens on this socket. Only necessary in
+case of errors (parse error or so).
+
+</p>
+<p>确保没有I/O活动在这个套接字。
+只有在错误发生情况下才需要（处理错误等等）。
+
+</p>
+<h3>socket.pause()<span><a href="net.html#net_socket_pause" id="net_socket_pause">#</a></span></h3>
+<p>Pauses the reading of data. That is, <code>&apos;data&apos;</code> events will not be emitted.
+Useful to throttle back an upload.
+
+</p>
+<p>暂停读取数据。 <code>&apos;data&apos;</code> 事件不会被触发。
+对于控制上传非常有用。
+
+</p>
+<h3>socket.resume()<span><a href="net.html#net_socket_resume" id="net_socket_resume">#</a></span></h3>
+<p>Resumes reading after a call to <code>pause()</code>.
+
+</p>
+<p>在调用 <code>pause()</code>后恢复读操作。
+
+</p>
+<h3>socket.setTimeout(timeout, [callback])<span><a href="net.html#net_socket_settimeout_timeout_callback" id="net_socket_settimeout_timeout_callback">#</a></span></h3>
+<p>Sets the socket to timeout after <code>timeout</code> milliseconds of inactivity on
+the socket. By default <code>net.Socket</code> do not have a timeout.
+
+</p>
+<p>如果套接字超过<code>timeout</code>毫秒处于闲置状态，则将套接字设为超时。默认情况下<code>net.Socket</code>不存在超时。
+
+</p>
+<p>When an idle timeout is triggered the socket will receive a <code>&apos;timeout&apos;</code>
+event but the connection will not be severed. The user must manually <code>end()</code>
+or <code>destroy()</code> the socket.
+
+</p>
+<p>当一个闲置超时被触发时，套接字会接收到一个<code>&apos;timeout&apos;</code>事件，但是连接将不会被断开。用户必须手动<code>end()</code>或<code>destroy()</code>这个套接字。
+
+</p>
+<p>If <code>timeout</code> is 0, then the existing idle timeout is disabled.
+
+</p>
+<p>如果<code>timeout</code>为0，那么现有的闲置超时会被禁用。
+
+</p>
+<p>The optional <code>callback</code> parameter will be added as a one time listener for the
+<code>&apos;timeout&apos;</code> event.
+
+</p>
+<p>可选的<code>callback</code>参数将会被添加成为<code>&apos;timeout&apos;</code>事件的一次性监听器。
+
+</p>
+<h3>socket.setNoDelay([noDelay])<span><a href="net.html#net_socket_setnodelay_nodelay" id="net_socket_setnodelay_nodelay">#</a></span></h3>
+<p>Disables the Nagle algorithm. By default TCP connections use the Nagle
+algorithm, they buffer data before sending it off. Setting <code>true</code> for
+<code>noDelay</code> will immediately fire off data each time <code>socket.write()</code> is called.
+<code>noDelay</code> defaults to <code>true</code>.
+
+</p>
+<p>禁用纳格（Nagle）算法。默认情况下TCP连接使用纳格算法，这些连接在发送数据之前对数据进行缓冲处理。 将<code>noDelay</code>设成<code>true</code>会在每次<code>socket.write()</code>被调用时立刻发送数据。<code>noDelay</code>默认为<code>true</code>。
+
+</p>
+<h3>socket.setKeepAlive([enable], [initialDelay])<span><a href="net.html#net_socket_setkeepalive_enable_initialdelay" id="net_socket_setkeepalive_enable_initialdelay">#</a></span></h3>
+<p>Enable/disable keep-alive functionality, and optionally set the initial
+delay before the first keepalive probe is sent on an idle socket.
+<code>enable</code> defaults to <code>false</code>.
+
+</p>
+<p>禁用/启用长连接功能，并在第一个在闲置套接字上的长连接probe被发送之前，可选地设定初始延时。<code>enable</code>默认为<code>false</code>。
+
+</p>
+<p>Set <code>initialDelay</code> (in milliseconds) to set the delay between the last
+data packet received and the first keepalive probe. Setting 0 for
+initialDelay will leave the value unchanged from the default
+(or previous) setting. Defaults to <code>0</code>.
+
+</p>
+<p>设定<code>initialDelay</code> (毫秒)，来设定在收到的最后一个数据包和第一个长连接probe之间的延时。将initialDelay设成0会让值保持不变(默认值或之前所设的值)。默认为<code>0</code>。
+
+</p>
+<h3>socket.address()<span><a href="net.html#net_socket_address" id="net_socket_address">#</a></span></h3>
+<p>Returns the bound address, the address family name and port of the
+socket as reported by the operating system. Returns an object with
+three properties, e.g.
+<code>{ port: 12346, family: &apos;IPv4&apos;, address: &apos;127.0.0.1&apos; }</code>
+
+</p>
+<p>返回 socket 绑定的IP地址, 协议类型 (family name) 以及 端口号 (port). 具体是一个包含三个属性的对象, 形如 <code>{ port: 12346, family: &apos;IPv4&apos;, address: &apos;127.0.0.1&apos; }</code>
+
+</p>
+<h3>socket.unref()<span><a href="net.html#net_socket_unref" id="net_socket_unref">#</a></span></h3>
+<p>Calling <code>unref</code> on a socket will allow the program to exit if this is the only
+active socket in the event system. If the socket is already <code>unref</code>d calling
+<code>unref</code> again will have no effect.
+
+</p>
+<p>如果这是事件系统中唯一一个活动的套接字，调用 <code>unref</code> 将允许程序退出。如果套接字已被 <code>unref</code>，则再次调用 <code>unref</code> 并不会产生影响。
+
+</p>
+<h3>socket.ref()<span><a href="net.html#net_socket_ref" id="net_socket_ref">#</a></span></h3>
+<p>Opposite of <code>unref</code>, calling <code>ref</code> on a previously <code>unref</code>d socket will <em>not</em>
+let the program exit if it&apos;s the only socket left (the default behavior). If
+the socket is <code>ref</code>d calling <code>ref</code> again will have no effect.
+
+</p>
+<p>与 <code>unref</code> 相反，如果这是仅剩的套接字，在一个之前被 <code>unref</code> 了的套接字上调用 <code>ref</code> 将<em>不会</em>让程序退出（缺省行为）。如果一个套接字已经被 <code>ref</code>，则再次调用 <code>ref</code> 并不会产生影响。
+
+</p>
+<h3>socket.remoteAddress<span><a href="net.html#net_socket_remoteaddress" id="net_socket_remoteaddress">#</a></span></h3>
+<p>The string representation of the remote IP address. For example,
+<code>&apos;74.125.127.100&apos;</code> or <code>&apos;2001:4860:a005::68&apos;</code>.
+
+</p>
+<p>远程IP地址的字符串表示。例如，<code>&apos;74.125.127.100&apos;</code>或 <code>&apos;2001:4860:a005::68&apos;</code>。
+
+</p>
+<h3>socket.remotePort<span><a href="net.html#net_socket_remoteport" id="net_socket_remoteport">#</a></span></h3>
+<p>The numeric representation of the remote port. For example,
+<code>80</code> or <code>21</code>.
+
+</p>
+<p>远程端口的数值表示。例如，<code>80</code> 或 <code>21</code>。
+
+</p>
+<h3>socket.localAddress<span><a href="net.html#net_socket_localaddress" id="net_socket_localaddress">#</a></span></h3>
+<p>The string representation of the local IP address the remote client is
+connecting on. For example, if you are listening on <code>&apos;0.0.0.0&apos;</code> and the
+client connects on <code>&apos;192.168.1.1&apos;</code>, the value would be <code>&apos;192.168.1.1&apos;</code>.
+
+</p>
+<p>远程客户端正在连接的本地IP地址的字符串表示。例如，如果你在监听<code>&apos;0.0.0.0&apos;</code>而客户端连接在<code>&apos;192.168.1.1&apos;</code>，这个值就会是 <code>&apos;192.168.1.1&apos;</code>。
+
+</p>
+<h3>socket.localPort<span><a href="net.html#net_socket_localport" id="net_socket_localport">#</a></span></h3>
+<p>The numeric representation of the local port. For example,
+<code>80</code> or <code>21</code>.
+
+</p>
+<p>本地端口的数值表示。比如<code>80</code> 或 <code>21</code>。
+
+</p>
+<h3>socket.bytesRead<span><a href="net.html#net_socket_bytesread" id="net_socket_bytesread">#</a></span></h3>
+<p>The amount of received bytes.
+
+</p>
+<p>所接收的字节数。
+
+</p>
+<h3>socket.bytesWritten<span><a href="net.html#net_socket_byteswritten" id="net_socket_byteswritten">#</a></span></h3>
+<p>The amount of bytes sent.
+
+</p>
+<p>所发送的字节数。
+
+</p>
+<p><code>net.Socket</code> instances are <a href="events.html#events_class_events_eventemitter">EventEmitter</a> with the following events:
+
+</p>
+<p><code>net.Socket</code>实例是带有以下事件的<a href="events.html#events_class_events_eventemitter">EventEmitter</a>对象：
+
+</p>
+<h3>事件: &apos;lookup&apos;<span><a href="net.html#net_lookup" id="net_lookup">#</a></span></h3>
+<p>Emitted after resolving the hostname but before connecting.
+Not applicable to UNIX sockets.
+
+</p>
+<p>这个事件在解析主机名之后，连接主机之前被分发。对UNIX套接字不适用。
+
+</p>
+<ul>
+<li><code>err</code> {Error | Null} The error object.  See [dns.lookup()][].</li>
+<li><code>address</code> {String} The IP address.</li>
+<li><p><code>family</code> {String | Null} The address type.  See [dns.lookup()][].</p>
+</li>
+<li><p><code>err</code> {Error | Null} 错误对象。见[dns.lookup()][]。</p>
+</li>
+<li><code>address</code> {String} IP地址。</li>
+<li><code>family</code> {String | Null} 得知类型。见[dns.lookup()][]。</li>
+</ul>
+<h3>事件: &apos;connect&apos;<span><a href="net.html#net_connect" id="net_connect">#</a></span></h3>
+<p>Emitted when a socket connection is successfully established.
+See <code>connect()</code>.
+
+</p>
+<p>该事件在一个套接字连接成功建立后被分发。见<code>connect()</code>。
+
+</p>
+<h3>事件: &apos;data&apos;<span><a href="net.html#net_data" id="net_data">#</a></span></h3>
+<div><ul>
+<li><p><span>Buffer object</span></p>
+</li>
+<li><p><span>Buffer object</span></p>
+</li>
+</div></ul>
+<p>Emitted when data is received.  The argument <code>data</code> will be a <code>Buffer</code> or
+<code>String</code>.  Encoding of data is set by <code>socket.setEncoding()</code>.
+(See the <a href="stream.html#stream_readable_stream">Readable Stream</a> section for more information.)
+
+</p>
+<p>当收到数据时被分发。<code>data</code>参数会是一个<code>Buffer</code>或<code>String</code>对象。数据的编码方式由<code>socket.setEncoding()</code>设定。
+（详见 [可读流][] 章节）
+
+</p>
+<p>Note that the <strong>data will be lost</strong> if there is no listener when a <code>Socket</code>
+emits a <code>&apos;data&apos;</code> event.
+
+</p>
+<p>请注意，如果一个<code>Socket</code>对象分发一个<code>&apos;data&apos;</code>事件时没有任何监听器存在，则 <strong>数据会丢失</strong>。
+
+</p>
+<h3>事件: &apos;end&apos;<span><a href="net.html#net_end" id="net_end">#</a></span></h3>
+<p>Emitted when the other end of the socket sends a FIN packet.
+
+</p>
+<p>当套接字的另一端发送FIN包时，该事件被分发。
+
+</p>
+<p>By default (<code>allowHalfOpen == false</code>) the socket will destroy its file
+descriptor  once it has written out its pending write queue.  However, by
+setting <code>allowHalfOpen == true</code> the socket will not automatically <code>end()</code>
+its side allowing the user to write arbitrary amounts of data, with the
+caveat that the user is required to <code>end()</code> their side now.
+
+</p>
+<p>默认情况下 （<code>allowHalfOpen == false</code>），当套接字完成待写入队列中的任务时，它会destroy文件描述符。然而，如果把<code>allowHalfOpen</code>设成<code>true</code>，那么套接字将不会从它这边自动调用<code>end()</code>，使得用户可以随意写入数据，但同时使得用户自己需要调用<code>end()</code>。
+
+</p>
+<h3>事件: &apos;timeout&apos;<span><a href="net.html#net_timeout" id="net_timeout">#</a></span></h3>
+<p>Emitted if the socket times out from inactivity. This is only to notify that
+the socket has been idle. The user must manually close the connection.
+
+</p>
+<p>当套接字因为非活动状态而超时时该事件被分发。这只是用来表明套接字处于空闲状态。用户必须手动关闭这个连接。
+
+</p>
+<p>See also: <code>socket.setTimeout()</code>
+
+</p>
+<p>参阅：<code>socket.setTimeout()</code>
+
+</p>
+<h3>事件: &apos;drain&apos;<span><a href="net.html#net_drain" id="net_drain">#</a></span></h3>
+<p>Emitted when the write buffer becomes empty. Can be used to throttle uploads.
+
+</p>
+<p>当写入缓冲被清空时产生。可被用于控制上传流量。
+
+</p>
+<p>See also: the return values of <code>socket.write()</code>
+
+</p>
+<p>参阅：<code>socket.write()</code> 的返回值
+
+</p>
+<h3>事件: &apos;error&apos;<span><a href="net.html#net_error_1" id="net_error_1">#</a></span></h3>
+<div><ul>
+<li><p><span>Error object</span></p>
+</li>
+<li><p><span>Error object</span></p>
+</li>
+</div></ul>
+<p>Emitted when an error occurs.  The <code>&apos;close&apos;</code> event will be called directly
+following this event.
+
+</p>
+<p>当一个错误发生时产生。<code>&apos;close&apos;</code> 事件会紧接着该事件被触发。
+
+</p>
+<h3>事件: &apos;close&apos;<span><a href="net.html#net_close_1" id="net_close_1">#</a></span></h3>
+<div><ul>
+<li><p><code>had_error</code> <span>Boolean</span> true if the socket had a transmission error</p>
+</li>
+<li><p><code>had_error</code> <span>Boolean</span> 如果套接字发生了传输错误则此字段为true</p>
+</li>
+</div></ul>
+<p>Emitted once the socket is fully closed. The argument <code>had_error</code> is a boolean
+which says if the socket was closed due to a transmission error.
+
+</p>
+<p>当套接字完全关闭时该事件被分发。参数<code>had_error</code>是一个布尔值，表示了套接字是否因为一个传输错误而被关闭。
+
+</p>
+<h2>net.isIP(input)<span><a href="net.html#net_net_isip_input" id="net_net_isip_input">#</a></span></h2>
+<p>Tests if input is an IP address. Returns 0 for invalid strings,
+returns 4 for IP version 4 addresses, and returns 6 for IP version 6 addresses.
+
+</p>
+<p>测试 input 是否 IP 地址。无效字符串返回 0；IP 版本 4 地址返回 4；IP 版本 6 地址返回 6。
+
+</p>
+<h2>net.isIPv4(input)<span><a href="net.html#net_net_isipv4_input" id="net_net_isipv4_input">#</a></span></h2>
+<p>Returns true if input is a version 4 IP address, otherwise returns false.
+
+</p>
+<p>如果 input 为版本 4 地址则返回 true，否则返回 false。
+
+</p>
+<h2>net.isIPv6(input)<span><a href="net.html#net_net_isipv6_input" id="net_net_isipv6_input">#</a></span></h2>
+<p>Returns true if input is a version 6 IP address, otherwise returns false.
+
+</p>
+<p>如果 input 为版本 6 地址则返回 true，否则返回 false。
+
+</p>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>

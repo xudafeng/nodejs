@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>执行 JavaScript Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/vm.html">
+</head>
+<body class="alt apidoc" id="api-section-vm">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="vm.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="vm.html#vm_javascript">执行 JavaScript</a><ul>
+<li><a href="vm.html#vm_vm_runinthiscontext_code_options">vm.runInThisContext(code, [options])</a></li>
+<li><a href="vm.html#vm_vm_createcontext_sandbox">vm.createContext([sandbox])</a></li>
+<li><a href="vm.html#vm_vm_iscontext_sandbox">vm.isContext(sandbox)</a></li>
+<li><a href="vm.html#vm_vm_runincontext_code_contextifiedsandbox_options">vm.runInContext(code, contextifiedSandbox, [options])</a></li>
+<li><a href="vm.html#vm_vm_runinnewcontext_code_sandbox_options">vm.runInNewContext(code, [sandbox], [options])</a></li>
+<li><a href="vm.html#vm_script">类: Script</a><ul>
+<li><a href="vm.html#vm_new_vm_script_code_options">new vm.Script(code, options)</a></li>
+<li><a href="vm.html#vm_script_runinthiscontext_options">script.runInThisContext([options])</a></li>
+<li><a href="vm.html#vm_script_runincontext_contextifiedsandbox_options">script.runInContext(contextifiedSandbox, [options])</a></li>
+<li><a href="vm.html#vm_script_runinnewcontext_sandbox_options">script.runInNewContext([sandbox], [options])</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>执行 JavaScript<span><a href="vm.html#vm_javascript" id="vm_javascript">#</a></span></h1>
+<pre><code>稳定度: 3 - 稳定</code></pre>
+<!--name=vm-->
+
+<p>You can access this module with:
+
+</p>
+<p>你可以这样引入此模块：
+
+</p>
+<pre><code>var vm = require(&apos;vm&apos;);</code></pre>
+<p>JavaScript code can be compiled and run immediately or compiled, saved, and run
+later.
+
+</p>
+<p>JavaScript 代码可以被编译并立即执行，也可以在编译后保存，留到稍后执行。
+
+</p>
+<h2>vm.runInThisContext(code, [options])<span><a href="vm.html#vm_vm_runinthiscontext_code_options" id="vm_vm_runinthiscontext_code_options">#</a></span></h2>
+<p><code>vm.runInThisContext()</code> compiles <code>code</code>, runs it and returns the result. Running
+code does not have access to local scope, but does have access to the current
+<code>global</code> object.
+
+</p>
+<p><code>vm.runInThisContext()</code> 对 <code>code</code> 进行编译、运行并返回结果。
+ 被运行的代码没有对本地作用域 (local scope) 的访问权限，但是可以访问当前的 <code>global</code> 对象。
+
+</p>
+<p>Example of using <code>vm.runInThisContext</code> and <code>eval</code> to run the same code:
+
+</p>
+<p>使用 <code>vm.runInThisContext</code> 和 <code>eval</code> 分别执行相同的代码：
+
+</p>
+<pre><code>// vmResult: &apos;vm&apos;, localVar: &apos;initial value&apos;
+// evalResult: &apos;eval&apos;, localVar: &apos;eval&apos;</code></pre>
+<p><code>vm.runInThisContext</code> does not have access to the local scope, so <code>localVar</code> is
+unchanged. <code>eval</code> does have access to the local scope, so <code>localVar</code> is changed.
+
+</p>
+<p><code>vm.runInThisContext</code> 无法访问本地作用域，因此 <code>localVar</code> 没有被改变。
+<code>eval</code> 可以访问本地作用域，因此 <code>localVar</code> 被改变。
+
+</p>
+<p>In this way <code>vm.runInThisContext</code> is much like an <a href="http://es5.github.io/#x10.4.2">indirect <code>eval</code> call</a>,
+e.g. <code>(0,eval)(&apos;code&apos;)</code>. However, it also has the following additional options:
+
+</p>
+<p>这种情况下 <code>vm.runInThisContext</code> 可以看作一种 <a href="http://es5.github.io/#x10.4.2">间接的 <code>eval</code> 调用</a>，
+如 <code>(0,eval)(&apos;code&apos;)</code>。但是 <code>vm.runInThisContext</code> 也提供下面几个额外的参数：
+
+</p>
+<ul>
+<li><code>filename</code>: allows you to control the filename that shows up in any stack
+traces produced.</li>
+<li><code>displayErrors</code>: whether or not to print any errors to stderr, with the
+line of code that caused them highlighted, before throwing an exception.
+Will capture both syntax errors from compiling <code>code</code> and runtime errors
+thrown by executing the compiled code. Defaults to <code>true</code>.</li>
+<li><p><code>timeout</code>: a number of milliseconds to execute <code>code</code> before terminating
+execution. If execution is terminated, an <code>Error</code> will be thrown.</p>
+</li>
+<li><p><code>filename</code>: 允许您更改显示在站追踪 (stack trace) 中的文件名</p>
+</li>
+<li><code>displayErrors</code>: 是否在抛出异常前输出带高亮错误代码行的错误信息到 stderr。
+将会捕捉所有在编译 <code>code</code> 的过程中产生的语法错误以及执行过程中产生的运行时错误。
+默认为 <code>true</code></li>
+<li><code>timeout</code>: 以毫秒为单位规定 <code>code</code> 允许执行的时间。在执行过程中被终止时会有 <code>Error</code> 抛出。</li>
+</ul>
+<h2>vm.createContext([sandbox])<span><a href="vm.html#vm_vm_createcontext_sandbox" id="vm_vm_createcontext_sandbox">#</a></span></h2>
+<p>If given a <code>sandbox</code> object, will &quot;contextify&quot; that sandbox so that it can be
+used in calls to <code>vm.runInContext</code> or <code>script.runInContext</code>. Inside scripts run
+as such, <code>sandbox</code> will be the global object, retaining all its existing
+properties but also having the built-in objects and functions any standard
+<a href="http://es5.github.io/#x15.1">global object</a> has. Outside of scripts run by the vm module, <code>sandbox</code> will
+be unchanged.
+
+</p>
+<p>如提供 <code>sandbox</code> 对象则将沙箱 (sandbox) 对象 “上下文化 (contextify)” 供 <code>vm.runInContext</code> 或者 <code>script.runInContext</code> 使用。
+以此方式运行的脚本将以 <code>sandbox</code> 作为全局对象，该对象将在保留其所有的属性的基础上拥有标准 <a href="http://es5.github.io/#x15.1">全局对象</a> 所拥有的内置对象和函数。
+在由 vm 模块运行的脚本之外的地方 <code>sandbox</code> 将不会被改变。
+
+</p>
+<p>If not given a sandbox object, returns a new, empty contextified sandbox object
+you can use.
+
+</p>
+<p>如果没有提供沙箱对象，则返回一个新建的、没有任何对象被上下文化的可用沙箱。
+
+</p>
+<p>This function is useful for creating a sandbox that can be used to run multiple
+scripts, e.g. if you were emulating a web browser it could be used to create a
+single sandbox representing a window&apos;s global object, then run all <code>&lt;script&gt;</code>
+tags together inside that sandbox.
+
+</p>
+<p>此函数可用于创建可执行多个脚本的沙箱，
+比如，在模拟浏览器的时候可以使用该函数创建一个用于表示 window 全局对象的沙箱，
+并将所有 <code>&lt;script&gt;</code> 标签放入沙箱执行。
+
+</p>
+<h2>vm.isContext(sandbox)<span><a href="vm.html#vm_vm_iscontext_sandbox" id="vm_vm_iscontext_sandbox">#</a></span></h2>
+<p>Returns whether or not a sandbox object has been contextified by calling
+<code>vm.createContext</code> on it.
+
+</p>
+<p>返回沙箱对象是否已经通过 <code>vm.createContext</code> 上下文化 (contextified)
+
+</p>
+<h2>vm.runInContext(code, contextifiedSandbox, [options])<span><a href="vm.html#vm_vm_runincontext_code_contextifiedsandbox_options" id="vm_vm_runincontext_code_contextifiedsandbox_options">#</a></span></h2>
+<p><code>vm.runInContext</code> compiles <code>code</code>, then runs it in <code>contextifiedSandbox</code> and
+returns the result. Running code does not have access to local scope. The
+<code>contextifiedSandbox</code> object must have been previously contextified via
+<code>vm.createContext</code>; it will be used as the global object for <code>code</code>.
+
+</p>
+<p><code>vm.runInContext</code> 编译 <code>code</code> 放入 <code>contextifiedSandbox</code> 执行并返回执行结果。
+被执行的代码对 本地作用域 (local scope) 没有访问权。
+<code>contextifiedSandbox</code> 必须在使用前通过 <code>vm.createContext</code> 上下文化，用作 <code>code</code> 的全局对象。
+
+</p>
+<p><code>vm.runInContext</code> takes the same options as <code>vm.runInThisContext</code>.
+
+</p>
+<p><code>vm.runInContext</code> 使用与 <code>vm.runInThisContext</code> 相同的 选项 (<code>options</code>)
+
+</p>
+<p>Example: compile and execute differnt scripts in a single existing context.
+
+</p>
+<p>示例：在同一个上下文中编译并执行不同的脚本
+
+</p>
+<pre><code>// { globalVar: 1024 }</code></pre>
+<p>Note that running untrusted code is a tricky business requiring great care.
+<code>vm.runInContext</code> is quite useful, but safely running untrusted code requires a
+separate process.
+
+</p>
+<p>执行不可信代码 (untrusted code) 是一件充满技巧而且需要非常小心的工作。
+<code>vm.runInContext</code> 十分好用，但是安全地运行不可信代码还需要将这些代码放入单独的进程里面执行。
+
+</p>
+<h2>vm.runInNewContext(code, [sandbox], [options])<span><a href="vm.html#vm_vm_runinnewcontext_code_sandbox_options" id="vm_vm_runinnewcontext_code_sandbox_options">#</a></span></h2>
+<p><code>vm.runInNewContext</code> compiles <code>code</code>, contextifies <code>sandbox</code> if passed or
+creates a new contextified sandbox if it&apos;s omitted, and then runs the code with
+the sandbox as the global object and returns the result.
+
+</p>
+<p><code>vm.runInNewContext</code> 首先编译 <code>code</code>，若提供 <code>sandbox</code> 则将 <code>sandbox</code> 上下文化，若未提供则创建一个新的沙箱并上下文化，
+然后将代码放入沙箱作为全局对象的上下文内执行并返回结果。
+
+</p>
+<p><code>vm.runInNewContext</code> takes the same options as <code>vm.runInThisContext</code>.
+
+</p>
+<p><code>vm.runInNewContext</code> 使用与 <code>vm.runInThisContext</code> 相同的 选项 (<code>options</code>)
+
+</p>
+<p>Example: compile and execute code that increments a global variable and sets a
+new one. These globals are contained in the sandbox.
+
+</p>
+<p>示例: 编译并执行一段“自增一个全局变量然后创建一个全局变量”的代码。这些被操作的全局变量会被保存在沙箱中。
+
+</p>
+<pre><code>// { animal: &apos;cat&apos;, count: 3, name: &apos;kitty&apos; }</code></pre>
+<p>Note that running untrusted code is a tricky business requiring great care.
+<code>vm.runInNewContext</code> is quite useful, but safely running untrusted code requires
+a separate process.
+
+</p>
+<p>执行不可信代码 (untrusted code) 是一件充满技巧而且需要非常小心的工作。
+<code>vm.runInNewContext</code> 十分好用，但是安全地运行不可信代码还需要将这些代码放入单独的进程里面执行。
+
+</p>
+<h2>类: Script<span><a href="vm.html#vm_script" id="vm_script">#</a></span></h2>
+<p>A class for holding precompiled scripts, and running them in specific sandboxes.
+
+</p>
+<p>用于存放预编译脚本的类，可将预编译代码放入沙箱执行。
+
+</p>
+<h3>new vm.Script(code, options)<span><a href="vm.html#vm_new_vm_script_code_options" id="vm_new_vm_script_code_options">#</a></span></h3>
+<p>Creating a new <code>Script</code> compiles <code>code</code> but does not run it. Instead, the
+created <code>vm.Script</code> object represents this compiled code. This script can be run
+later many times using methods below. The returned script is not bound to any
+global object. It is bound before each run, just for that run.
+
+</p>
+<p>创建一个新的 <code>Script</code> 用于编译 <code>code</code> 但是不执行。使用被创建的 <code>vm.Script</code> 用来表示完成编译的代码。
+这份可以在后面的代码中执行多次。
+返回的脚本是未绑定任何全局对象 (上下文 context) 的，全局对象仅在每一次执行的时候被绑定，执行结束后即释放绑定。
+
+</p>
+<p>The options when creating a script are:
+
+</p>
+<p>创建脚本的选项 (option) 有：
+
+</p>
+<ul>
+<li><code>filename</code>: allows you to control the filename that shows up in any stack
+traces produced from this script.</li>
+<li><p><code>displayErrors</code>: whether or not to print any errors to stderr, with the
+line of code that caused them highlighted, before throwing an exception.
+Applies only to syntax errors compiling the code; errors while running the
+code are controlled by the options to the script&apos;s methods.</p>
+</li>
+<li><p><code>filename</code>: 允许您更改显示在站追踪 (stack trace) 中的文件名</p>
+</li>
+<li><code>displayErrors</code>: 是否在抛出异常前输出带高亮错误代码行的错误信息到 stderr。
+仅捕捉所有在编译过程中产生的语法错误（运行时错误由运行脚本选项控制）。</li>
+</ul>
+<h3>script.runInThisContext([options])<span><a href="vm.html#vm_script_runinthiscontext_options" id="vm_script_runinthiscontext_options">#</a></span></h3>
+<p>Similar to <code>vm.runInThisContext</code> but a method of a precompiled <code>Script</code> object.
+<code>script.runInThisContext</code> runs <code>script</code>&apos;s compiled code and returns the result.
+Running code does not have access to local scope, but does have access to the
+current <code>global</code> object.
+
+</p>
+<p>类似 <code>vm.runInThisContext</code> 只是作为预编译的 <code>Script</code> 对象方法。
+<code>script.runInThisContext</code> 执行被编译的 <code>script</code> 并返回结果。
+被运行的代码没有对本地作用域 (local scope) 的访问权限，但是可以访问当前的 <code>global</code> 对象。
+
+</p>
+<p>Example of using <code>script.runInThisContext</code> to compile code once and run it
+multiple times:
+
+</p>
+<p>示例: 使用 <code>script.runInThisContext</code> 编译代码并多次执行: 
+
+</p>
+<pre><code>// 1000</code></pre>
+<p>The options for running a script are:
+
+</p>
+<p>运行脚本的选项 (option) 有: 
+
+</p>
+<ul>
+<li><code>displayErrors</code>: whether or not to print any runtime errors to stderr, with
+the line of code that caused them highlighted, before throwing an exception.
+Applies only to runtime errors executing the code; it is impossible to create
+a <code>Script</code> instance with syntax errors, as the constructor will throw.</li>
+<li><p><code>timeout</code>: a number of milliseconds to execute the script before terminating
+execution. If execution is terminated, an <code>Error</code> will be thrown.</p>
+</li>
+<li><p><code>displayErrors</code>: 是否在抛出异常前输出带高亮错误代码行的错误信息到 stderr。
+仅捕捉所有执行过程中产生的运行时错误（语法错误会在 <code>Script</code> 示例创建时就发生，因此不可能创建出带语法错误的 <code>Script</code> 对象）。</p>
+</li>
+<li><code>timeout</code>: 以毫秒为单位规定 <code>code</code> 允许执行的时间。在执行过程中被终止时会有 <code>Error</code> 抛出。</li>
+</ul>
+<h3>script.runInContext(contextifiedSandbox, [options])<span><a href="vm.html#vm_script_runincontext_contextifiedsandbox_options" id="vm_script_runincontext_contextifiedsandbox_options">#</a></span></h3>
+<p>Similar to <code>vm.runInContext</code> but a method of a precompiled <code>Script</code> object.
+<code>script.runInContext</code> runs <code>script</code>&apos;s compiled code in <code>contextifiedSandbox</code>
+and returns the result. Running code does not have access to local scope.
+
+</p>
+<p>类似 <code>vm.runInContext</code> 只是作为预编译的 <code>Script</code> 对象方法。
+<code>script.runInContext</code> 在 <code>contextifiedSandbox</code> 中执行 <code>script</code> 编译出的代码，并返回结果。
+被运行的代码没有对本地作用域 (local scope) 的访问权限。
+
+</p>
+<p><code>script.runInContext</code> takes the same options as <code>script.runInThisContext</code>.
+
+</p>
+<p><code>script.runInContext</code> 使用与 <code>script.runInThisContext</code> 相同的 选项 (option)。
+
+</p>
+<p>Example: compile code that increments a global variable and sets one, then
+execute the code multiple times. These globals are contained in the sandbox.
+
+</p>
+<p>示例: 编译一段“自增一个全局变量然后创建一个全局变量”的代码，然后多次执行此代码，
+被操作的全局变量会被保存在沙箱中。
+
+</p>
+<pre><code>// { animal: &apos;cat&apos;, count: 12, name: &apos;kitty&apos; }</code></pre>
+<p>Note that running untrusted code is a tricky business requiring great care.
+<code>script.runInContext</code> is quite useful, but safely running untrusted code
+requires a separate process.
+
+</p>
+<p>执行不可信代码 (untrusted code) 是一件充满技巧而且需要非常小心的工作。
+<code>script.runInContext</code> 十分好用，但是安全地运行不可信代码还需要将这些代码放入单独的进程里面执行。
+
+</p>
+<h3>script.runInNewContext([sandbox], [options])<span><a href="vm.html#vm_script_runinnewcontext_sandbox_options" id="vm_script_runinnewcontext_sandbox_options">#</a></span></h3>
+<p>Similar to <code>vm.runInNewContext</code> but a method of a precompiled <code>Script</code> object.
+<code>script.runInNewContext</code> contextifies <code>sandbox</code> if passed or creates a new
+contextified sandbox if it&apos;s omitted, and then runs <code>script</code>&apos;s compiled code
+with the sandbox as the global object and returns the result. Running code does
+not have access to local scope.
+
+</p>
+<p>类似 <code>vm.runInNewContext</code> 但是作为预编译的 <code>Script</code> 对象方法。
+若提供 <code>sandbox</code> 则 <code>script.runInNewContext</code> 将 <code>sandbox</code> 上下文化，若未提供，则创建一个新的上下文化的沙箱，
+然后将代码放入沙箱作为全局对象的上下文内执行并返回结果。
+
+</p>
+<p><code>script.runInNewContext</code> takes the same options as <code>script.runInThisContext</code>.
+
+</p>
+<p><code>script.runInNewContext</code> 使用与 <code>script.runInThisContext</code> 相同的 选项 (option)。
+
+</p>
+<p>Example: compile code that sets a global variable, then execute the code
+multiple times in different contexts. These globals are set on and contained in
+the sandboxes.
+
+</p>
+<p>示例: 编译一段“写入一个全局变量”的代码，然后将代码放入不同的上下文 (context) 执行，这些被操作的全局变量会被保存在沙箱中。
+
+</p>
+<pre><code>// [{ globalVar: &apos;set&apos; }, { globalVar: &apos;set&apos; }, { globalVar: &apos;set&apos; }]</code></pre>
+<p>Note that running untrusted code is a tricky business requiring great care.
+<code>script.runInNewContext</code> is quite useful, but safely running untrusted code
+requires a separate process.
+
+
+</p>
+<p>执行不可信代码 (untrusted code) 是一件充满技巧而且需要非常小心的工作。
+<code>script.runInNewContext</code> 十分好用，但是安全地运行不可信代码还需要将这些代码放入单独的进程里面执行。</p>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>

@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Smalloc Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/smalloc.html">
+</head>
+<body class="alt apidoc" id="api-section-smalloc">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="http://jixiangac.com/doc/node/smalloc.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="smalloc.html#smalloc_smalloc">Smalloc</a><ul>
+<li><a href="smalloc.html#smalloc_smalloc_alloc_length_receiver_type">smalloc.alloc(length[, receiver][, type])</a></li>
+<li><a href="smalloc.html#smalloc_smalloc_copyonto_source_sourcestart_dest_deststart_copylength">smalloc.copyOnto(source, sourceStart, dest, destStart, copyLength);</a></li>
+<li><a href="smalloc.html#smalloc_smalloc_dispose_obj">smalloc.dispose(obj)</a></li>
+<li><a href="smalloc.html#smalloc_smalloc_kmaxlength">smalloc.kMaxLength</a></li>
+<li><a href="smalloc.html#smalloc_smalloc_types">smalloc.Types</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>Smalloc<span><a href="smalloc.html#smalloc_smalloc" id="smalloc_smalloc">#</a></span></h1>
+<pre><code>稳定度: 1 - 实验性</code></pre>
+<h2>smalloc.alloc(length[, receiver][, type])<span><a href="smalloc.html#smalloc_smalloc_alloc_length_receiver_type" id="smalloc_smalloc_alloc_length_receiver_type">#</a></span></h2>
+<div><ul>
+<li><code>length</code> <span>Number</span> <code>&lt;= smalloc.kMaxLength</code></li>
+<li><code>receiver</code> <span>Object</span>, Optional, Default: <code>new Object</code></li>
+<li><p><code>type</code> <span>Enum</span>, Optional, Default: <code>Uint8</code></p>
+</li>
+<li><p><code>length</code> <span>Number</span> <code>&lt;= smalloc.kMaxLength</code></p>
+</li>
+<li><code>receiver</code> <span>Object</span> 可选，缺省为 <code>new Object</code></li>
+<li><code>type</code> <span>Enum</span> 可选，缺省为 <code>Uint8</code></li>
+</div></ul>
+<p>Returns <code>receiver</code> with allocated external array data. If no <code>receiver</code> is
+passed then a new Object will be created and returned.
+
+</p>
+<p>返回 <code>receiver</code> 及所分配的外部数组数据。如果未传入 <code>receiver</code> 则会创建并返回一个新的 Object。
+
+</p>
+<p>Buffers are backed by a simple allocator that only handles the assignation of
+external raw memory. Smalloc exposes that functionality.
+
+</p>
+<p>Buffer 后端为一个只处理外部原始内存的分配的简易分配器所支撑。Smalloc 暴露了该功能。
+
+</p>
+<p>This can be used to create your own Buffer-like classes. No other properties are
+set, so the user will need to keep track of other necessary information (e.g.
+<code>length</code> of the allocation).
+
+</p>
+<p>这可用于创建你自己的类似 Buffer 的类。由于不会设置其它属性，因此使用者需要自行跟踪其它所需信息（比如所分配的长度 <code>length</code>）。
+
+</p>
+<pre><code>SimpleData.prototype = { /* ... */ };</code></pre>
+<p>It only checks if the <code>receiver</code> is an Object, and also not an Array. Because of
+this it is possible to allocate external array data to more than a plain Object.
+
+</p>
+<p>它只检查 <code>receiver</code> 是否为一个非 Array 的 Object。因此，可以分配外部数组数据的不止纯 Object。
+
+</p>
+<pre><code>// { [Function allocMe] &apos;0&apos;: 0, &apos;1&apos;: 0, &apos;2&apos;: 0 }</code></pre>
+<p>v8 does not support allocating external array data to an Array, and if passed
+will throw.
+
+</p>
+<p>V8 不支持向一个 Array 分配外部数组数据，如果这么做将会抛出异常。
+
+</p>
+<p>It&apos;s possible is to specify the type of external array data you would like. All
+possible options are listed in <code>smalloc.Types</code>. Example usage:
+
+</p>
+<p>您可以指定您想要的外部数组数据的类型。所有可取的值都已在 <code>smalloc.Types</code> 中列出。使用示例：
+
+</p>
+<pre><code>// { &apos;0&apos;: 0, &apos;1&apos;: 0.1, &apos;2&apos;: 0.2 }</code></pre>
+<h2>smalloc.copyOnto(source, sourceStart, dest, destStart, copyLength);<span><a href="smalloc.html#smalloc_smalloc_copyonto_source_sourcestart_dest_deststart_copylength" id="smalloc_smalloc_copyonto_source_sourcestart_dest_deststart_copylength">#</a></span></h2>
+<div><ul>
+<li><code>source</code> Object with external array allocation</li>
+<li><code>sourceStart</code> Position to begin copying from</li>
+<li><code>dest</code> Object with external array allocation</li>
+<li><code>destStart</code> Position to begin copying onto</li>
+<li><p><code>copyLength</code> Length of copy</p>
+</li>
+<li><p><code>source</code> 分配了外部数组的来源对象</p>
+</li>
+<li><code>sourceStart</code> 从这个位置开始拷贝</li>
+<li><code>dest</code> 分配了外部数组的目标对象</li>
+<li><code>destStart</code> 拷贝到这个位置</li>
+<li><code>copyLength</code> 拷贝的长度</li>
+</div></ul>
+<p>Copy memory from one external array allocation to another. No arguments are
+optional, and any violation will throw.
+
+</p>
+<p>从一个外部数组向另一个拷贝内存。所有参数都是必填，否则将会抛出异常。
+
+</p>
+<pre><code>// { &apos;0&apos;: 4, &apos;1&apos;: 6, &apos;2&apos;: 2, &apos;3&apos;: 3 }</code></pre>
+<p><code>copyOnto</code> automatically detects the length of the allocation internally, so no
+need to set any additional properties for this to work.
+
+</p>
+<p><code>copyOnto</code> 会在内部自动检测分配的长度，因此无需对此给出额外的参数。
+
+</p>
+<h2>smalloc.dispose(obj)<span><a href="smalloc.html#smalloc_smalloc_dispose_obj" id="smalloc_smalloc_dispose_obj">#</a></span></h2>
+<div><ul>
+<li><p><code>obj</code> Object</p>
+</li>
+<li><p><code>obj</code> 对象</p>
+</li>
+</div></ul>
+<p>Free memory that has been allocated to an object via <code>smalloc.alloc</code>.
+
+</p>
+<p>释放已使用 <code>smalloc.alloc</code> 分配到一个对象的内存。
+
+</p>
+<pre><code>// {}</code></pre>
+<p>This is useful to reduce strain on the garbage collector, but developers must be
+careful. Cryptic errors may arise in applications that are difficult to trace.
+
+</p>
+<p>这对于减轻垃圾回收器的负担有所帮助，但开发者务必小心。难以跟踪的应用程序可能会发生奇怪的错误。
+
+</p>
+<pre><code>// 将导致：
+// Error: source has no external array data</code></pre>
+<p><code>dispose()</code> does not support Buffers, and will throw if passed.
+
+</p>
+<p><code>dispose()</code> 不支持 Buffer，传入将会抛出异常。
+
+</p>
+<h2>smalloc.kMaxLength<span><a href="smalloc.html#smalloc_smalloc_kmaxlength" id="smalloc_smalloc_kmaxlength">#</a></span></h2>
+<p>Size of maximum allocation. This is also applicable to Buffer creation.
+
+</p>
+<p>最大的分配大小。该值同时也适用于 Buffer 的创建。
+
+</p>
+<h2>smalloc.Types<span><a href="smalloc.html#smalloc_smalloc_types" id="smalloc_smalloc_types">#</a></span></h2>
+<p>Enum of possible external array types. Contains:
+
+</p>
+<p>外部数组类型的可取值，包含：
+
+</p>
+<ul>
+<li><code>Int8</code></li>
+<li><code>Uint8</code></li>
+<li><code>Int16</code></li>
+<li><code>Uint16</code></li>
+<li><code>Int32</code></li>
+<li><code>Uint32</code></li>
+<li><code>Float</code></li>
+<li><code>Double</code></li>
+<li><code>Uint8Clamped</code></li>
+</ul>
+<ul>
+<li><code>Int8</code></li>
+<li><code>Uint8</code></li>
+<li><code>Int16</code></li>
+<li><code>Uint16</code></li>
+<li><code>Int32</code></li>
+<li><code>Uint32</code></li>
+<li><code>Float</code></li>
+<li><code>Double</code></li>
+<li><code>Uint8Clamped</code></li>
+</ul>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
