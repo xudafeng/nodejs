@@ -1,0 +1,992 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>子进程 Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/child_process.html">
+</head>
+<body class="alt apidoc" id="api-section-child_process">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="http://jixiangac.com/doc/node/child_process.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="child_process.html#child_process">子进程</a><ul>
+<li><a href="child_process.html#child_process_childprocess">类: ChildProcess</a><ul>
+<li><a href="child_process.html#child_process_error">事件:  &apos;error&apos;</a></li>
+<li><a href="child_process.html#child_process_exit">事件:  &apos;exit&apos;</a></li>
+<li><a href="child_process.html#child_process_close">事件: &apos;close&apos;</a></li>
+<li><a href="child_process.html#child_process_disconnect">事件: &apos;disconnect&apos;</a></li>
+<li><a href="child_process.html#child_process_message">事件: &apos;message&apos;</a></li>
+<li><a href="child_process.html#child_process_child_stdin">child.stdin</a></li>
+<li><a href="child_process.html#child_process_child_stdout">child.stdout</a></li>
+<li><a href="child_process.html#child_process_child_stderr">child.stderr</a></li>
+<li><a href="child_process.html#child_process_child_pid">child.pid</a></li>
+<li><a href="child_process.html#child_process_child_kill_signal">child.kill([signal])</a></li>
+<li><a href="child_process.html#child_process_child_send_message_sendhandle">child.send(message, [sendHandle])</a><ul>
+<li><a href="child_process.html#child_process_server">例子: 发送一个server对象</a></li>
+<li><a href="child_process.html#child_process_socket">示例: 发送socket对象</a></li>
+</ul>
+</li>
+<li><a href="child_process.html#child_process_child_disconnect">child.disconnect()</a></li>
+</ul>
+</li>
+<li><a href="child_process.html#child_process_child_process_spawn_command_args_options">child_process.spawn(command, [args], [options])</a></li>
+<li><a href="child_process.html#child_process_child_process_exec_command_options_callback">child_process.exec(command, [options], callback)</a></li>
+<li><a href="child_process.html#child_process_child_process_execfile_file_args_options_callback">child_process.execFile(file, args, options, callback)</a></li>
+<li><a href="child_process.html#child_process_child_process_fork_modulepath_args_options">child_process.fork(modulePath, [args], [options])</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>子进程<span><a href="child_process.html#child_process" id="child_process">#</a></span></h1>
+<pre><code>稳定度: 3 - 稳定</code></pre>
+<p>Node provides a tri-directional <code>popen(3)</code> facility through the
+<code>child_process</code> module.
+
+</p>
+<p>Node 通过 <code>child_process</code> 模块提供了类似 <code>popen(3)</code> 的处理三向数据流（stdin/stdout/stderr）的功能。
+
+</p>
+<p>It is possible to stream data through a child&apos;s <code>stdin</code>, <code>stdout</code>, and
+<code>stderr</code> in a fully non-blocking way.  (Note that some programs use
+line-buffered I/O internally.  That doesn&apos;t affect node.js but it means
+data you send to the child process is not immediately consumed.)
+
+</p>
+<p>它能够以完全非阻塞的方式与子进程的 <code>stdin</code>、<code>stdout</code> 和 <code>stderr</code> 以流式传递数据。（请注意，某些程序在内部使用行缓冲 I/O。这不会影响到 node.js，但您发送到子进程的数据不会被立即消费。）
+
+</p>
+<p>To create a child process use <code>require(&apos;child_process&apos;).spawn()</code> or
+<code>require(&apos;child_process&apos;).fork()</code>.  The semantics of each are slightly
+different, and explained below.
+
+</p>
+<p>使用 <code>require(&apos;child_process&apos;).spawn()</code> 或 <code>require(&apos;child_process&apos;).fork()</code> 创建子进程。这两种方法的语义有些区别，下文将会解释。
+
+</p>
+<h2>类: ChildProcess<span><a href="child_process.html#child_process_childprocess" id="child_process_childprocess">#</a></span></h2>
+<p><code>ChildProcess</code> is an <a href="events.html#events_class_events_eventemitter">EventEmitter</a>.
+
+</p>
+<p><code>ChildProcess</code> 是一个 <a href="events.html#events_class_events_eventemitter">EventEmitter</a>。
+
+</p>
+<p>Child processes always have three streams associated with them. <code>child.stdin</code>,
+<code>child.stdout</code>, and <code>child.stderr</code>.  These may be shared with the stdio
+streams of the parent process, or they may be separate stream objects
+which can be piped to and from.
+
+</p>
+<p>子进程有三个与之关联的流：<code>child.stdin</code>、<code>child.stdout</code> 和 <code>child.stderr</code>。它们可以共享父进程的 stdio 流，也可以作为独立的被导流的流对象。
+
+</p>
+<p>The ChildProcess class is not intended to be used directly.  Use the
+<code>spawn()</code> or <code>fork()</code> methods to create a Child Process instance.
+
+</p>
+<p>ChildProcess 类不能直接被使用， 使用 <code>spawn()</code> 或者 <code>fork()</code> 方法创建一个 Child Process 实例。
+
+</p>
+<h3>事件:  &apos;error&apos;<span><a href="child_process.html#child_process_error" id="child_process_error">#</a></span></h3>
+<div><ul>
+<li><p><code>err</code> <span>Error Object</span> the error.</p>
+</li>
+<li><p><code>err</code> <span>Error Object</span> 错误。</p>
+</li>
+</div></ul>
+<p>Emitted when:
+
+</p>
+<p>发生于：
+
+</p>
+<ol>
+<li>The process could not be spawned, or</li>
+<li>The process could not be killed, or</li>
+<li>Sending a message to the child process failed for whatever reason.</li>
+</ol>
+<ol>
+<li>进程不能被创建, 或者</li>
+<li>进程不能被终止掉, 或者</li>
+<li>由任何原因引起的数据发送到子进程失败.</li>
+</ol>
+<p>See also <a href="child_process.html#child_process_child_kill_signal"><code>ChildProcess#kill()</code></a> and
+<a href="child_process.html#child_process_child_send_message_sendhandle"><code>ChildProcess#send()</code></a>.
+
+</p>
+<p>参阅 <a href="child_process.html#child_process_child_kill_signal"><code>ChildProcess#kill()</code></a> 和
+<a href="child_process.html#child_process_child_send_message_sendhandle"><code>ChildProcess#send()</code></a>。
+
+</p>
+<h3>事件:  &apos;exit&apos;<span><a href="child_process.html#child_process_exit" id="child_process_exit">#</a></span></h3>
+<div><ul>
+<li><code>code</code> <span>Number</span> the exit code, if it exited normally.</li>
+<li><p><code>signal</code> <span>String</span> the signal passed to kill the child process, if it
+was killed by the parent.</p>
+</li>
+<li><p><code>code</code> <span>Number</span> 假如进程正常退出，则为它的退出代码。</p>
+</li>
+<li><code>signal</code> <span>String</span> 假如是被父进程终止，则为所传入的终止子进程的信号。</li>
+</div></ul>
+<p>This event is emitted after the child process ends. If the process terminated
+normally, <code>code</code> is the final exit code of the process, otherwise <code>null</code>. If
+the process terminated due to receipt of a signal, <code>signal</code> is the string name
+of the signal, otherwise <code>null</code>.
+
+</p>
+<p>这个事件是在子进程被结束的时候触发的. 假如进程被正常结束，‘code’就是退出进程的指令代码, 否则为&apos;null&apos;. 假如进程是由于接受到signal结束的, <code>signal</code> 就代表着信号的名称, 否则为<code>null</code>.
+
+</p>
+<p>Note that the child process stdio streams might still be open.
+
+</p>
+<p>注意子进程的 stdio 流可能仍为开启状态。
+
+</p>
+<p>See <code>waitpid(2)</code>.
+
+</p>
+<p>参阅<code>waitpid(2)</code>.
+
+</p>
+<h3>事件: &apos;close&apos;<span><a href="child_process.html#child_process_close" id="child_process_close">#</a></span></h3>
+<div><ul>
+<li><code>code</code> <span>Number</span> the exit code, if it exited normally.</li>
+<li><p><code>signal</code> <span>String</span> the signal passed to kill the child process, if it
+was killed by the parent.</p>
+</li>
+<li><p><code>code</code> <span>Number</span> 假如进程正常退出，则为它的退出代码。</p>
+</li>
+<li><code>signal</code> <span>String</span> 假如是被父进程终止，则为所传入的终止子进程的信号。</li>
+</div></ul>
+<p>This event is emitted when the stdio streams of a child process have all
+terminated.  This is distinct from &apos;exit&apos;, since multiple processes
+might share the same stdio streams.
+
+</p>
+<p>这个事件会在一个子进程的所有stdio流被终止时触发， 这和&apos;exit&apos;事件有明显的不同，因为多进程有时候会共享同一个stdio流
+
+</p>
+<h3>事件: &apos;disconnect&apos;<span><a href="child_process.html#child_process_disconnect" id="child_process_disconnect">#</a></span></h3>
+<p>This event is emitted after using the <code>.disconnect()</code> method in the parent or
+in the child. After disconnecting it is no longer possible to send messages.
+An alternative way to check if you can send messages is to see if the
+<code>child.connected</code> property is <code>true</code>.
+
+</p>
+<p>在子进程或父进程中使用使用.disconnect()方法后，这个事件会被触发，在断开之后，就不可能再相互发送信息了。可以通过检查子进程的child.connected属性是否为true去检查是否可以发送信息
+
+</p>
+<h3>事件: &apos;message&apos;<span><a href="child_process.html#child_process_message" id="child_process_message">#</a></span></h3>
+<div><ul>
+<li><code>message</code> <span>Object</span> a parsed JSON object or primitive value</li>
+<li><p><code>sendHandle</code> <span>Handle object</span> a Socket or Server object</p>
+</li>
+<li><p><code>message</code> <span>Object</span> 一个已解析的JSON对象或者原始类型值</p>
+</li>
+<li><code>sendHandle</code> <span>Handle object</span> 一个socket 或者 server对象</li>
+</div></ul>
+<p>Messages send by <code>.send(message, [sendHandle])</code> are obtained using the
+<code>message</code> event.
+
+</p>
+<p>通过.send()发送的信息可以通过监听&apos;message&apos;事件获取到
+
+</p>
+<h3>child.stdin<span><a href="child_process.html#child_process_child_stdin" id="child_process_child_stdin">#</a></span></h3>
+<div><ul>
+<li><p><span>Stream object</span></p>
+</li>
+<li><p><span>Stream object</span></p>
+</li>
+</div></ul>
+<p>A <code>Writable Stream</code> that represents the child process&apos;s <code>stdin</code>.
+Closing this stream via <code>end()</code> often causes the child process to terminate.
+
+</p>
+<p>子进程的&apos;stdin&apos;是一个‘可写流’，通过end()方法关闭该可写流可以终止子进程，
+
+</p>
+<p>If the child stdio streams are shared with the parent, then this will
+not be set.
+
+</p>
+<p>假如子进程的stdio流与父线程共享，这个child.stdin不会被设置
+
+</p>
+<h3>child.stdout<span><a href="child_process.html#child_process_child_stdout" id="child_process_child_stdout">#</a></span></h3>
+<div><ul>
+<li><p><span>Stream object</span></p>
+</li>
+<li><p><span>Stream object</span></p>
+</li>
+</div></ul>
+<p>A <code>Readable Stream</code> that represents the child process&apos;s <code>stdout</code>.
+
+</p>
+<p>子进程的<code>stdout</code>是个可读流.
+
+</p>
+<p>If the child stdio streams are shared with the parent, then this will
+not be set.
+
+</p>
+<p>假如子进程的stdio流与父线程共享，这个child.stdin不会被设置
+
+</p>
+<h3>child.stderr<span><a href="child_process.html#child_process_child_stderr" id="child_process_child_stderr">#</a></span></h3>
+<div><ul>
+<li><p><span>Stream object</span></p>
+</li>
+<li><p><span>Stream object</span></p>
+</li>
+</div></ul>
+<p>A <code>Readable Stream</code> that represents the child process&apos;s <code>stderr</code>.
+
+</p>
+<p>子进程的stderr是一个可读流
+
+</p>
+<p>If the child stdio streams are shared with the parent, then this will
+not be set.
+
+</p>
+<p>假如子进程的stdio流与父线程共享，这个child.stdin不会被设置
+
+</p>
+<h3>child.pid<span><a href="child_process.html#child_process_child_pid" id="child_process_child_pid">#</a></span></h3>
+<div><ul>
+<li><p><span>Integer</span></p>
+</li>
+<li><p><span>Integer</span></p>
+</li>
+</div></ul>
+<p>The PID of the child process.
+
+</p>
+<p>子进程的PID
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>console.log(&apos;Spawned child pid: &apos; + grep.pid);
+grep.stdin.end();</code></pre>
+<h3>child.kill([signal])<span><a href="child_process.html#child_process_child_kill_signal" id="child_process_child_kill_signal">#</a></span></h3>
+<div><ul>
+<li><p><code>signal</code> <span>String</span></p>
+</li>
+<li><p><code>signal</code> <span>String</span></p>
+</li>
+</div></ul>
+<p>Send a signal to the child process. If no argument is given, the process will
+be sent <code>&apos;SIGTERM&apos;</code>. See <code>signal(7)</code> for a list of available signals.
+
+</p>
+<p>发送一个信号给子线程. 假如没有给参数, 将会发送 <code>&apos;SIGTERM&apos;</code>. 参阅 <code>signal(7)</code> 查看所有可用的signals列表
+
+</p>
+<pre><code>// send SIGHUP to process
+grep.kill(&apos;SIGHUP&apos;);</code></pre>
+<p>May emit an <code>&apos;error&apos;</code> event when the signal cannot be delivered. Sending a
+signal to a child process that has already exited is not an error but may
+have unforeseen consequences: if the PID (the process ID) has been reassigned
+to another process, the signal will be delivered to that process instead.
+What happens next is anyone&apos;s guess.
+
+</p>
+<p>当一个signal不能被传递的时候，会触发一个&apos;error&apos;事件， 发送一个信号到已终止的子线程不会发生错误，但是可能引起不可预见的后果， 假如该子进程的ID已经重新分配给了其他进程，signal将会被发送到其他进程上面，大家可以猜想到这发生什么后果。
+
+</p>
+<p>Note that while the function is called <code>kill</code>, the signal delivered to the
+child process may not actually kill it.  <code>kill</code> really just sends a signal
+to a process.
+
+</p>
+<p>注意，当函数调用‘kill’, 传递给子进程的信号不会去终结子进程， ‘kill’实际上只是发送一个信号到进程而已。
+
+</p>
+<p>See <code>kill(2)</code>
+
+</p>
+<p>See <code>kill(2)</code>
+
+</p>
+<h3>child.send(message, [sendHandle])<span><a href="child_process.html#child_process_child_send_message_sendhandle" id="child_process_child_send_message_sendhandle">#</a></span></h3>
+<div><ul>
+<li><code>message</code> <span>Object</span></li>
+<li><p><code>sendHandle</code> <span>Handle object</span></p>
+</li>
+<li><p><code>message</code> <span>Object</span></p>
+</li>
+<li><code>sendHandle</code> <span>Handle object</span></li>
+</div></ul>
+<p>When using <code>child_process.fork()</code> you can write to the child using
+<code>child.send(message, [sendHandle])</code> and messages are received by
+a <code>&apos;message&apos;</code> event on the child.
+
+</p>
+<p>当使用 <code>child_process.fork()</code> 你可以使用 
+<code>child.send(message, [sendHandle])</code>向子进程写数据 and 数据将通过子进程上的‘message’事件接受.
+
+</p>
+<p>For example:
+
+</p>
+<p>例如：
+
+</p>
+<pre><code>n.send({ hello: &apos;world&apos; });</code></pre>
+<p>And then the child script, <code>&apos;sub.js&apos;</code> might look like this:
+
+</p>
+<p>然后是子进程脚本的代码, <code>&apos;sub.js&apos;</code> 代码如下:
+
+</p>
+<pre><code>process.send({ foo: &apos;bar&apos; });</code></pre>
+<p>In the child the <code>process</code> object will have a <code>send()</code> method, and <code>process</code>
+will emit objects each time it receives a message on its channel.
+
+</p>
+<p>在子进程脚本中&apos;process&apos;对象有‘send()’方法， ‘process’每次通过它的信道接收到信息都会触发事件，信息以对象形式返回。
+
+</p>
+<p>There is a special case when sending a <code>{cmd: &apos;NODE_foo&apos;}</code> message. All messages
+containing a <code>NODE_</code> prefix in its <code>cmd</code> property will not be emitted in
+the <code>message</code> event, since they are internal messages used by node core.
+Messages containing the prefix are emitted in the <code>internalMessage</code> event, you
+should by all means avoid using this feature, it is subject to change without notice.
+
+</p>
+<p>不过发送<code>{cmd: &apos;NODE_foo&apos;}</code> 信息是个比较特殊的情况. 所有在‘cmd’属性中包含 a <code>NODE_</code>前缀的信息将不会触发‘message’事件, 因为他们是由node 核心使用的内部信息.
+相反这种信息会触发 <code>internalMessage</code> 事件, 你应该通过各种方法避免使用这种特性, 他改变的时候不会接收到通知.
+
+</p>
+<p>The <code>sendHandle</code> option to <code>child.send()</code> is for sending a TCP server or
+socket object to another process. The child will receive the object as its
+second argument to the <code>message</code> event.
+
+</p>
+<p><code>child.send()</code>的<code>sendHandle</code> 选项是用来发送一个TCP服务或者socket对象到另一个线程的，子进程将会接收这个参数作为‘message’事件的第二个参数。
+
+</p>
+<p>Emits an <code>&apos;error&apos;</code> event if the message cannot be sent, for example because
+the child process has already exited.
+
+</p>
+<p>假如信息不能被发送，将会触发一个‘error’事件， 比如说因为子线程已经退出了。
+
+</p>
+<h4>例子: 发送一个server对象<span><a href="child_process.html#child_process_server" id="child_process_server">#</a></span></h4>
+<p>Here is an example of sending a server:
+
+</p>
+<p>这里是一个发送一个server对象的例子:
+
+</p>
+<pre><code>// 创建一个handle对象，发送一个句柄.
+var server = require(&apos;net&apos;).createServer();
+server.on(&apos;connection&apos;, function (socket) {
+  socket.end(&apos;handled by parent&apos;);
+});
+server.listen(1337, function() {
+  child.send(&apos;server&apos;, server);
+});</code></pre>
+<p>And the child would the receive the server object as:
+
+</p>
+<p>同时子进程将会以如下方式接收到这个server对象:
+
+</p>
+<pre><code>process.on(&apos;message&apos;, function(m, server) {
+  if (m === &apos;server&apos;) {
+    server.on(&apos;connection&apos;, function (socket) {
+      socket.end(&apos;handled by child&apos;);
+    });
+  }
+});</code></pre>
+<p>Note that the server is now shared between the parent and child, this means
+that some connections will be handled by the parent and some by the child.
+
+</p>
+<p>注意，server对象现在有父进程和子进程共享，这意味着某些连接将会被父进程和子进程处理。
+
+</p>
+<p>For <code>dgram</code> servers the workflow is exactly the same.  Here you listen on
+a <code>message</code> event instead of <code>connection</code> and use <code>server.bind</code> instead of
+<code>server.listen</code>.  (Currently only supported on UNIX platforms.)
+
+</p>
+<p>对‘dgram’服务器，工作流程是一样的, 你监听的是‘message’事件，而不是 ‘connection’事件， 使用‘server.bind’ ,而不是‘server.listen’.(当前仅在UNIX平台支持)
+
+</p>
+<h4>示例: 发送socket对象<span><a href="child_process.html#child_process_socket" id="child_process_socket">#</a></span></h4>
+<p>Here is an example of sending a socket. It will spawn two children and handle
+connections with the remote address <code>74.125.127.100</code> as VIP by sending the
+socket to a &quot;special&quot; child process. Other sockets will go to a &quot;normal&quot; process.
+
+</p>
+<p>这是个发送socket的例子. 他将创建两个子线程 ，同时处理连接，这是通过使用远程地址 <code>74.125.127.100</code> 作为 VIP 发送socket到一个‘特殊’的子线程. 其他的socket将会发送到‘正常’的线程里.
+
+</p>
+<pre><code>  // if this is a VIP
+  if (socket.remoteAddress === &apos;74.125.127.100&apos;) {
+    special.send(&apos;socket&apos;, socket);
+    return;
+  }
+  // just the usual dudes
+  normal.send(&apos;socket&apos;, socket);
+});
+server.listen(1337);</code></pre>
+<p>The <code>child.js</code> could look like this:
+
+</p>
+<p> <code>child.js</code> 文件代码如下:
+
+</p>
+<pre><code>process.on(&apos;message&apos;, function(m, socket) {
+  if (m === &apos;socket&apos;) {
+    socket.end(&apos;You were handled as a &apos; + process.argv[2] + &apos; person&apos;);
+  }
+});</code></pre>
+<p>Note that once a single socket has been sent to a child the parent can no
+longer keep track of when the socket is destroyed. To indicate this condition
+the <code>.connections</code> property becomes <code>null</code>.
+It is also recommended not to use <code>.maxConnections</code> in this condition.
+
+</p>
+<p>注意，一旦单个的socket被发送到子进程，当这个socket被删除之后，父进程将不再对它保存跟踪，这表明了这个条件下‘.connetions’属性将变成&apos;null&apos;， 在这个条件下同时也不推荐时间‘.maxConnections’
+
+</p>
+<h3>child.disconnect()<span><a href="child_process.html#child_process_child_disconnect" id="child_process_child_disconnect">#</a></span></h3>
+<p>To close the IPC connection between parent and child use the
+<code>child.disconnect()</code> method. This allows the child to exit gracefully since
+there is no IPC channel keeping it alive. When calling this method the
+<code>disconnect</code> event will be emitted in both parent and child, and the
+<code>connected</code> flag will be set to <code>false</code>. Please note that you can also call
+<code>process.disconnect()</code> in the child process.
+
+</p>
+<p>使用<code>child.disconnect()</code> 方法关闭父进程与子进程的IPC连接. 他让子进程非常优雅的退出，因为已经没有活跃的IPC信道. 当调用这个方法，‘disconnect’事件将会同时在父进程和子进程内被触发，‘connected’的标签将会被设置成‘flase’， 请注意，你也可以在子进程中调用‘process.disconnect()’
+
+
+</p>
+<h2>child_process.spawn(command, [args], [options])<span><a href="child_process.html#child_process_child_process_spawn_command_args_options" id="child_process_child_process_spawn_command_args_options">#</a></span></h2>
+<div><ul>
+<li><code>command</code> <span>String</span> The command to run</li>
+<li><code>args</code> <span>Array</span> List of string arguments</li>
+<li><code>options</code> <span>Object</span><ul>
+<li><code>cwd</code> <span>String</span> Current working directory of the child process</li>
+<li><code>stdio</code> <span>Array|String</span> Child&apos;s stdio configuration. (See below)</li>
+<li><code>customFds</code> <span>Array</span> <strong>Deprecated</strong> File descriptors for the child to use
+for stdio.  (See below)</li>
+<li><code>env</code> <span>Object</span> Environment key-value pairs</li>
+<li><code>detached</code> <span>Boolean</span> The child will be a process group leader.  (See below)</li>
+<li><code>uid</code> <span>Number</span> Sets the user identity of the process. (See setuid(2).)</li>
+<li><code>gid</code> <span>Number</span> Sets the group identity of the process. (See setgid(2).)</li>
+</ul>
+</li>
+<li>return: <span>ChildProcess object</span></li>
+</div></ul>
+<ul>
+<li><code>command</code> {String}要运行的命令</li>
+<li><code>args</code> {Array} 字符串参数列表</li>
+<li><code>options</code> {Object}<ul>
+<li><code>cwd</code> {String} 子进程的当前的工作目录</li>
+<li><code>stdio</code> {Array|String} 子进程 stdio 配置. (参阅下文)</li>
+<li><code>customFds</code> {Array} <strong>Deprecated</strong> 作为子进程 stdio 使用的 文件标示符.  (参阅下文)</li>
+<li><code>env</code> {Object} 环境变量的键值对</li>
+<li><code>detached</code> {Boolean} 子进程将会变成一个进程组的领导者.  (参阅下文)</li>
+<li><code>uid</code> {Number} 设置用户进程的ID. (See setuid(2).)</li>
+<li><code>gid</code> {Number} 设置进程组的ID. (See setgid(2).)</li>
+</ul>
+</li>
+<li>返回: {ChildProcess object}</li>
+</ul>
+<p>Launches a new process with the given <code>command</code>, with  command line arguments in <code>args</code>.
+If omitted, <code>args</code> defaults to an empty Array.
+
+</p>
+<p>用给定的命令发布一个子进程，带有‘args’命令行参数，如果省略的话，‘args’默认为一个空数组
+
+</p>
+<p>The third argument is used to specify additional options, which defaults to:
+
+</p>
+<p>第三个参数被用来指定额外的设置，默认是:
+
+</p>
+<pre><code>{ cwd: undefined,
+  env: process.env
+}</code></pre>
+<p><code>cwd</code> allows you to specify the working directory from which the process is spawned.
+Use <code>env</code> to specify environment variables that will be visible to the new process.
+
+</p>
+<p><code>cwd</code>允许你从被创建的子进程中指定一个工作目录.
+使用 <code>env</code> 去指定在新进程中可用的环境变量.
+
+</p>
+<p>Example of running <code>ls -lh /usr</code>, capturing <code>stdout</code>, <code>stderr</code>, and the exit code:
+
+</p>
+<p>一个运行 <code>ls -lh /usr</code>的例子, 获取<code>stdout</code>, <code>stderr</code>, 和退出代码:
+
+</p>
+<pre><code>ls.on(&apos;close&apos;, function (code) {
+  console.log(&apos;child process exited with code &apos; + code);
+});</code></pre>
+<p>Example: A very elaborate way to run &apos;ps ax | grep ssh&apos;
+
+</p>
+<p>例子: 一个非常精巧的方法执行 &apos;ps ax | grep ssh&apos;
+
+</p>
+<pre><code>grep.on(&apos;close&apos;, function (code) {
+  if (code !== 0) {
+    console.log(&apos;grep process exited with code &apos; + code);
+  }
+});</code></pre>
+<p>Example of checking for failed exec:
+
+</p>
+<p>检查执行错误的例子:
+
+</p>
+<pre><code>child.stderr.setEncoding(&apos;utf8&apos;);
+child.stderr.on(&apos;data&apos;, function (data) {
+  if (/^execvp\(\)/.test(data)) {
+    console.log(&apos;Failed to start child process.&apos;);
+  }
+});</code></pre>
+<p>Note that if spawn receives an empty options object, it will result in
+spawning the process with an empty environment rather than using
+<code>process.env</code>. This due to backwards compatibility issues with a deprecated
+API.
+
+</p>
+<p>注意，当在spawn过程中接收一个空对象,这会导致创建的进程使用空的环境变量而不是使用‘process.env’.这是由于与一个废弃API向后兼容的问题.
+
+</p>
+<p>The &apos;stdio&apos; option to <code>child_process.spawn()</code> is an array where each
+index corresponds to a fd in the child.  The value is one of the following:
+
+</p>
+<p><code>child_process.spawn()</code> 中的 <code>stdio</code> 选项是一个数组，每个索引对应子进程中的一个文件标识符。可以是下列值之一：
+
+</p>
+<ol>
+<li><code>&apos;pipe&apos;</code> - Create a pipe between the child process and the parent process.
+The parent end of the pipe is exposed to the parent as a property on the
+<code>child_process</code> object as <code>ChildProcess.stdio[fd]</code>. Pipes created for
+fds 0 - 2 are also available as ChildProcess.stdin, ChildProcess.stdout
+and ChildProcess.stderr, respectively.</li>
+<li><code>&apos;ipc&apos;</code> - Create an IPC channel for passing messages/file descriptors
+between parent and child. A ChildProcess may have at most <em>one</em> IPC stdio
+file descriptor. Setting this option enables the ChildProcess.send() method.
+If the child writes JSON messages to this file descriptor, then this will
+trigger ChildProcess.on(&apos;message&apos;).  If the child is a Node.js program, then
+the presence of an IPC channel will enable process.send() and
+process.on(&apos;message&apos;).</li>
+<li><code>&apos;ignore&apos;</code> - Do not set this file descriptor in the child. Note that Node
+will always open fd 0 - 2 for the processes it spawns. When any of these is
+ignored node will open <code>/dev/null</code> and attach it to the child&apos;s fd.</li>
+<li><code>Stream</code> object - Share a readable or writable stream that refers to a tty,
+file, socket, or a pipe with the child process. The stream&apos;s underlying
+file descriptor is duplicated in the child process to the fd that 
+corresponds to the index in the <code>stdio</code> array.</li>
+<li>Positive integer - The integer value is interpreted as a file descriptor 
+that is is currently open in the parent process. It is shared with the child
+process, similar to how <code>Stream</code> objects can be shared.</li>
+<li><code>null</code>, <code>undefined</code> - Use default value. For stdio fds 0, 1 and 2 (in other
+words, stdin, stdout, and stderr) a pipe is created. For fd 3 and up, the
+default is <code>&apos;ignore&apos;</code>.</li>
+</ol>
+<ol>
+<li><p><code>&apos;pipe&apos;</code> -在子进程与父进程之间创建一个管道，管道的父进程端以 <code>child_process</code> 的属性的形式暴露给父进程，如 <code>ChildProcess.stdio[fd]</code>。
+为 文件标识（fds） 0 - 2 建立的管道也可以通过 ChildProcess.stdin，ChildProcess.stdout 及 ChildProcess.stderr 分别访问。</p>
+</li>
+<li><p><code>&apos;ipc&apos;</code> - 创建一个IPC通道以在父进程与子进程之间传递 消息/文件标识符。一个子进程只能有最多<em>一个</em> IPC stdio 文件标识。
+设置该选项激活 ChildProcess.send() 方法。如果子进程向此文件标识符写JSON消息，则会触发 ChildProcess.on(&quot;message&quot;)。
+如果子进程是一个nodejs程序，那么IPC通道的存在会激活process.send()和process.on(&apos;message&apos;)</p>
+</li>
+<li><p><code>&apos;ignore&apos;</code> - 不在子进程中设置该文件标识。注意，Node 总是会为其spawn的进程打开 文件标识（fd） 0 - 2。 
+当其中任意一项被 ignored，node 会打开 <code>/dev/null</code> 并将其附给子进程的文件标识（fd）。</p>
+</li>
+<li><p><code>Stream</code> 对象 - 与子进程共享一个与tty，文件，socket，或者管道(pipe)相关的可读或可写流。
+ 该流底层（underlying）的文件标识在子进程中被复制给stdio数组索引对应的文件标识（fd）</p>
+</li>
+<li><p>正数 - 该整形值被解释为父进程中打开的文件标识符。他与子进程共享，和<code>Stream</code>被共享的方式相似。</p>
+</li>
+<li><p><code>null</code>, <code>undefined</code> - 使用默认值。 对于stdio fds 0,1,2（或者说stdin,stdout和stderr），pipe管道被建立。对于fd 3及往后，默认为<code>ignore</code></p>
+</li>
+</ol>
+<p>As a shorthand, the <code>stdio</code> argument may also be one of the following
+strings, rather than an array:
+
+</p>
+<p>作为快捷方式，<code>stdio</code> 参数除了数组也可以是下列字符串之一：
+
+</p>
+<ul>
+<li><code>ignore</code> - <code>[&apos;ignore&apos;, &apos;ignore&apos;, &apos;ignore&apos;]</code></li>
+<li><code>pipe</code> - <code>[&apos;pipe&apos;, &apos;pipe&apos;, &apos;pipe&apos;]</code></li>
+<li><p><code>inherit</code> - <code>[process.stdin, process.stdout, process.stderr]</code> or <code>[0,1,2]</code></p>
+</li>
+<li><p><code>ignore</code> - <code>[&apos;ignore&apos;, &apos;ignore&apos;, &apos;ignore&apos;]</code></p>
+</li>
+<li><code>pipe</code> - <code>[&apos;pipe&apos;, &apos;pipe&apos;, &apos;pipe&apos;]</code></li>
+<li><code>inherit</code> - <code>[process.stdin, process.stdout, process.stderr]</code> 或 <code>[0,1,2]</code></li>
+</ul>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>// 开启一个额外的 fd=4 来与提供 startd 风格接口的程序进行交互。
+spawn(&apos;prg&apos;, [], { stdio: [&apos;pipe&apos;, null, null, null, &apos;pipe&apos;] });</code></pre>
+<p>If the <code>detached</code> option is set, the child process will be made the leader of a
+new process group.  This makes it possible for the child to continue running 
+after the parent exits.
+
+</p>
+<p>如果 <code>detached</code> 选项被设置，则子进程会被作为新进程组的 leader。这使得子进程可以在父进程退出后继续运行。
+
+</p>
+<p>By default, the parent will wait for the detached child to exit.  To prevent
+the parent from waiting for a given <code>child</code>, use the <code>child.unref()</code> method,
+and the parent&apos;s event loop will not include the child in its reference count.
+
+</p>
+<p>缺省情况下，父进程会等待脱离了的子进程退出。要阻止父进程等待一个给出的子进程 <code>child</code>，使用 <code>child.unref()</code> 方法，则父进程的事件循环引用计数中将不会包含这个子进程。
+
+</p>
+<p>Example of detaching a long-running process and redirecting its output to a
+file:
+
+</p>
+<p>脱离一个长时间运行的进程并将它的输出重定向到一个文件的例子：
+
+</p>
+<pre><code> child.unref();</code></pre>
+<p>When using the <code>detached</code> option to start a long-running process, the process
+will not stay running in the background unless it is provided with a <code>stdio</code>
+configuration that is not connected to the parent.  If the parent&apos;s <code>stdio</code> is
+inherited, the child will remain attached to the controlling terminal.
+
+</p>
+<p>当使用 <code>detached</code> 选项来启动一个长时间运行的进程，该进程不会在后台保持运行，除非向它提供了一个不连接到父进程的 <code>stdio</code> 配置。如果继承了父进程的 <code>stdio</code>，则子进程会继续附着在控制终端。
+
+</p>
+<p>There is a deprecated option called <code>customFds</code> which allows one to specify
+specific file descriptors for the stdio of the child process. This API was
+not portable to all platforms and therefore removed.
+With <code>customFds</code> it was possible to hook up the new process&apos; <code>[stdin, stdout,
+stderr]</code> to existing streams; <code>-1</code> meant that a new stream should be created.
+Use at your own risk.
+
+</p>
+<p>有一个已废弃的选项 <code>customFds</code> 允许指定特定文件描述符作为子进程的 stdio。该 API 无法移植到所有平台，因此被移除。使用 <code>customFds</code> 可以将新进程的 <code>[stdin, stdout, stderr]</code> 钩到已有流上；<code>-1</code> 表示创建新流。自己承担使用风险。
+
+</p>
+<p>See also: <code>child_process.exec()</code> and <code>child_process.fork()</code>
+
+</p>
+<p>参阅：<code>child_process.exec()</code> 和 <code>child_process.fork()</code>
+
+</p>
+<h2>child_process.exec(command, [options], callback)<span><a href="child_process.html#child_process_child_process_exec_command_options_callback" id="child_process_child_process_exec_command_options_callback">#</a></span></h2>
+<div><ul>
+<li><code>command</code> <span>String</span> The command to run, with space-separated arguments</li>
+<li><code>options</code> <span>Object</span><ul>
+<li><code>cwd</code> <span>String</span> Current working directory of the child process</li>
+<li><code>env</code> <span>Object</span> Environment key-value pairs</li>
+<li><code>encoding</code> <span>String</span> (Default: &apos;utf8&apos;)</li>
+<li><code>shell</code> <span>String</span> Shell to execute the command with
+(Default: &apos;/bin/sh&apos; on UNIX, &apos;cmd.exe&apos; on Windows,  The shell should
+ understand the <code>-c</code> switch on UNIX or <code>/s /c</code> on Windows. On Windows,
+ command line parsing should be compatible with <code>cmd.exe</code>.)</li>
+<li><code>timeout</code> <span>Number</span> (Default: 0)</li>
+<li><code>maxBuffer</code> <span>Number</span> (Default: 200*1024)</li>
+<li><code>killSignal</code> <span>String</span> (Default: &apos;SIGTERM&apos;)</li>
+</ul>
+</li>
+<li><code>callback</code> <span>Function</span> called with the output when process terminates<ul>
+<li><code>error</code> <span>Error</span></li>
+<li><code>stdout</code> <span>Buffer</span></li>
+<li><code>stderr</code> <span>Buffer</span></li>
+</ul>
+</li>
+<li><p>Return: ChildProcess object</p>
+</li>
+<li><p><code>command</code> <span>String</span> 将要执行的命令，用空格分隔参数</p>
+</li>
+<li><code>options</code> <span>Object</span><ul>
+<li><code>cwd</code> <span>String</span> 子进程的当前工作目录</li>
+<li><code>env</code> <span>Object</span> 环境变量键值对</li>
+<li><code>encoding</code> <span>String</span> 编码（缺省为 &apos;utf8&apos;）</li>
+<li><code>shell</code> <span>String</span> 运行命令的 shell（UNIX 上缺省为 &apos;/bin/sh&apos;，Windows 上缺省为 &apos;cmd.exe&apos;。该 shell 在 UNIX 上应当接受 <code>-c</code> 开关，在 Windows 上应当接受 <code>/s /c</code> 开关。在 Windows 中，命令行解析应当兼容 <code>cmd.exe</code>。）</li>
+<li><code>timeout</code> <span>Number</span> 超时（缺省为 0）</li>
+<li><code>maxBuffer</code> <span>Number</span> 最大缓冲（缺省为 200*1024）</li>
+<li><code>killSignal</code> <span>String</span> 结束信号（缺省为 &apos;SIGTERM&apos;）</li>
+</ul>
+</li>
+<li><code>callback</code> <span>Function</span> 进程结束时回调并带上输出<ul>
+<li><code>error</code> <span>Error</span></li>
+<li><code>stdout</code> <span>Buffer</span></li>
+<li><code>stderr</code> <span>Buffer</span></li>
+</ul>
+</li>
+<li>返回：ChildProcess 对象</li>
+</div></ul>
+<p>Runs a command in a shell and buffers the output.
+
+</p>
+<p>在 shell 中执行一个命令并缓冲输出。
+
+</p>
+<pre><code>child = exec(&apos;cat *.js bad_file | wc -l&apos;,
+  function (error, stdout, stderr) {
+    console.log(&apos;stdout: &apos; + stdout);
+    console.log(&apos;stderr: &apos; + stderr);
+    if (error !== null) {
+      console.log(&apos;exec error: &apos; + error);
+    }
+});</code></pre>
+<p>The callback gets the arguments <code>(error, stdout, stderr)</code>. On success, <code>error</code>
+will be <code>null</code>.  On error, <code>error</code> will be an instance of <code>Error</code> and <code>err.code</code>
+will be the exit code of the child process, and <code>err.signal</code> will be set to the
+signal that terminated the process.
+
+</p>
+<p>回调参数为 <code>(error, stdout, stderr)</code>。当成功时，<code>error</code> 会是 <code>null</code>。当遇到错误时，<code>error</code> 会是一个 <code>Error</code> 实例，并且 <code>err.code</code> 会是子进程的退出代码，同时 <code>err.signal</code> 会被设置为结束进程的信号名。
+
+</p>
+<p>There is a second optional argument to specify several options. The
+default options are
+
+</p>
+<p>第二个可选的参数用于指定一些选项，缺省选项为：
+
+</p>
+<pre><code>{ encoding: &apos;utf8&apos;,
+  timeout: 0,
+  maxBuffer: 200*1024,
+  killSignal: &apos;SIGTERM&apos;,
+  cwd: null,
+  env: null }</code></pre>
+<p>If <code>timeout</code> is greater than 0, then it will kill the child process
+if it runs longer than <code>timeout</code> milliseconds. The child process is killed with
+<code>killSignal</code> (default: <code>&apos;SIGTERM&apos;</code>). <code>maxBuffer</code> specifies the largest
+amount of data allowed on stdout or stderr - if this value is exceeded then
+the child process is killed.
+
+</p>
+<p>如果 <code>timeout</code> 大于 0，则当进程运行超过 <code>timeout</code> 毫秒后会被终止。子进程使用 <code>killSignal</code> 信号结束（缺省为 <code>&apos;SIGTERM&apos;</code>）。<code>maxBuffer</code> 指定了 stdout 或 stderr 所允许的最大数据量，如果超出这个值则子进程会被终止。
+
+</p>
+<h2>child_process.execFile(file, args, options, callback)<span><a href="child_process.html#child_process_child_process_execfile_file_args_options_callback" id="child_process_child_process_execfile_file_args_options_callback">#</a></span></h2>
+<div><ul>
+<li><code>file</code> <span>String</span> The filename of the program to run</li>
+<li><code>args</code> <span>Array</span> List of string arguments</li>
+<li><code>options</code> <span>Object</span><ul>
+<li><code>cwd</code> <span>String</span> Current working directory of the child process</li>
+<li><code>env</code> <span>Object</span> Environment key-value pairs</li>
+<li><code>encoding</code> <span>String</span> (Default: &apos;utf8&apos;)</li>
+<li><code>timeout</code> <span>Number</span> (Default: 0)</li>
+<li><code>maxBuffer</code> <span>Number</span> (Default: 200*1024)</li>
+<li><code>killSignal</code> <span>String</span> (Default: &apos;SIGTERM&apos;)</li>
+</ul>
+</li>
+<li><code>callback</code> <span>Function</span> called with the output when process terminates<ul>
+<li><code>error</code> <span>Error</span></li>
+<li><code>stdout</code> <span>Buffer</span></li>
+<li><code>stderr</code> <span>Buffer</span></li>
+</ul>
+</li>
+<li><p>Return: ChildProcess object</p>
+</li>
+<li><p><code>file</code> <span>String</span> 要运行的程序的文件名</p>
+</li>
+<li><code>args</code> <span>Array</span> 字符串参数列表</li>
+<li><code>options</code> <span>Object</span><ul>
+<li><code>cwd</code> <span>String</span> 子进程的当前工作目录</li>
+<li><code>env</code> <span>Object</span> 环境变量键值对</li>
+<li><code>encoding</code> <span>String</span> 编码（缺省为 &apos;utf8&apos;）</li>
+<li><code>timeout</code> <span>Number</span> 超时（缺省为 0）</li>
+<li><code>maxBuffer</code> <span>Number</span> 最大缓冲（缺省为 200*1024）</li>
+<li><code>killSignal</code> <span>String</span> 结束信号（缺省为 &apos;SIGTERM&apos;）</li>
+</ul>
+</li>
+<li><code>callback</code> <span>Function</span> 进程结束时回调并带上输出<ul>
+<li><code>error</code> <span>Error</span></li>
+<li><code>stdout</code> <span>Buffer</span></li>
+<li><code>stderr</code> <span>Buffer</span></li>
+</ul>
+</li>
+<li>返回：ChildProcess 对象</li>
+</div></ul>
+<p>This is similar to <code>child_process.exec()</code> except it does not execute a
+subshell but rather the specified file directly. This makes it slightly
+leaner than <code>child_process.exec</code>. It has the same options.
+
+</p>
+<p>该方法类似于 <code>child_process.exec()</code>，但是它不会执行一个子 shell，而是直接执行所指定的文件。因此它稍微比 <code>child_process.exec</code> 精简，参数与之一致。
+
+</p>
+<h2>child_process.fork(modulePath, [args], [options])<span><a href="child_process.html#child_process_child_process_fork_modulepath_args_options" id="child_process_child_process_fork_modulepath_args_options">#</a></span></h2>
+<div><ul>
+<li><code>modulePath</code> <span>String</span> The module to run in the child</li>
+<li><code>args</code> <span>Array</span> List of string arguments</li>
+<li><code>options</code> <span>Object</span><ul>
+<li><code>cwd</code> <span>String</span> Current working directory of the child process</li>
+<li><code>env</code> <span>Object</span> Environment key-value pairs</li>
+<li><code>encoding</code> <span>String</span> (Default: &apos;utf8&apos;)</li>
+<li><code>execPath</code> <span>String</span> Executable used to create the child process</li>
+</ul>
+</li>
+<li><p>Return: ChildProcess object</p>
+</li>
+<li><p><code>modulePath</code> <span>String</span> 子进程中运行的模块</p>
+</li>
+<li><code>args</code> <span>Array</span> 字符串参数列表</li>
+<li><code>options</code> <span>Object</span><ul>
+<li><code>cwd</code> <span>String</span> 子进程的当前工作目录</li>
+<li><code>env</code> <span>Object</span> 环境变量键值对</li>
+<li><code>encoding</code> <span>String</span> 编码（缺省为 &apos;utf8&apos;）</li>
+<li><code>execPath</code> <span>String</span> 创建子进程的可执行文件</li>
+</ul>
+</li>
+<li>返回：ChildProcess 对象</li>
+</div></ul>
+<p>This is a special case of the <code>spawn()</code> functionality for spawning Node
+processes. In addition to having all the methods in a normal ChildProcess
+instance, the returned object has a communication channel built-in. See
+<code>child.send(message, [sendHandle])</code> for details.
+
+</p>
+<p>该方法是 <code>spawn()</code> 的特殊情景，用于派生 Node 进程。除了普通 ChildProcess 实例所具有的所有方法，所返回的对象还具有内建的通讯通道。详见 <code>child.send(message, [sendHandle])</code>。
+
+</p>
+<p>By default the spawned Node process will have the stdout, stderr associated
+with the parent&apos;s. To change this behavior set the <code>silent</code> property in the
+<code>options</code> object to <code>true</code>.
+
+</p>
+<p>缺省情况下所派生的 Node 进程的 stdout、stderr 会关联到父进程。要更改该行为，可将 <code>options</code> 对象中的 <code>silent</code> 属性设置为 <code>true</code>。
+
+</p>
+<p>The child process does not automatically exit once it&apos;s done, you need to call
+<code>process.exit()</code> explicitly. This limitation may be lifted in the future.
+
+</p>
+<p>子进程运行完成时并不会自动退出，您需要明确地调用 <code>process.exit()</code>。该限制可能会在未来版本里接触。
+
+</p>
+<p>These child Nodes are still whole new instances of V8. Assume at least 30ms
+startup and 10mb memory for each new Node. That is, you cannot create many
+thousands of them.
+
+</p>
+<p>这些子 Node 是全新的 V8 实例，假设每个新的 Node 需要至少 30 毫秒的启动时间和 10MB 内存，就是说您不能创建成百上千个这样的实例。
+
+</p>
+<p>The <code>execPath</code> property in the <code>options</code> object allows for a process to be
+created for the child rather than the current <code>node</code> executable. This should be
+done with care and by default will talk over the fd represented an
+environmental variable <code>NODE_CHANNEL_FD</code> on the child process. The input and
+output on this fd is expected to be line delimited JSON objects.
+
+</p>
+<p><code>options</code> 对象中的 <code>execPath</code> 属性可以用非当前 <code>node</code> 可执行文件来创建子进程。这需要小心使用，并且缺省情况下会使用子进程上的 <code>NODE_CHANNEL_FD</code> 环境变量所指定的文件描述符来通讯。该文件描述符的输入和输出假定为以行分割的 JSON 对象。
+
+</p>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>

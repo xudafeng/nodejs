@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>调试器 Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/debugger.html">
+</head>
+<body class="alt apidoc" id="api-section-debugger">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="http://jixiangac.com/doc/node/debugger.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="debugger.html#debugger">调试器</a><ul>
+<li><a href="debugger.html#debugger_1">监视器</a></li>
+<li><a href="debugger.html#debugger_2">命令参考</a><ul>
+<li><a href="debugger.html#debugger_3">步进</a></li>
+<li><a href="debugger.html#debugger_4">断点</a></li>
+<li><a href="debugger.html#debugger_5">信息</a></li>
+<li><a href="debugger.html#debugger_6">执行控制</a></li>
+<li><a href="debugger.html#debugger_7">杂项</a></li>
+</ul>
+</li>
+<li><a href="debugger.html#debugger_8">高级使用</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>调试器<span><a href="debugger.html#debugger" id="debugger">#</a></span></h1>
+<pre><code>稳定度: 3 - 稳定</code></pre>
+<!-- type=misc -->
+
+<p>V8 comes with an extensive debugger which is accessible out-of-process via a
+simple <a href="http://code.google.com/p/v8/wiki/DebuggerProtocol">TCP protocol</a>.
+Node has a built-in client for this debugger. To use this, start Node with the
+<code>debug</code> argument; a prompt will appear:
+
+</p>
+<p>V8 提供了一个强大的调试器，可以通过 <a href="http://code.google.com/p/v8/wiki/DebuggerProtocol">TCP 协议</a>从外部访问。Node 内建了这个调试器的客户端。要使用调试器，以 <code>debug</code> 参数启动 Node，出现提示符：
+
+</p>
+<pre><code>% node debug myscript.js
+&lt; debugger listening on port 5858
+connecting... ok
+break in /home/indutny/Code/git/indutny/myscript.js:1
+  1 x = 5;
+  2 setTimeout(function () {
+  3   debugger;
+debug&gt;</code></pre>
+<p>Node&apos;s debugger client doesn&apos;t support the full range of commands, but
+simple step and inspection is possible. By putting the statement <code>debugger;</code>
+into the source code of your script, you will enable a breakpoint.
+
+</p>
+<p>Node 的调试器客户端并未完整支持所有命令，但简单的步进和检查是可行的。通过脚本的源代码中放置 <code>debugger;</code> 语句，您便可启用一个断点。
+
+</p>
+<p>For example, suppose <code>myscript.js</code> looked like this:
+
+</p>
+<p>比如，假设有一个类似这样的 <code>myscript.js</code>：
+
+</p>
+<pre><code>// myscript.js
+x = 5;
+setTimeout(function () {
+  debugger;
+  console.log(&quot;world&quot;);
+}, 1000);
+console.log(&quot;hello&quot;);</code></pre>
+<p>Then once the debugger is run, it will break on line 4.
+
+</p>
+<p>那么，当调试器运行时，它会在第 4 行中断：
+
+</p>
+<pre><code>% node debug myscript.js
+&lt; debugger listening on port 5858
+connecting... ok
+break in /home/indutny/Code/git/indutny/myscript.js:1
+  1 x = 5;
+  2 setTimeout(function () {
+  3   debugger;
+debug&gt; cont
+&lt; hello
+break in /home/indutny/Code/git/indutny/myscript.js:3
+  1 x = 5;
+  2 setTimeout(function () {
+  3   debugger;
+  4   console.log(&quot;world&quot;);
+  5 }, 1000);
+debug&gt; next
+break in /home/indutny/Code/git/indutny/myscript.js:4
+  2 setTimeout(function () {
+  3   debugger;
+  4   console.log(&quot;world&quot;);
+  5 }, 1000);
+  6 console.log(&quot;hello&quot;);
+debug&gt; repl
+Press Ctrl + C to leave debug repl
+&gt; x
+5
+&gt; 2+2
+4
+debug&gt; next
+&lt; world
+break in /home/indutny/Code/git/indutny/myscript.js:5
+  3   debugger;
+  4   console.log(&quot;world&quot;);
+  5 }, 1000);
+  6 console.log(&quot;hello&quot;);
+  7
+debug&gt; quit
+%</code></pre>
+<p>The <code>repl</code> command allows you to evaluate code remotely. The <code>next</code> command
+steps over to the next line. There are a few other commands available and more
+to come. Type <code>help</code> to see others.
+
+</p>
+<p><code>repl</code> 命令允许您远程执行代码；<code>next</code> 命令步进到下一行。此外还有一些其它命令，输入 <code>help</code> 查看。
+
+</p>
+<h2>监视器<span><a href="debugger.html#debugger_1" id="debugger_1">#</a></span></h2>
+<p>You can watch expression and variable values while debugging your code.
+On every breakpoint each expression from the watchers list will be evaluated
+in the current context and displayed just before the breakpoint&apos;s source code
+listing.
+
+</p>
+<p>调试代码时您可以监视表达式或变量值。在每个断点中监视器列表中的各个表达式会被以当前上下文执行，并在断点的源代码前显示。
+
+</p>
+<p>To start watching an expression, type <code>watch(&quot;my_expression&quot;)</code>. <code>watchers</code>
+prints the active watchers. To remove a watcher, type
+<code>unwatch(&quot;my_expression&quot;)</code>.
+
+</p>
+<p>输入 <code>watch(&quot;my_expression&quot;)</code> 开始监视一个表达式；<code>watchers</code> 显示活动监视器；<code>unwatch(&quot;my_expression&quot;)</code> 移除一个监视器。
+
+</p>
+<h2>命令参考<span><a href="debugger.html#debugger_2" id="debugger_2">#</a></span></h2>
+<h3>步进<span><a href="debugger.html#debugger_3" id="debugger_3">#</a></span></h3>
+<ul>
+<li><code>cont</code>, <code>c</code> - Continue execution</li>
+<li><code>next</code>, <code>n</code> - Step next</li>
+<li><code>step</code>, <code>s</code> - Step in</li>
+<li><code>out</code>, <code>o</code> - Step out</li>
+<li><p><code>pause</code> - Pause running code (like pause button in Developer Tools)</p>
+</li>
+<li><p><code>cont</code>, <code>c</code> - 继续执行</p>
+</li>
+<li><code>next</code>, <code>n</code> - Step next</li>
+<li><code>step</code>, <code>s</code> - Step in</li>
+<li><code>out</code>, <code>o</code> - Step out</li>
+<li><code>pause</code> - 暂停执行代码（类似开发者工具中的暂停按钮）</li>
+</ul>
+<h3>断点<span><a href="debugger.html#debugger_4" id="debugger_4">#</a></span></h3>
+<div><ul>
+<li><code>setBreakpoint()</code>, <code>sb()</code> - Set breakpoint on current line</li>
+<li><code>setBreakpoint(line)</code>, <code>sb(line)</code> - Set breakpoint on specific line</li>
+<li><code>setBreakpoint(&apos;fn()&apos;)</code>, <code>sb(...)</code> - Set breakpoint on a first statement in
+functions body</li>
+<li><code>setBreakpoint(&apos;script.js&apos;, 1)</code>, <code>sb(...)</code> - Set breakpoint on first line of
+script.js</li>
+<li><p><code>clearBreakpoint</code>, <code>cb(...)</code> - Clear breakpoint</p>
+</li>
+<li><p><code>setBreakpoint()</code>, <code>sb()</code> - 在当前行设置断点</p>
+</li>
+<li><code>setBreakpoint(line)</code>, <code>sb(line)</code> - 在指定行设置断点</li>
+<li><code>setBreakpoint(&apos;fn()&apos;)</code>, <code>sb(...)</code> - 在函数体的第一条语句设置断点</li>
+<li><code>setBreakpoint(&apos;script.js&apos;, 1)</code>, <code>sb(...)</code> - 在 script.js 的第一行设置断点</li>
+<li><code>clearBreakpoint</code>, <code>cb(...)</code> - 清除断点</li>
+</div></ul>
+<p>It is also possible to set a breakpoint in a file (module) that
+isn&apos;t loaded yet:
+
+</p>
+<p>在一个尚未被加载的文件（模块）中设置断点也是可行的：
+
+</p>
+<pre><code>% ./node debug test/fixtures/break-in-module/main.js
+&lt; debugger listening on port 5858
+connecting to port 5858... ok
+break in test/fixtures/break-in-module/main.js:1
+  1 var mod = require(&apos;./mod.js&apos;);
+  2 mod.hello();
+  3 mod.hello();
+debug&gt; setBreakpoint(&apos;mod.js&apos;, 23)
+Warning: script &apos;mod.js&apos; was not loaded yet.
+  1 var mod = require(&apos;./mod.js&apos;);
+  2 mod.hello();
+  3 mod.hello();
+debug&gt; c
+break in test/fixtures/break-in-module/mod.js:23
+ 21
+ 22 exports.hello = function() {
+ 23   return &apos;hello from module&apos;;
+ 24 };
+ 25
+debug&gt;</code></pre>
+<h3>信息<span><a href="debugger.html#debugger_5" id="debugger_5">#</a></span></h3>
+<div><ul>
+<li><code>backtrace</code>, <code>bt</code> - Print backtrace of current execution frame</li>
+<li><code>list(5)</code> - List scripts source code with 5 line context (5 lines before and
+after)</li>
+<li><code>watch(expr)</code> - Add expression to watch list</li>
+<li><code>unwatch(expr)</code> - Remove expression from watch list</li>
+<li><code>watchers</code> - List all watchers and their values (automatically listed on each
+breakpoint)</li>
+<li><p><code>repl</code> - Open debugger&apos;s repl for evaluation in debugging script&apos;s context</p>
+</li>
+<li><p><code>backtrace</code>, <code>bt</code> - 显示当前执行框架的回溯</p>
+</li>
+<li><code>list(5)</code> - 显示脚本源代码的 5 行上下文（之前 5 行和之后 5 行）</li>
+<li><code>watch(expr)</code> - 向监视列表添加表达式</li>
+<li><code>unwatch(expr)</code> - 从监视列表移除表达式</li>
+<li><code>watchers</code> - 列出所有监视器和它们的值（每个断点会自动列出）</li>
+<li><code>repl</code> - 在所调试的脚本的上下文中打开调试器的 repl 执行代码</li>
+</div></ul>
+<h3>执行控制<span><a href="debugger.html#debugger_6" id="debugger_6">#</a></span></h3>
+<div><ul>
+<li><code>run</code> - Run script (automatically runs on debugger&apos;s start)</li>
+<li><code>restart</code> - Restart script</li>
+<li><p><code>kill</code> - Kill script</p>
+</li>
+<li><p><code>run</code> - 运行脚本（调试器开始时自动运行）</p>
+</li>
+<li><code>restart</code> - 重新运行脚本</li>
+<li><code>kill</code> - 终止脚本</li>
+</div></ul>
+<h3>杂项<span><a href="debugger.html#debugger_7" id="debugger_7">#</a></span></h3>
+<div><ul>
+<li><code>scripts</code> - List all loaded scripts</li>
+<li><p><code>version</code> - Display v8&apos;s version</p>
+</li>
+<li><p><code>scripts</code> - 列出所有已加载的脚本</p>
+</li>
+<li><code>version</code> - 显示 V8 的版本</li>
+</div></ul>
+<h2>高级使用<span><a href="debugger.html#debugger_8" id="debugger_8">#</a></span></h2>
+<p>The V8 debugger can be enabled and accessed either by starting Node with
+the <code>--debug</code> command-line flag or by signaling an existing Node process
+with <code>SIGUSR1</code>.
+
+</p>
+<p>V8 调试器可以从两种方式启用和访问：以 <code>--debug</code> 命令行标志启动 Node；或者向已存在的 Node 进程发送 <code>SIGUSR1</code> 信号。
+
+</p>
+<p>Once a process has been set in debug mode with this it can be connected to
+with the node debugger. Either connect to the <code>pid</code> or the URI to the debugger.
+The syntax is:
+
+</p>
+<p>一旦一个进程进入了调试模式，它便可被 Node 调试器连接。调试器可以通过 <code>pid</code> 或 URI 来连接，语法是：
+
+</p>
+<ul>
+<li><code>node debug -p &lt;pid&gt;</code> - Connects to the process via the <code>pid</code></li>
+<li><code>node debug &lt;URI&gt;</code> - Connects to the process via the URI such as localhost:5858</li>
+</ul>
+<ul>
+<li><code>node debug -p &lt;pid&gt;</code> - 通过 <code>pid</code> 连接进程</li>
+<li><code>node debug &lt;URI&gt;</code> - 通过类似 localhost:5858 的 URI 连接进程</li>
+</ul>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>

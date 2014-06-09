@@ -1,0 +1,70 @@
+{
+  "source": "url.markdown",
+  "modules": [
+    {
+      "textRaw": "URL",
+      "name": "url",
+      "desc": "<pre><code>稳定度: 3 - 稳定</code></pre>\n<p>This module has utilities for URL resolution and parsing.\nCall <code>require(&apos;url&apos;)</code> to use it.\n\n</p>\n<p>该模块包含用以 URL 解析的实用函数。\n使用 <code>require(&apos;url&apos;)</code> 来调用该模块。\n\n</p>\n<p>Parsed URL objects have some or all of the following fields, depending on\nwhether or not they exist in the URL string. Any parts that are not in the URL\nstring will not be in the parsed object. Examples are shown for the URL\n\n</p>\n<p>不同的 URL 字符串解析后返回的对象会有一些额外的字段信息，仅当该部分出现在 URL 中才会有。以下是一个 URL 例子：\n\n</p>\n<p><code>&apos;http://user:pass@host.com:8080/p/a/t/h?query=string#hash&apos;</code>\n\n</p>\n<p><code>&apos;http://user:pass@host.com:8080/p/a/t/h?query=string#hash&apos;</code>\n\n</p>\n<ul>\n<li><p><code>href</code>: The full URL that was originally parsed. Both the protocol and host are lowercased.</p>\n</li>\n<li><p><code>href</code>: 所解析的完整原始 URL。协议名和主机名都已转为小写。</p>\n<p>  例如: <code>&apos;http://user:pass@host.com:8080/p/a/t/h?query=string#hash&apos;</code></p>\n</li>\n<li><p><code>protocol</code>: The request protocol, lowercased.</p>\n</li>\n<li><p><code>protocol</code>: 请求协议，小写</p>\n<p>  例如: <code>&apos;http:&apos;</code></p>\n</li>\n<li><p><code>host</code>: The full lowercased host portion of the URL, including port\ninformation.</p>\n</li>\n<li><p><code>host</code>: URL主机名已全部转换成小写, 包括端口信息</p>\n<p>  例如: <code>&apos;host.com:8080&apos;</code></p>\n</li>\n<li><p><code>auth</code>: The authentication information portion of a URL.</p>\n</li>\n<li><p><code>auth</code>:URL中身份验证信息部分</p>\n<p>  例如: <code>&apos;user:pass&apos;</code></p>\n</li>\n<li><p><code>hostname</code>: Just the lowercased hostname portion of the host.</p>\n</li>\n<li><p><code>hostname</code>:主机的主机名部分, 已转换成小写</p>\n<p>  例如: <code>&apos;host.com&apos;</code></p>\n</li>\n<li><p><code>port</code>: The port number portion of the host.</p>\n</li>\n<li><p><code>port</code>: 主机的端口号部分</p>\n<p>  例如: <code>&apos;8080&apos;</code></p>\n</li>\n<li><p><code>pathname</code>: The path section of the URL, that comes after the host and\nbefore the query, including the initial slash if present.</p>\n</li>\n<li><p><code>pathname</code>: URL的路径部分,位于主机名之后请求查询之前, including the initial slash if present.</p>\n<p>  例如: <code>&apos;/p/a/t/h&apos;</code></p>\n</li>\n<li><p><code>search</code>: The &apos;query string&apos; portion of the URL, including the leading\nquestion mark.</p>\n</li>\n<li><p><code>search</code>: URL 的“查询字符串”部分，包括开头的问号。</p>\n<p>  例如: <code>&apos;?query=string&apos;</code></p>\n</li>\n<li><p><code>path</code>: Concatenation of <code>pathname</code> and <code>search</code>.</p>\n</li>\n<li><p><code>path</code>: <code>pathname</code> 和 <code>search</code> 连在一起。</p>\n<p>  例如: <code>&apos;/p/a/t/h?query=string&apos;</code></p>\n</li>\n<li><p><code>query</code>: Either the &apos;params&apos; portion of the query string, or a\nquerystring-parsed object.</p>\n</li>\n<li><p><code>query</code>: 查询字符串中的参数部分（问号后面部分字符串），或者使用  <code>querystring.parse()</code> 解析后返回的对象。</p>\n<p>  例如: <code>&apos;query=string&apos;</code> or <code>{&apos;query&apos;:&apos;string&apos;}</code></p>\n</li>\n<li><p><code>hash</code>: The &apos;fragment&apos; portion of the URL including the pound-sign.</p>\n</li>\n<li><p><code>hash</code>: URL 的 “#” 后面部分（包括 # 符号） </p>\n<p>  例如: <code>&apos;#hash&apos;</code></p>\n</li>\n</ul>\n<p>The following methods are provided by the URL module:\n\n</p>\n<p>以下是 URL 模块提供的方法：\n\n</p>\n",
+      "methods": [
+        {
+          "textRaw": "url.parse(urlStr, [parseQueryString], [slashesDenoteHost])",
+          "type": "method",
+          "name": "parse",
+          "desc": "<p>Take a URL string, and return an object.\n\n</p>\n<p>输入 URL 字符串，返回一个对象。\n\n</p>\n<p>Pass <code>true</code> as the second argument to also parse\nthe query string using the <code>querystring</code> module.\nDefaults to <code>false</code>.\n\n</p>\n<p>将第二个参数设置为 <code>true</code> 则使用 <code>querystring</code> 模块来解析 URL 中德查询字符串部分，默认为 <code>false</code>。\n\n</p>\n<p>Pass <code>true</code> as the third argument to treat <code>//foo/bar</code> as\n<code>{ host: &apos;foo&apos;, pathname: &apos;/bar&apos; }</code> rather than\n<code>{ pathname: &apos;//foo/bar&apos; }</code>. Defaults to <code>false</code>.\n\n</p>\n<p>将第三个参数设置为 <code>true</code> 来把诸如 <code>//foo/bar</code> 这样的URL解析为\n<code>{ host: &apos;foo&apos;, pathname: &apos;/bar&apos; }</code> 而不是\n<code>{ pathname: &apos;//foo/bar&apos; }</code>。 默认为 <code>false</code>。\n\n</p>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "urlStr"
+                },
+                {
+                  "name": "parseQueryString",
+                  "optional": true
+                },
+                {
+                  "name": "slashesDenoteHost",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "url.format(urlObj)",
+          "type": "method",
+          "name": "format",
+          "desc": "<p>Take a parsed URL object, and return a formatted URL string.\n\n</p>\n<p>输入一个 URL 对象，返回格式化后的 URL 字符串。\n\n</p>\n<ul>\n<li><code>href</code> will be ignored.</li>\n<li><code>protocol</code>is treated the same with or without the trailing <code>:</code> (colon).<ul>\n<li>The protocols <code>http</code>, <code>https</code>, <code>ftp</code>, <code>gopher</code>, <code>file</code> will be\npostfixed with <code>://</code> (colon-slash-slash).</li>\n<li>All other protocols <code>mailto</code>, <code>xmpp</code>, <code>aim</code>, <code>sftp</code>, <code>foo</code>, etc will\nbe postfixed with <code>:</code> (colon)</li>\n</ul>\n</li>\n<li><code>auth</code> will be used if present.</li>\n<li><code>hostname</code> will only be used if <code>host</code> is absent.</li>\n<li><code>port</code> will only be used if <code>host</code> is absent.</li>\n<li><code>host</code> will be used in place of <code>hostname</code> and <code>port</code></li>\n<li><code>pathname</code> is treated the same with or without the leading <code>/</code> (slash)</li>\n<li><code>search</code> will be used in place of <code>query</code></li>\n<li><code>query</code> (object; see <code>querystring</code>) will only be used if <code>search</code> is absent.</li>\n<li><code>search</code> is treated the same with or without the leading <code>?</code> (question mark)</li>\n<li><p><code>hash</code> is treated the same with or without the leading <code>#</code> (pound sign, anchor)</p>\n</li>\n<li><p><code>href</code> 属性会被忽略处理.</p>\n</li>\n<li><code>protocol</code>无论是否有末尾的 <code>:</code> (冒号)，会同样的处理<ul>\n<li>这些协议包括 <code>http</code>, <code>https</code>, <code>ftp</code>, <code>gopher</code>, <code>file</code> \n后缀是 <code>://</code> (冒号-斜杠-斜杠).</li>\n<li>所有其他的协议如 <code>mailto</code>, <code>xmpp</code>, <code>aim</code>, <code>sftp</code>, <code>foo</code>, 等\n 会加上后缀 <code>:</code> (冒号)</li>\n</ul>\n</li>\n<li><code>auth</code> 如果有将会出现.</li>\n<li><code>hostname</code> 如果 <code>host</code> 属性没被定义，则会使用此属性.</li>\n<li><code>port</code> 如果 <code>host</code> 属性没被定义，则会使用此属性.</li>\n<li><code>host</code> 优先使用，将会替代 <code>hostname</code> 和<code>port</code></li>\n<li><code>pathname</code> 将会同样处理无论结尾是否有<code>/</code> (斜杠)</li>\n<li><code>search</code> 将会替代 <code>query</code>属性</li>\n<li><code>query</code> (object类型; 详细请看 <code>querystring</code>) 如果没有 <code>search</code>,将会使用此属性.</li>\n<li><code>search</code> 无论前面是否有 <code>?</code> (问号)，都会同样的处理</li>\n<li><code>hash</code>无论前面是否有<code>#</code> (井号, 锚点)，都会同样处理</li>\n</ul>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "urlObj"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "url.resolve(from, to)",
+          "type": "method",
+          "name": "resolve",
+          "desc": "<p>Take a base URL, and a href URL, and resolve them as a browser would for\nan anchor tag.  Examples:\n\n</p>\n<p>给定一个基础URL路径，和一个href URL路径，并且象浏览器那样处理他们可以带上锚点。 例子：\n\n</p>\n<pre><code>url.resolve(&apos;/one/two/three&apos;, &apos;four&apos;)         // &apos;/one/two/four&apos;\nurl.resolve(&apos;http://example.com/&apos;, &apos;/one&apos;)    // &apos;http://example.com/one&apos;\nurl.resolve(&apos;http://example.com/one&apos;, &apos;/two&apos;) // &apos;http://example.com/two&apos;\n\n\nurl.resolve(&apos;/one/two/three&apos;, &apos;four&apos;)         // &apos;/one/two/four&apos;\nurl.resolve(&apos;http://example.com/&apos;, &apos;/one&apos;)    // &apos;http://example.com/one&apos;\nurl.resolve(&apos;http://example.com/one&apos;, &apos;/two&apos;) // &apos;http://example.com/two&apos;</code></pre>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "from"
+                },
+                {
+                  "name": "to"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "type": "module",
+      "displayName": "URL"
+    }
+  ]
+}

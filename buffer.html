@@ -1,0 +1,1261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Buffer Node.js v0.10.18 文档 中文版</title>
+  <link rel="stylesheet" href="public/api_assets/style.css">
+  <link rel="stylesheet" href="public/api_assets/sh.css">
+  <link rel="canonical" href="http://nodejs.org/api/buffer.html">
+</head>
+<body class="alt apidoc" id="api-section-buffer">
+
+    <div id="intro" class="interior">
+        <a href="http://jixiangac.com/api/" title="返回首页">
+            <img id="logo" src="http://nodejs.org/images/logo-light.png" alt="node.js">
+        </a>
+    </div>
+    <div id="content" class="clearfix">
+        <div id="column2" class="interior">
+            <ul>
+                <li><a href="http://jixiangac.com/api/" class="docs current">文档首页</a></li>
+                <li><a href="http://nodejs.org/api/">英文版文档</a></li>
+            </ul>
+            <div style="margin-top:44px; font-size:12px;">
+              <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh"><img alt="知识共享许可协议" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.zh">知识共享署名-非商业性使用 3.0 未本地化版本许可协议</a>进行许可。
+            </div>
+        </div>
+
+        <div id="column1" class="interior">
+          <header>
+            <h1>Node.js v0.10.18 手册 &amp; 文档</h1>
+            <div id="gtoc">
+              <p>
+                <a href="index.html" name="toc">索引</a> |
+                <a href="all.html">在单一页面中浏览</a> |
+                <a href="http://jixiangac.com/doc/node/buffer.json">JSON格式</a>
+              </p>
+            </div>
+            <hr>
+          </header>
+
+          <div id="toc">
+            <h2>目录</h2>
+            <ul>
+<li><a href="buffer.html#buffer_buffer">Buffer</a><ul>
+<li><a href="buffer.html#buffer_buffer_1">类: Buffer</a><ul>
+<li><a href="buffer.html#buffer_new_buffer_size">new Buffer(size)</a></li>
+<li><a href="buffer.html#buffer_new_buffer_array">new Buffer(array)</a></li>
+<li><a href="buffer.html#buffer_new_buffer_str_encoding">new Buffer(str, [encoding])</a></li>
+<li><a href="buffer.html#buffer_buffer_isencoding_encoding">类方法: Buffer.isEncoding(encoding)</a></li>
+<li><a href="buffer.html#buffer_buffer_isbuffer_obj">类方法: Buffer.isBuffer(obj)</a></li>
+<li><a href="buffer.html#buffer_buffer_bytelength_string_encoding">类方法: Buffer.byteLength(string, [encoding])</a></li>
+<li><a href="buffer.html#buffer_buffer_concat_list_totallength">类方法: Buffer.concat(list, [totalLength])</a></li>
+<li><a href="buffer.html#buffer_buf_length">buf.length</a></li>
+<li><a href="buffer.html#buffer_buf_write_string_offset_length_encoding">buf.write(string, [offset], [length], [encoding])</a></li>
+<li><a href="buffer.html#buffer_buf_tostring_encoding_start_end">buf.toString([encoding], [start], [end])</a></li>
+<li><a href="buffer.html#buffer_buf_tojson">buf.toJSON()</a></li>
+<li><a href="buffer.html#buffer_buf_index">buf[index]</a></li>
+<li><a href="buffer.html#buffer_buf_copy_targetbuffer_targetstart_sourcestart_sourceend">buf.copy(targetBuffer, [targetStart], [sourceStart], [sourceEnd])</a></li>
+<li><a href="buffer.html#buffer_buf_slice_start_end">buf.slice([start], [end])</a></li>
+<li><a href="buffer.html#buffer_buf_readuint8_offset_noassert">buf.readUInt8(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readuint16le_offset_noassert">buf.readUInt16LE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readuint16be_offset_noassert">buf.readUInt16BE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readuint16le_offset_noassert_1">buf.readUInt16LE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readuint16be_offset_noassert_1">buf.readUInt16BE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readuint32le_offset_noassert">buf.readUInt32LE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readuint32be_offset_noassert">buf.readUInt32BE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readuint32le_offset_noassert_1">buf.readUInt32LE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readuint32be_offset_noassert_1">buf.readUInt32BE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readint8_offset_noassert">buf.readInt8(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readint16le_offset_noassert">buf.readInt16LE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readint16be_offset_noassert">buf.readInt16BE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readint16le_offset_noassert_1">buf.readInt16LE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readint16be_offset_noassert_1">buf.readInt16BE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readint32le_offset_noassert">buf.readInt32LE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readint32be_offset_noassert">buf.readInt32BE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readint32le_offset_noassert_1">buf.readInt32LE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readint32be_offset_noassert_1">buf.readInt32BE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readfloatle_offset_noassert">buf.readFloatLE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readfloatbe_offset_noassert">buf.readFloatBE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readfloatle_offset_noassert_1">buf.readFloatLE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readfloatbe_offset_noassert_1">buf.readFloatBE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readdoublele_offset_noassert">buf.readDoubleLE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readdoublebe_offset_noassert">buf.readDoubleBE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readdoublele_offset_noassert_1">buf.readDoubleLE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_readdoublebe_offset_noassert_1">buf.readDoubleBE(offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeuint8_value_offset_noassert">buf.writeUInt8(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeuint16le_value_offset_noassert">buf.writeUInt16LE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeuint16be_value_offset_noassert">buf.writeUInt16BE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeuint16le_value_offset_noassert_1">buf.writeUInt16LE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeuint16be_value_offset_noassert_1">buf.writeUInt16BE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeuint32le_value_offset_noassert">buf.writeUInt32LE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeuint32be_value_offset_noassert">buf.writeUInt32BE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeuint32le_value_offset_noassert_1">buf.writeUInt32LE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeuint32be_value_offset_noassert_1">buf.writeUInt32BE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeint8_value_offset_noassert">buf.writeInt8(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeint16le_value_offset_noassert">buf.writeInt16LE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeint16be_value_offset_noassert">buf.writeInt16BE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeint16le_value_offset_noassert_1">buf.writeInt16LE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeint16be_value_offset_noassert_1">buf.writeInt16BE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeint32le_value_offset_noassert">buf.writeInt32LE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeint32be_value_offset_noassert">buf.writeInt32BE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeint32le_value_offset_noassert_1">buf.writeInt32LE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writeint32be_value_offset_noassert_1">buf.writeInt32BE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writefloatle_value_offset_noassert">buf.writeFloatLE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writefloatbe_value_offset_noassert">buf.writeFloatBE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writefloatle_value_offset_noassert_1">buf.writeFloatLE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writefloatbe_value_offset_noassert_1">buf.writeFloatBE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writedoublele_value_offset_noassert">buf.writeDoubleLE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writedoublebe_value_offset_noassert">buf.writeDoubleBE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writedoublele_value_offset_noassert_1">buf.writeDoubleLE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_writedoublebe_value_offset_noassert_1">buf.writeDoubleBE(value, offset, [noAssert])</a></li>
+<li><a href="buffer.html#buffer_buf_fill_value_offset_end">buf.fill(value, [offset], [end])</a></li>
+</ul>
+</li>
+<li><a href="buffer.html#buffer_buffer_inspect_max_bytes">buffer.INSPECT_MAX_BYTES</a></li>
+<li><a href="buffer.html#buffer_slowbuffer">类: SlowBuffer</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+
+          <div id="apicontent">
+            <h1>Buffer<span><a href="buffer.html#buffer_buffer" id="buffer_buffer">#</a></span></h1>
+<pre><code>稳定度: 3 - 稳定</code></pre>
+<p>Pure JavaScript is Unicode friendly but not nice to binary data.  When
+dealing with TCP streams or the file system, it&apos;s necessary to handle octet
+streams. Node has several strategies for manipulating, creating, and
+consuming octet streams.
+
+</p>
+<p>纯javascript对Unicode比较友好，但是无法很好地处理二进制数据。当我们面对TCP流或者文件系统的时候，是需要处理八位字节流的。Node有几种操作，创建和消化八位字节流的策略。
+
+</p>
+<p>Raw data is stored in instances of the <code>Buffer</code> class. A <code>Buffer</code> is similar
+to an array of integers but corresponds to a raw memory allocation outside
+the V8 heap. A <code>Buffer</code> cannot be resized.
+
+</p>
+<p>原始数据保存在 <code>Buffer</code> 类的实例中。一个 <code>Buffer</code> 实例类似于一个整数数组，但对应者 V8 堆之外的一个原始内存分配区域。一个 <code>Buffer</code> 的大小不可变。
+
+</p>
+<p>The <code>Buffer</code> class is a global, making it very rare that one would need
+to ever <code>require(&apos;buffer&apos;)</code>.
+
+</p>
+<p><code>Buffer</code> 类是一个全局的类，所以它很罕有地不需要<code>require</code>语句就可以调用。
+
+</p>
+<p>Converting between Buffers and JavaScript string objects requires an explicit
+encoding method.  Here are the different string encodings.
+
+</p>
+<p>在Buffers和JavaScript string转换时，需要明确的一个编码方法。下面是一些不同的string编码。
+
+</p>
+<ul>
+<li><p><code>&apos;ascii&apos;</code> - for 7 bit ASCII data only.  This encoding method is very fast, and
+will strip the high bit if set.</p>
+</li>
+<li><p><code>&apos;ascii&apos;</code> - 仅适用 7 bit ASCII 格式数据。这个编码方式非常快速，而且会剥离设置过高的bit。</p>
+</li>
+<li><p><code>&apos;utf8&apos;</code> - Multibyte encoded Unicode characters. Many web pages and other
+document formats use UTF-8.</p>
+</li>
+<li><p><code>&apos;utf8&apos;</code> - 多字节编码 Unicode字符。很多网页或者其他文档的编码格式都是使用 UTF-8的。</p>
+</li>
+<li><p><code>&apos;utf16le&apos;</code> - 2 or 4 bytes, little endian encoded Unicode characters.
+Surrogate pairs (U+10000 to U+10FFFF) are supported.</p>
+</li>
+<li><p><code>&apos;utf16le&apos;</code> - 2 或者 4 字节, Little Endian (LE)  编码Unicode字符。
+代理对 (U+10000 to U+10FFFF) 是支持的.（BE和LE表示大端和小端，Little-Endian就是低位字节排放在内存的低地址端，高位字节排放在内存的高地址端；Big-Endian就是高位字节排放在内存的低地址端，低位字节排放在内存的高地址端；下同）</p>
+</li>
+<li><p><code>&apos;ucs2&apos;</code> - Alias of <code>&apos;utf16le&apos;</code>.</p>
+</li>
+<li><p><code>&apos;ucs2&apos;</code> -  <code>&apos;utf16le&apos;</code>的别名.</p>
+</li>
+<li><p><code>&apos;base64&apos;</code> - Base64 string encoding.</p>
+</li>
+<li><p><code>&apos;base64&apos;</code> - Base64 字符串编码。</p>
+</li>
+<li><p><code>&apos;binary&apos;</code> - A way of encoding raw binary data into strings by using only
+the first 8 bits of each character. This encoding method is deprecated and
+should be avoided in favor of <code>Buffer</code> objects where possible. This encoding
+will be removed in future versions of Node.</p>
+</li>
+<li><p><code>&apos;binary&apos;</code> - 一个将原始2进制数据编码为字符串的方法，仅使用每个字符的前8bits。 这个编码方式已经被弃用而且应该被避免，尽可能的使用<code>Buffer</code>对象。这个编码方式将会在未来的Node版本中移除。</p>
+</li>
+<li><p><code>&apos;hex&apos;</code> - Encode each byte as two hexadecimal characters.</p>
+</li>
+<li><p><code>&apos;hex&apos;</code> - 把每个byte编码成2个十六进制字符</p>
+</li>
+</ul>
+<h2>类: Buffer<span><a href="buffer.html#buffer_buffer_1" id="buffer_buffer_1">#</a></span></h2>
+<p>The Buffer class is a global type for dealing with binary data directly.
+It can be constructed in a variety of ways.
+
+</p>
+<p>Buffer 类是一个全局变量类型，用来直接处理2进制数据的。
+它能够使用多种方式构建。
+
+</p>
+<h3>new Buffer(size)<span><a href="buffer.html#buffer_new_buffer_size" id="buffer_new_buffer_size">#</a></span></h3>
+<div><ul>
+<li><p><code>size</code> Number</p>
+</li>
+<li><p><code>size</code> Number</p>
+</li>
+</div></ul>
+<p>Allocates a new buffer of <code>size</code> octets.
+
+</p>
+<p>分配一个新的 buffer 大小是 <code>size</code> 的8位字节.
+
+</p>
+<h3>new Buffer(array)<span><a href="buffer.html#buffer_new_buffer_array" id="buffer_new_buffer_array">#</a></span></h3>
+<div><ul>
+<li><p><code>array</code> Array</p>
+</li>
+<li><p><code>array</code> Array</p>
+</li>
+</div></ul>
+<p>Allocates a new buffer using an <code>array</code> of octets.
+
+</p>
+<p>分配一个新的 buffer 使用一个8位字节 <code>array</code> 数组.
+
+</p>
+<h3>new Buffer(str, [encoding])<span><a href="buffer.html#buffer_new_buffer_str_encoding" id="buffer_new_buffer_str_encoding">#</a></span></h3>
+<div><ul>
+<li><code>str</code> String - string to encode.</li>
+<li><p><code>encoding</code> String - encoding to use, Optional.</p>
+</li>
+<li><p><code>str</code> String类型 - 需要存入buffer的string字符串.</p>
+</li>
+<li><code>encoding</code> String类型 - 使用什么编码方式，参数可选.</li>
+</div></ul>
+<p>Allocates a new buffer containing the given <code>str</code>.
+<code>encoding</code> defaults to <code>&apos;utf8&apos;</code>.
+
+</p>
+<p>分配一个新的 buffer ，其中包含着给定的 <code>str</code>字符串.
+<code>encoding</code> 编码方式默认是：<code>&apos;utf8&apos;</code>.
+
+</p>
+<h3>类方法: Buffer.isEncoding(encoding)<span><a href="buffer.html#buffer_buffer_isencoding_encoding" id="buffer_buffer_isencoding_encoding">#</a></span></h3>
+<div><ul>
+<li><p><code>encoding</code> <span>String</span> The encoding string to test</p>
+</li>
+<li><p><code>encoding</code> <span>String</span> 用来测试给定的编码字符串</p>
+</li>
+</div></ul>
+<p>Returns true if the <code>encoding</code> is a valid encoding argument, or false
+otherwise.
+
+</p>
+<p>如果给定的编码 <code>encoding</code> 是有效的，返回 true，否则返回 false。
+
+</p>
+<h3>类方法: Buffer.isBuffer(obj)<span><a href="buffer.html#buffer_buffer_isbuffer_obj" id="buffer_buffer_isbuffer_obj">#</a></span></h3>
+<div><ul>
+<li><code>obj</code> Object</li>
+<li><p>Return: Boolean</p>
+</li>
+<li><p><code>obj</code> Object</p>
+</li>
+<li>返回: Boolean</li>
+</div></ul>
+<p>Tests if <code>obj</code> is a <code>Buffer</code>.
+
+</p>
+<p>测试这个 <code>obj</code> 是否是一个 <code>Buffer</code>.
+
+</p>
+<h3>类方法: Buffer.byteLength(string, [encoding])<span><a href="buffer.html#buffer_buffer_bytelength_string_encoding" id="buffer_buffer_bytelength_string_encoding">#</a></span></h3>
+<div><ul>
+<li><code>string</code> String</li>
+<li><code>encoding</code> String, Optional, Default: &apos;utf8&apos;</li>
+<li><p>Return: Number</p>
+</li>
+<li><p><code>string</code> String类型</p>
+</li>
+<li><code>encoding</code> String类型, 可选参数, 默认是: &apos;utf8&apos;</li>
+<li>Return: Number类型</li>
+</div></ul>
+<p>Gives the actual byte length of a string. <code>encoding</code> defaults to <code>&apos;utf8&apos;</code>.
+This is not the same as <code>String.prototype.length</code> since that returns the
+number of <em>characters</em> in a string.
+
+</p>
+<p>将会返回这个字符串真实byte长度。 <code>encoding</code> 编码默认是： <code>&apos;utf8&apos;</code>.
+这个和 <code>String.prototype.length</code> 是不一样的，因为那个方法返回这个字符串中有几个字符的数量。
+（译者：当用户在写http响应头Cotent-Length的时候，千万记得一定要用 <code>Buffer.byteLength</code> 方法，不要使用 <code>String.prototype.length</code> ）
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>// ½ + ¼ = ¾: 9 characters, 12 bytes</code></pre>
+<h3>类方法: Buffer.concat(list, [totalLength])<span><a href="buffer.html#buffer_buffer_concat_list_totallength" id="buffer_buffer_concat_list_totallength">#</a></span></h3>
+<div><ul>
+<li><code>list</code> <span>Array</span> List of Buffer objects to concat</li>
+<li><p><code>totalLength</code> <span>Number</span> Total length of the buffers when concatenated</p>
+</li>
+<li><p><code>list</code> <span>Array</span>数组类型，Buffer数组，用于被连接。</p>
+</li>
+<li><code>totalLength</code> <span>Number</span>类型 上述Buffer数组的所有Buffer的总大小。（译者：注意这里的totalLength不是数组长度是数组里Buffer实例的大小总和）</li>
+</div></ul>
+<p>Returns a buffer which is the result of concatenating all the buffers in
+the list together.
+
+</p>
+<p>返回一个保存着将传入buffer数组中所有buffer对象拼接在一起的buffer对象。（译者：有点拗口，其实就是将数组中所有的buffer实例通过复制拼接在一起）
+
+</p>
+<p>If the list has no items, or if the totalLength is 0, then it returns a
+zero-length buffer.
+
+</p>
+<p>如果传入的数组没有内容，或者 totalLength 参数是0，那将返回一个zero-length的buffer。
+
+</p>
+<p>If the list has exactly one item, then the first item of the list is
+returned.
+
+</p>
+<p>如果数组中只有一项，那么这第一项就会被返回。
+
+</p>
+<p>If the list has more than one item, then a new Buffer is created.
+
+</p>
+<p>如果数组中的项多于一个，那么一个新的Buffer实例将被创建。
+
+</p>
+<p>If totalLength is not provided, it is read from the buffers in the list.
+However, this adds an additional loop to the function, so it is faster
+to provide the length explicitly.
+
+</p>
+<p>如果 totalLength 参数没有提供，虽然会从buffer数组中计算读取，但是会增加一个额外的循环来计算它，所以提供一个明确的 totalLength  参数将会更快。
+
+</p>
+<h3>buf.length<span><a href="buffer.html#buffer_buf_length" id="buffer_buf_length">#</a></span></h3>
+<div><ul>
+<li><p>Number</p>
+</li>
+<li><p>Number类型</p>
+</li>
+</div></ul>
+<p>The size of the buffer in bytes.  Note that this is not necessarily the size
+of the contents. <code>length</code> refers to the amount of memory allocated for the
+buffer object.  It does not change when the contents of the buffer are changed.
+
+</p>
+<p>这个buffer的bytes大小。注意这未必是这buffer里面内容的大小。<code>length</code> 的依据是buffer对象所分配的内存数值，它不会随着这个buffer对象内容的改变而改变。
+
+</p>
+<pre><code>// 1234
+// 1234</code></pre>
+<h3>buf.write(string, [offset], [length], [encoding])<span><a href="buffer.html#buffer_buf_write_string_offset_length_encoding" id="buffer_buf_write_string_offset_length_encoding">#</a></span></h3>
+<div><ul>
+<li><code>string</code> String - data to be written to buffer</li>
+<li><code>offset</code> Number, Optional, Default: 0</li>
+<li><code>length</code> Number, Optional, Default: <code>buffer.length - offset</code></li>
+<li><p><code>encoding</code> String, Optional, Default: &apos;utf8&apos;</p>
+</li>
+<li><p><code>string</code> String类型 - 将要被写入 buffer 的数据</p>
+</li>
+<li><code>offset</code> Number类型, 可选参数, 默认: 0</li>
+<li><code>length</code> Number类型, 可选参数, 默认: <code>buffer.length - offset</code></li>
+<li><code>encoding</code> String类型, 可选参数, 默认: &apos;utf8&apos;</li>
+</div></ul>
+<p>Writes <code>string</code> to the buffer at <code>offset</code> using the given encoding.
+<code>offset</code> defaults to <code>0</code>, <code>encoding</code> defaults to <code>&apos;utf8&apos;</code>. <code>length</code> is
+the number of bytes to write. Returns number of octets written. If <code>buffer</code> did
+not contain enough space to fit the entire string, it will write a partial
+amount of the string. <code>length</code> defaults to <code>buffer.length - offset</code>.
+The method will not write partial characters.
+
+</p>
+<p>根据参数 <code>offset</code> 偏移量和指定的<code>encoding</code>编码方式，将参数 <code>string</code> 数据写入buffer。
+<code>offset</code>偏移量 默认是 <code>0</code>, <code>encoding</code>编码方式默认是 <code>&apos;utf8&apos;</code>。 
+<code>length</code>长度是将要写入的字符串的bytes大小。
+返回number类型，表示多少8位字节流被写入了。如果<code>buffer</code> 没有足够的空间来放入整个string，它将只会写入部分的字符串。
+<code>length</code> 默认是 <code>buffer.length - offset</code>。
+这个方法不会出现写入部分字符。
+
+
+</p>
+<pre><code>buf = new Buffer(256);
+len = buf.write(&apos;\u00bd + \u00bc = \u00be&apos;, 0);
+console.log(len + &quot; bytes: &quot; + buf.toString(&apos;utf8&apos;, 0, len));</code></pre>
+<h3>buf.toString([encoding], [start], [end])<span><a href="buffer.html#buffer_buf_tostring_encoding_start_end" id="buffer_buf_tostring_encoding_start_end">#</a></span></h3>
+<div><ul>
+<li><code>encoding</code> String, Optional, Default: &apos;utf8&apos;</li>
+<li><code>start</code> Number, Optional, Default: 0</li>
+<li><p><code>end</code> Number, Optional, Default: <code>buffer.length</code></p>
+</li>
+<li><p><code>encoding</code> String类型, 可选参数, 默认: &apos;utf8&apos;</p>
+</li>
+<li><code>start</code> Number类型, 可选参数, 默认: 0</li>
+<li><code>end</code> Number类型, 可选参数, 默认: <code>buffer.length</code></li>
+</div></ul>
+<p>Decodes and returns a string from buffer data encoded with <code>encoding</code>
+(defaults to <code>&apos;utf8&apos;</code>) beginning at <code>start</code> (defaults to <code>0</code>) and ending at
+<code>end</code> (defaults to <code>buffer.length</code>).
+
+</p>
+<p>根据 <code>encoding</code>参数（默认是 <code>&apos;utf8&apos;</code>）返回一个解码的 string 类型。还会根据传入的参数 <code>start</code> (默认是<code>0</code>) 和 <code>end</code> (默认是 <code>buffer.length</code>)作为取值范围。
+
+</p>
+<p>See <code>buffer.write()</code> example, above.
+
+</p>
+<p>查看上面<code>buffer.write()</code> 的例子.
+
+</p>
+<h3>buf.toJSON()<span><a href="buffer.html#buffer_buf_tojson" id="buffer_buf_tojson">#</a></span></h3>
+<p>Returns a JSON-representation of the Buffer instance.  <code>JSON.stringify</code>
+implicitly calls this function when stringifying a Buffer instance.
+
+</p>
+<p>返回一个 JSON表示的Buffer实例。<code>JSON.stringify</code>将会默认调用来字符串序列化这个Buffer实例。
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>console.log(copy);
+// &lt;Buffer 74 65 73 74&gt;</code></pre>
+<h3>buf[index]<span><a href="buffer.html#buffer_buf_index" id="buffer_buf_index">#</a></span></h3>
+<!--type=property-->
+<!--name=[index]-->
+
+<!--type=property-->
+<!--name=[index]-->
+
+<p>Get and set the octet at <code>index</code>. The values refer to individual bytes,
+so the legal range is between <code>0x00</code> and <code>0xFF</code> hex or <code>0</code> and <code>255</code>.
+
+</p>
+<p>获取或者设置在指定<code>index</code>索引位置的8位字节。这个值是指单个字节，所以这个值必须在合法的范围，16进制的<code>0x00</code> 到<code>0xFF</code>，或者<code>0</code> 到<code>255</code>。
+
+</p>
+<p>Example: copy an ASCII string into a buffer, one byte at a time:
+
+</p>
+<p>例子: 拷贝一个 ASCII 编码的 string 字符串到一个 buffer, 一次一个 byte 进行拷贝:
+
+</p>
+<pre><code>// node.js</code></pre>
+<h3>buf.copy(targetBuffer, [targetStart], [sourceStart], [sourceEnd])<span><a href="buffer.html#buffer_buf_copy_targetbuffer_targetstart_sourcestart_sourceend" id="buffer_buf_copy_targetbuffer_targetstart_sourcestart_sourceend">#</a></span></h3>
+<div><ul>
+<li><code>targetBuffer</code> Buffer object - Buffer to copy into</li>
+<li><code>targetStart</code> Number, Optional, Default: 0</li>
+<li><code>sourceStart</code> Number, Optional, Default: 0</li>
+<li><p><code>sourceEnd</code> Number, Optional, Default: <code>buffer.length</code></p>
+</li>
+<li><p><code>targetBuffer</code> Buffer 类型对象 - 将要进行拷贝的Buffer</p>
+</li>
+<li><code>targetStart</code> Number类型, 可选参数, 默认: 0</li>
+<li><code>sourceStart</code> Number类型, 可选参数, 默认: 0</li>
+<li><code>sourceEnd</code> Number类型, 可选参数, 默认: <code>buffer.length</code></li>
+</div></ul>
+<p>Does copy between buffers. The source and target regions can be overlapped.
+<code>targetStart</code> and <code>sourceStart</code> default to <code>0</code>.
+<code>sourceEnd</code> defaults to <code>buffer.length</code>.
+
+</p>
+<p>进行buffer的拷贝，源和目标可以是重叠的。
+<code>targetStart</code> 目标开始偏移 和<code>sourceStart</code>源开始偏移 默认都是 <code>0</code>.
+<code>sourceEnd</code> 源结束位置偏移默认是源的长度 <code>buffer.length</code>.
+
+</p>
+<p>All values passed that are <code>undefined</code>/<code>NaN</code> or are out of bounds are set equal
+to their respective defaults.
+
+</p>
+<p>如果传递的值是<code>undefined</code>/<code>NaN</code> 或者是 out of bounds 超越边界的，就将设置为他们的默认值。（译者：这个默认值下面有的例子有说明）
+
+</p>
+<p>Example: build two Buffers, then copy <code>buf1</code> from byte 16 through byte 19
+into <code>buf2</code>, starting at the 8th byte in <code>buf2</code>.
+
+</p>
+<p>例子: 创建2个Buffer，然后把将<code>buf1</code>的16位到19位 拷贝到 <code>buf2</code>中，并且从<code>buf2</code>的第8位开始拷贝。
+
+</p>
+<pre><code>// !!!!!!!!qrst!!!!!!!!!!!!!</code></pre>
+<h3>buf.slice([start], [end])<span><a href="buffer.html#buffer_buf_slice_start_end" id="buffer_buf_slice_start_end">#</a></span></h3>
+<div><ul>
+<li><code>start</code> Number, Optional, Default: 0</li>
+<li><p><code>end</code> Number, Optional, Default: <code>buffer.length</code></p>
+</li>
+<li><p><code>start</code> Number类型, 可选参数, 默认: 0</p>
+</li>
+<li><code>end</code> Number类型, 可选参数, 默认: <code>buffer.length</code></li>
+</div></ul>
+<p>Returns a new buffer which references the same memory as the old, but offset
+and cropped by the <code>start</code> (defaults to <code>0</code>) and <code>end</code> (defaults to
+<code>buffer.length</code>) indexes.  Negative indexes start from the end of the buffer.
+
+</p>
+<p>返回一个新的buffer，这个buffer将会和老的buffer引用相同的内存地址，只是根据 <code> start</code> (默认是 <code>0</code>) 和<code>end</code> (默认是<code>buffer.length</code>)  偏移和裁剪了索引。
+负的索引是从buffer尾部开始计算的。
+
+</p>
+<p><strong>Modifying the new buffer slice will modify memory in the original buffer!</strong>
+
+</p>
+<p><strong>修改这个新的buffer实例slice切片，也会改变原来的buffer</strong>
+
+</p>
+<p>Example: build a Buffer with the ASCII alphabet, take a slice, then modify one
+byte from the original Buffer.
+
+</p>
+<p>例子: 创建一个ASCII 字母的 Buffer，对它slice切片，然后修改源Buffer上的一个byte。
+
+</p>
+<pre><code>// abc
+// !bc</code></pre>
+<h3>buf.readUInt8(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readuint8_offset_noassert" id="buffer_buf_readuint8_offset_noassert">#</a></span></h3>
+<div><ul>
+<li><code>offset</code> Number</li>
+<li><code>noAssert</code> Boolean, Optional, Default: false</li>
+<li><p>Return: Number</p>
+</li>
+<li><p><code>offset</code> Number类型</p>
+</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+<li>Return: Number类型</li>
+</div></ul>
+<p>Reads an unsigned 8 bit integer from the buffer at the specified offset.
+
+</p>
+<p>从这个buffer对象里，根据指定的偏移量，读取一个 unsigned 8 bit integer整形。 
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>offset</code>. This means that <code>offset</code>
+may be beyond the end of the buffer. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>offset</code>偏移量参数。
+这意味着 <code>offset</code>可能会超出buffer的末尾。默认是 <code>false</code>。
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>// 0x3
+// 0x4
+// 0x23
+// 0x42</code></pre>
+<h3>buf.readUInt16LE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readuint16le_offset_noassert" id="buffer_buf_readuint16le_offset_noassert">#</a></span></h3>
+<h3>buf.readUInt16BE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readuint16be_offset_noassert" id="buffer_buf_readuint16be_offset_noassert">#</a></span></h3>
+<h3>buf.readUInt16LE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readuint16le_offset_noassert_1" id="buffer_buf_readuint16le_offset_noassert_1">#</a></span></h3>
+<h3>buf.readUInt16BE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readuint16be_offset_noassert_1" id="buffer_buf_readuint16be_offset_noassert_1">#</a></span></h3>
+<ul>
+<li><code>offset</code> Number</li>
+<li><code>noAssert</code> Boolean, Optional, Default: false</li>
+<li><p>Return: Number</p>
+</li>
+<li><p><code>offset</code> Number类型</p>
+</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+<li>Return: Number类型</li>
+</ul>
+<p>Reads an unsigned 16 bit integer from the buffer at the specified offset with
+specified endian format.
+
+</p>
+<p>从这个buffer对象里，根据指定的偏移量，使用特殊的 endian字节序格式读取一个 unsigned 16 bit integer。
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>offset</code>. This means that <code>offset</code>
+may be beyond the end of the buffer. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>offset</code>偏移量参数。
+这意味着 <code>offset</code>可能会超出buffer的末尾。默认是 <code>false</code>。
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>// 0x0304
+// 0x0403
+// 0x0423
+// 0x2304
+// 0x2342
+// 0x4223</code></pre>
+<h3>buf.readUInt32LE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readuint32le_offset_noassert" id="buffer_buf_readuint32le_offset_noassert">#</a></span></h3>
+<h3>buf.readUInt32BE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readuint32be_offset_noassert" id="buffer_buf_readuint32be_offset_noassert">#</a></span></h3>
+<h3>buf.readUInt32LE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readuint32le_offset_noassert_1" id="buffer_buf_readuint32le_offset_noassert_1">#</a></span></h3>
+<h3>buf.readUInt32BE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readuint32be_offset_noassert_1" id="buffer_buf_readuint32be_offset_noassert_1">#</a></span></h3>
+<ul>
+<li><code>offset</code> Number</li>
+<li><code>noAssert</code> Boolean, Optional, Default: false</li>
+<li><p>Return: Number</p>
+</li>
+<li><p><code>offset</code> Number类型</p>
+</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+<li>Return: Number类型</li>
+</ul>
+<p>Reads an unsigned 32 bit integer from the buffer at the specified offset with
+specified endian format.
+
+</p>
+<p>从这个buffer对象里，根据指定的偏移量，使用指定的 endian字节序格式读取一个 unsigned 32 bit integer。
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>offset</code>. This means that <code>offset</code>
+may be beyond the end of the buffer. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>offset</code>偏移量参数。
+这意味着 <code>offset</code>可能会超出buffer的末尾。默认是 <code>false</code>。
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>// 0x03042342
+// 0x42230403</code></pre>
+<h3>buf.readInt8(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readint8_offset_noassert" id="buffer_buf_readint8_offset_noassert">#</a></span></h3>
+<div><ul>
+<li><code>offset</code> Number</li>
+<li><code>noAssert</code> Boolean, Optional, Default: false</li>
+<li><p>Return: Number</p>
+</li>
+<li><p><code>offset</code> Number类型</p>
+</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+<li>Return: Number类型</li>
+</div></ul>
+<p>Reads a signed 8 bit integer from the buffer at the specified offset.
+
+</p>
+<p>从这个buffer对象里，根据指定的偏移量，读取一个 signed 8 bit integer。
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>offset</code>. This means that <code>offset</code>
+may be beyond the end of the buffer. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>offset</code>偏移量参数。
+这意味着 <code>offset</code>可能会超出buffer的末尾。默认是 <code>false</code>。
+
+</p>
+<p>Works as <code>buffer.readUInt8</code>, except buffer contents are treated as two&apos;s
+complement signed values.
+
+</p>
+<p>和 <code>buffer.readUInt8</code>一样的返回，除非buffer中包含了有作为2的补码的有符号值。
+
+</p>
+<h3>buf.readInt16LE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readint16le_offset_noassert" id="buffer_buf_readint16le_offset_noassert">#</a></span></h3>
+<h3>buf.readInt16BE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readint16be_offset_noassert" id="buffer_buf_readint16be_offset_noassert">#</a></span></h3>
+<h3>buf.readInt16LE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readint16le_offset_noassert_1" id="buffer_buf_readint16le_offset_noassert_1">#</a></span></h3>
+<h3>buf.readInt16BE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readint16be_offset_noassert_1" id="buffer_buf_readint16be_offset_noassert_1">#</a></span></h3>
+<ul>
+<li><code>offset</code> Number</li>
+<li><code>noAssert</code> Boolean, Optional, Default: false</li>
+<li><p>Return: Number</p>
+</li>
+<li><p><code>offset</code> Number类型</p>
+</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+<li>Return: Number类型</li>
+</ul>
+<p>Reads a signed 16 bit integer from the buffer at the specified offset with
+specified endian format.
+
+</p>
+<p>从这个buffer对象里，根据指定的偏移量，使用特殊的 endian字节序格式读取一个 signed 16 bit integer。
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>offset</code>. This means that <code>offset</code>
+may be beyond the end of the buffer. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>offset</code>偏移量参数。
+这意味着 <code>offset</code>可能会超出buffer的末尾。默认是 <code>false</code>。
+
+</p>
+<p>Works as <code>buffer.readUInt16*</code>, except buffer contents are treated as two&apos;s
+complement signed values.
+
+</p>
+<p>和 buffer.readUInt16一样返回，除非buffer中包含了有作为2的补码的有符号值。
+
+</p>
+<h3>buf.readInt32LE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readint32le_offset_noassert" id="buffer_buf_readint32le_offset_noassert">#</a></span></h3>
+<h3>buf.readInt32BE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readint32be_offset_noassert" id="buffer_buf_readint32be_offset_noassert">#</a></span></h3>
+<h3>buf.readInt32LE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readint32le_offset_noassert_1" id="buffer_buf_readint32le_offset_noassert_1">#</a></span></h3>
+<h3>buf.readInt32BE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readint32be_offset_noassert_1" id="buffer_buf_readint32be_offset_noassert_1">#</a></span></h3>
+<ul>
+<li><code>offset</code> Number</li>
+<li><code>noAssert</code> Boolean, Optional, Default: false</li>
+<li><p>Return: Number</p>
+</li>
+<li><p><code>offset</code> Number类型</p>
+</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+<li>Return: Number类型</li>
+</ul>
+<p>Reads a signed 32 bit integer from the buffer at the specified offset with
+specified endian format.
+
+</p>
+<p>从这个buffer对象里，根据指定的偏移量，使用指定的 endian字节序格式读取一个 signed 32 bit integer。
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>offset</code>. This means that <code>offset</code>
+may be beyond the end of the buffer. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>offset</code>偏移量参数。
+这意味着 <code>offset</code>可能会超出buffer的末尾。默认是 <code>false</code>。
+
+</p>
+<p>Works as <code>buffer.readUInt32*</code>, except buffer contents are treated as two&apos;s
+complement signed values.
+
+</p>
+<p>和 buffer.readUInt32一样返回，除非buffer中包含了有作为2的补码的有符号值。
+
+</p>
+<h3>buf.readFloatLE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readfloatle_offset_noassert" id="buffer_buf_readfloatle_offset_noassert">#</a></span></h3>
+<h3>buf.readFloatBE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readfloatbe_offset_noassert" id="buffer_buf_readfloatbe_offset_noassert">#</a></span></h3>
+<h3>buf.readFloatLE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readfloatle_offset_noassert_1" id="buffer_buf_readfloatle_offset_noassert_1">#</a></span></h3>
+<h3>buf.readFloatBE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readfloatbe_offset_noassert_1" id="buffer_buf_readfloatbe_offset_noassert_1">#</a></span></h3>
+<ul>
+<li><code>offset</code> Number</li>
+<li><code>noAssert</code> Boolean, Optional, Default: false</li>
+<li><p>Return: Number</p>
+</li>
+<li><p><code>offset</code> Number类型</p>
+</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+<li>Return: Number类型</li>
+</ul>
+<p>Reads a 32 bit float from the buffer at the specified offset with specified
+endian format.
+
+</p>
+<p>从这个buffer对象里，根据指定的偏移量，使用指定的 endian字节序格式读取一个 32 bit float。
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>offset</code>. This means that <code>offset</code>
+may be beyond the end of the buffer. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>offset</code>偏移量参数。
+这意味着 <code>offset</code>可能会超出buffer的末尾。默认是 <code>false</code>。
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>// 0x01</code></pre>
+<h3>buf.readDoubleLE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readdoublele_offset_noassert" id="buffer_buf_readdoublele_offset_noassert">#</a></span></h3>
+<h3>buf.readDoubleBE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readdoublebe_offset_noassert" id="buffer_buf_readdoublebe_offset_noassert">#</a></span></h3>
+<h3>buf.readDoubleLE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readdoublele_offset_noassert_1" id="buffer_buf_readdoublele_offset_noassert_1">#</a></span></h3>
+<h3>buf.readDoubleBE(offset, [noAssert])<span><a href="buffer.html#buffer_buf_readdoublebe_offset_noassert_1" id="buffer_buf_readdoublebe_offset_noassert_1">#</a></span></h3>
+<ul>
+<li><code>offset</code> Number</li>
+<li><code>noAssert</code> Boolean, Optional, Default: false</li>
+<li><p>Return: Number</p>
+</li>
+<li><p><code>offset</code> Number类型</p>
+</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+<li>Return: Number类型</li>
+</ul>
+<p>Reads a 64 bit double from the buffer at the specified offset with specified
+endian format.
+
+</p>
+<p>从这个buffer对象里，根据指定的偏移量，使用指定的 endian字节序格式读取一个 64 bit double。
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>offset</code>. This means that <code>offset</code>
+may be beyond the end of the buffer. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>offset</code>偏移量参数。
+这意味着 <code>offset</code>可能会超出buffer的末尾。默认是 <code>false</code>。
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>// 0.3333333333333333</code></pre>
+<h3>buf.writeUInt8(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeuint8_value_offset_noassert" id="buffer_buf_writeuint8_value_offset_noassert">#</a></span></h3>
+<div><ul>
+<li><code>value</code> Number</li>
+<li><code>offset</code> Number</li>
+<li><p><code>noAssert</code> Boolean, Optional, Default: false</p>
+</li>
+<li><p><code>value</code> Number类型</p>
+</li>
+<li><code>offset</code> Number类型</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+</div></ul>
+<p>Writes <code>value</code> to the buffer at the specified offset. Note, <code>value</code> must be a
+valid unsigned 8 bit integer.
+
+</p>
+<p>根据指定的offset偏移量将<code>value</code>写入buffer。注意：<code>value</code> 必须是一个合法的unsigned 8 bit integer.
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>value</code> and <code>offset</code>. This means
+that <code>value</code> may be too large for the specific function and <code>offset</code> may be
+beyond the end of the buffer leading to the values being silently dropped. This
+should not be used unless you are certain of correctness. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>value</code>和<code>offset</code>参数。
+这意味着 <code>value</code>可能过大，或者<code>offset</code>可能会超出buffer的末尾造成<code>value</code>被丢弃。
+这个参数除了你非常有把握，否则不应该使用它。默认是 <code>false</code>。`.
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>// &lt;Buffer 03 04 23 42&gt;</code></pre>
+<h3>buf.writeUInt16LE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeuint16le_value_offset_noassert" id="buffer_buf_writeuint16le_value_offset_noassert">#</a></span></h3>
+<h3>buf.writeUInt16BE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeuint16be_value_offset_noassert" id="buffer_buf_writeuint16be_value_offset_noassert">#</a></span></h3>
+<h3>buf.writeUInt16LE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeuint16le_value_offset_noassert_1" id="buffer_buf_writeuint16le_value_offset_noassert_1">#</a></span></h3>
+<h3>buf.writeUInt16BE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeuint16be_value_offset_noassert_1" id="buffer_buf_writeuint16be_value_offset_noassert_1">#</a></span></h3>
+<ul>
+<li><code>value</code> Number</li>
+<li><code>offset</code> Number</li>
+<li><p><code>noAssert</code> Boolean, Optional, Default: false</p>
+</li>
+<li><p><code>value</code> Number类型</p>
+</li>
+<li><code>offset</code> Number类型</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+</ul>
+<p>Writes <code>value</code> to the buffer at the specified offset with specified endian
+format. Note, <code>value</code> must be a valid unsigned 16 bit integer.
+
+</p>
+<p>根据指定的offset偏移量和指定的 endian字节序格式将<code>value</code>写入buffer。注意：<code>value</code> 必须是一个合法的unsigned 16 bit integer.
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>value</code> and <code>offset</code>. This means
+that <code>value</code> may be too large for the specific function and <code>offset</code> may be
+beyond the end of the buffer leading to the values being silently dropped. This
+should not be used unless you are certain of correctness. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>value</code>和<code>offset</code>参数。
+这意味着 <code>value</code>可能过大，或者<code>offset</code>可能会超出buffer的末尾造成<code>value</code>被丢弃。
+这个参数除了你非常有把握，否则不应该使用它。默认是 <code>false</code>。`.
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>// &lt;Buffer de ad be ef&gt;
+// &lt;Buffer ad de ef be&gt;</code></pre>
+<h3>buf.writeUInt32LE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeuint32le_value_offset_noassert" id="buffer_buf_writeuint32le_value_offset_noassert">#</a></span></h3>
+<h3>buf.writeUInt32BE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeuint32be_value_offset_noassert" id="buffer_buf_writeuint32be_value_offset_noassert">#</a></span></h3>
+<h3>buf.writeUInt32LE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeuint32le_value_offset_noassert_1" id="buffer_buf_writeuint32le_value_offset_noassert_1">#</a></span></h3>
+<h3>buf.writeUInt32BE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeuint32be_value_offset_noassert_1" id="buffer_buf_writeuint32be_value_offset_noassert_1">#</a></span></h3>
+<ul>
+<li><code>value</code> Number</li>
+<li><code>offset</code> Number</li>
+<li><p><code>noAssert</code> Boolean, Optional, Default: false</p>
+</li>
+<li><p><code>value</code> Number类型</p>
+</li>
+<li><code>offset</code> Number类型</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+</ul>
+<p>Writes <code>value</code> to the buffer at the specified offset with specified endian
+format. Note, <code>value</code> must be a valid unsigned 32 bit integer.
+
+</p>
+<p>根据指定的offset偏移量和指定的 endian字节序格式将<code>value</code>写入buffer。注意：<code>value</code> 必须是一个合法的unsigned 32 bit integer。
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>value</code> and <code>offset</code>. This means
+that <code>value</code> may be too large for the specific function and <code>offset</code> may be
+beyond the end of the buffer leading to the values being silently dropped. This
+should not be used unless you are certain of correctness. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>value</code>和<code>offset</code>参数。
+这意味着 <code>value</code>可能过大，或者<code>offset</code>可能会超出buffer的末尾造成<code>value</code>被丢弃。
+这个参数除了你非常有把握，否则不应该使用它。默认是 <code>false</code>。`.
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>// &lt;Buffer fe ed fa ce&gt;
+// &lt;Buffer ce fa ed fe&gt;</code></pre>
+<h3>buf.writeInt8(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeint8_value_offset_noassert" id="buffer_buf_writeint8_value_offset_noassert">#</a></span></h3>
+<div><ul>
+<li><code>value</code> Number</li>
+<li><code>offset</code> Number</li>
+<li><p><code>noAssert</code> Boolean, Optional, Default: false</p>
+</li>
+<li><p><code>value</code> Number类型</p>
+</li>
+<li><code>offset</code> Number类型</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+</div></ul>
+<p>Writes <code>value</code> to the buffer at the specified offset. Note, <code>value</code> must be a
+valid signed 8 bit integer.
+
+</p>
+<p>根据指定的offset偏移量将<code>value</code>写入buffer。注意：<code>value</code> 必须是一个合法的 signed 8 bit integer。
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>value</code> and <code>offset</code>. This means
+that <code>value</code> may be too large for the specific function and <code>offset</code> may be
+beyond the end of the buffer leading to the values being silently dropped. This
+should not be used unless you are certain of correctness. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>value</code>和<code>offset</code>参数。
+这意味着 <code>value</code>可能过大，或者<code>offset</code>可能会超出buffer的末尾造成<code>value</code>被丢弃。
+这个参数除了你非常有把握，否则不应该使用它。默认是 <code>false</code>。`.
+
+</p>
+<p>Works as <code>buffer.writeUInt8</code>, except value is written out as a two&apos;s complement
+signed integer into <code>buffer</code>.
+
+</p>
+<p>和 <code>buffer.writeUInt8</code> 一样工作，除非是把有2的补码的 signed integer 有符号整形写入<code>buffer</code>。
+
+</p>
+<h3>buf.writeInt16LE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeint16le_value_offset_noassert" id="buffer_buf_writeint16le_value_offset_noassert">#</a></span></h3>
+<h3>buf.writeInt16BE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeint16be_value_offset_noassert" id="buffer_buf_writeint16be_value_offset_noassert">#</a></span></h3>
+<h3>buf.writeInt16LE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeint16le_value_offset_noassert_1" id="buffer_buf_writeint16le_value_offset_noassert_1">#</a></span></h3>
+<h3>buf.writeInt16BE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeint16be_value_offset_noassert_1" id="buffer_buf_writeint16be_value_offset_noassert_1">#</a></span></h3>
+<ul>
+<li><code>value</code> Number</li>
+<li><code>offset</code> Number</li>
+<li><p><code>noAssert</code> Boolean, Optional, Default: false</p>
+</li>
+<li><p><code>value</code> Number类型</p>
+</li>
+<li><code>offset</code> Number类型</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+</ul>
+<p>Writes <code>value</code> to the buffer at the specified offset with specified endian
+format. Note, <code>value</code> must be a valid signed 16 bit integer.
+
+</p>
+<p>根据指定的offset偏移量和指定的 endian字节序格式将<code>value</code>写入buffer。注意：<code>value</code> 必须是一个合法的 signed 16 bit integer。
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>value</code> and <code>offset</code>. This means
+that <code>value</code> may be too large for the specific function and <code>offset</code> may be
+beyond the end of the buffer leading to the values being silently dropped. This
+should not be used unless you are certain of correctness. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>value</code>和<code>offset</code>参数。
+这意味着 <code>value</code>可能过大，或者<code>offset</code>可能会超出buffer的末尾造成<code>value</code>被丢弃。
+这个参数除了你非常有把握，否则不应该使用它。默认是 <code>false</code>。`.
+
+</p>
+<p>Works as <code>buffer.writeUInt16*</code>, except value is written out as a two&apos;s
+complement signed integer into <code>buffer</code>.
+
+</p>
+<p>和 <code>buffer.writeUInt16*</code> 一样工作，除非是把有2的补码的 signed integer 有符号整形写入<code>buffer</code>。
+
+</p>
+<h3>buf.writeInt32LE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeint32le_value_offset_noassert" id="buffer_buf_writeint32le_value_offset_noassert">#</a></span></h3>
+<h3>buf.writeInt32BE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeint32be_value_offset_noassert" id="buffer_buf_writeint32be_value_offset_noassert">#</a></span></h3>
+<h3>buf.writeInt32LE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeint32le_value_offset_noassert_1" id="buffer_buf_writeint32le_value_offset_noassert_1">#</a></span></h3>
+<h3>buf.writeInt32BE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writeint32be_value_offset_noassert_1" id="buffer_buf_writeint32be_value_offset_noassert_1">#</a></span></h3>
+<ul>
+<li><code>value</code> Number</li>
+<li><code>offset</code> Number</li>
+<li><p><code>noAssert</code> Boolean, Optional, Default: false</p>
+</li>
+<li><p><code>value</code> Number类型</p>
+</li>
+<li><code>offset</code> Number类型</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+</ul>
+<p>Writes <code>value</code> to the buffer at the specified offset with specified endian
+format. Note, <code>value</code> must be a valid signed 32 bit integer.
+
+</p>
+<p>根据指定的offset偏移量和指定的 endian字节序格式将<code>value</code>写入buffer。注意：<code>value</code> 必须是一个合法的 signed 32 bit integer。
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>value</code> and <code>offset</code>. This means
+that <code>value</code> may be too large for the specific function and <code>offset</code> may be
+beyond the end of the buffer leading to the values being silently dropped. This
+should not be used unless you are certain of correctness. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>value</code>和<code>offset</code>参数。
+这意味着 <code>value</code>可能过大，或者<code>offset</code>可能会超出buffer的末尾造成<code>value</code>被丢弃。
+这个参数除了你非常有把握，否则不应该使用它。默认是 <code>false</code>。`.
+
+</p>
+<p>Works as <code>buffer.writeUInt32*</code>, except value is written out as a two&apos;s
+complement signed integer into <code>buffer</code>.
+
+</p>
+<p>和 <code>buffer.writeUInt32*</code> 一样工作，除非是把有2的补码的 signed integer 有符号整形写入<code>buffer</code>。
+
+</p>
+<h3>buf.writeFloatLE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writefloatle_value_offset_noassert" id="buffer_buf_writefloatle_value_offset_noassert">#</a></span></h3>
+<h3>buf.writeFloatBE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writefloatbe_value_offset_noassert" id="buffer_buf_writefloatbe_value_offset_noassert">#</a></span></h3>
+<h3>buf.writeFloatLE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writefloatle_value_offset_noassert_1" id="buffer_buf_writefloatle_value_offset_noassert_1">#</a></span></h3>
+<h3>buf.writeFloatBE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writefloatbe_value_offset_noassert_1" id="buffer_buf_writefloatbe_value_offset_noassert_1">#</a></span></h3>
+<ul>
+<li><code>value</code> Number</li>
+<li><code>offset</code> Number</li>
+<li><p><code>noAssert</code> Boolean, Optional, Default: false</p>
+</li>
+<li><p><code>value</code> Number类型</p>
+</li>
+<li><code>offset</code> Number类型</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+</ul>
+<p>Writes <code>value</code> to the buffer at the specified offset with specified endian
+format. Note, behavior is unspecified if <code>value</code> is not a 32 bit float.
+
+</p>
+<p>根据指定的offset偏移量和指定的 endian字节序格式将<code>value</code>写入buffer。注意：当<code>value</code> 不是一个 32 bit float 类型的值时，结果将是不确定的。
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>value</code> and <code>offset</code>. This means
+that <code>value</code> may be too large for the specific function and <code>offset</code> may be
+beyond the end of the buffer leading to the values being silently dropped. This
+should not be used unless you are certain of correctness. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>value</code>和<code>offset</code>参数。
+这意味着 <code>value</code>可能过大，或者<code>offset</code>可能会超出buffer的末尾造成<code>value</code>被丢弃。
+这个参数除了你非常有把握，否则不应该使用它。默认是 <code>false</code>。`.
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>// &lt;Buffer 4f 4a fe bb&gt;
+// &lt;Buffer bb fe 4a 4f&gt;</code></pre>
+<h3>buf.writeDoubleLE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writedoublele_value_offset_noassert" id="buffer_buf_writedoublele_value_offset_noassert">#</a></span></h3>
+<h3>buf.writeDoubleBE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writedoublebe_value_offset_noassert" id="buffer_buf_writedoublebe_value_offset_noassert">#</a></span></h3>
+<h3>buf.writeDoubleLE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writedoublele_value_offset_noassert_1" id="buffer_buf_writedoublele_value_offset_noassert_1">#</a></span></h3>
+<h3>buf.writeDoubleBE(value, offset, [noAssert])<span><a href="buffer.html#buffer_buf_writedoublebe_value_offset_noassert_1" id="buffer_buf_writedoublebe_value_offset_noassert_1">#</a></span></h3>
+<ul>
+<li><code>value</code> Number</li>
+<li><code>offset</code> Number</li>
+<li><p><code>noAssert</code> Boolean, Optional, Default: false</p>
+</li>
+<li><p><code>value</code> Number类型</p>
+</li>
+<li><code>offset</code> Number类型</li>
+<li><code>noAssert</code> Boolean类型, 可选参数, 默认: false</li>
+</ul>
+<p>Writes <code>value</code> to the buffer at the specified offset with specified endian
+format. Note, <code>value</code> must be a valid 64 bit double.
+
+</p>
+<p>根据指定的offset偏移量和指定的 endian字节序格式将<code>value</code>写入buffer。注意：<code>value</code> 必须是一个有效的 64 bit double 类型的值。
+
+</p>
+<p>Set <code>noAssert</code> to true to skip validation of <code>value</code> and <code>offset</code>. This means
+that <code>value</code> may be too large for the specific function and <code>offset</code> may be
+beyond the end of the buffer leading to the values being silently dropped. This
+should not be used unless you are certain of correctness. Defaults to <code>false</code>.
+
+</p>
+<p>设置参数 <code>noAssert</code>为true表示忽略验证<code>value</code>和<code>offset</code>参数。
+这意味着 <code>value</code>可能过大，或者<code>offset</code>可能会超出buffer的末尾造成<code>value</code>被丢弃。
+这个参数除了你非常有把握，否则不应该使用它。默认是 <code>false</code>。`.
+
+</p>
+<p>Example:
+
+</p>
+<p>示例：
+
+</p>
+<pre><code>// &lt;Buffer 43 eb d5 b7 dd f9 5f d7&gt;
+// &lt;Buffer d7 5f f9 dd b7 d5 eb 43&gt;</code></pre>
+<h3>buf.fill(value, [offset], [end])<span><a href="buffer.html#buffer_buf_fill_value_offset_end" id="buffer_buf_fill_value_offset_end">#</a></span></h3>
+<div><ul>
+<li><code>value</code></li>
+<li><code>offset</code> Number, Optional</li>
+<li><p><code>end</code> Number, Optional</p>
+</li>
+<li><p><code>value</code></p>
+</li>
+<li><code>offset</code> Number类型, 可选参数</li>
+<li><code>end</code> Number类型, 可选参数</li>
+</div></ul>
+<p>Fills the buffer with the specified value. If the <code>offset</code> (defaults to <code>0</code>)
+and <code>end</code> (defaults to <code>buffer.length</code>) are not given it will fill the entire
+buffer.
+
+</p>
+<p>使用指定的value来填充这个buffer。如果 <code>offset</code> (默认是 <code>0</code>) 并且 <code>end</code> (默认是 <code>buffer.length</code>) 没有明确给出，就会填充整个buffer。
+（译者：buf.fill调用的是C语言的memset函数非常高效）
+
+</p>
+<pre><code>var b = new Buffer(50);
+b.fill(&quot;h&quot;);</code></pre>
+<h2>buffer.INSPECT_MAX_BYTES<span><a href="buffer.html#buffer_buffer_inspect_max_bytes" id="buffer_buffer_inspect_max_bytes">#</a></span></h2>
+<div><ul>
+<li><p>Number, Default: 50</p>
+</li>
+<li><p>Number类型, 默认: 50</p>
+</li>
+</div></ul>
+<p>How many bytes will be returned when <code>buffer.inspect()</code> is called. This can
+be overridden by user modules.
+
+</p>
+<p>设置当调用<code>buffer.inspect()</code>方法后，多少bytes将会返回。这个值可以被用户模块重写。
+（译者：这个值主要用在当我们打印console.log(buf)时，设置返回多少长度内容）
+
+</p>
+<p>Note that this is a property on the buffer module returned by
+<code>require(&apos;buffer&apos;)</code>, not on the Buffer global, or a buffer instance.
+
+</p>
+<p>注意这个属性是<code>require(&apos;buffer&apos;)</code>模块返回的。这个属性不是在全局变量Buffer中，也不再buffer的实例里。 
+
+</p>
+<h2>类: SlowBuffer<span><a href="buffer.html#buffer_slowbuffer" id="buffer_slowbuffer">#</a></span></h2>
+<p>Returns an un-pooled <code>Buffer</code>.
+
+</p>
+<p>返回一个不被池管理的 <code>Buffer</code>。
+
+</p>
+<p>In order to avoid the garbage collection overhead of creating many individually
+allocated Buffers, by default allocations under 4KB are sliced from a single
+larger allocated object. This approach improves both performance and memory
+usage since v8 does not need to track and cleanup as many <code>Persistent</code> objects.
+
+</p>
+<p>为了避免创建大量独立分配的 Buffer 带来的垃圾回收开销，默认情况下小于 4KB 的空间都是切割自一个较大的独立对象。这种策略既提高了性能也改善了内存使用，因为 V8 不需要跟踪和清理很多 <code>Persistent</code> 对象。
+
+</p>
+<p>In the case where a developer may need to retain a small chunk of memory from a
+pool for an indeterminate amount of time it may be appropriate to create an
+un-pooled Buffer instance using SlowBuffer and copy out the relevant bits.
+
+</p>
+<p>当开发者需要将池中一小块数据保留不确定的一段时间，较为妥当的办法是用 SlowBuffer 创建一个不被池管理的 Buffer 实例并将相应数据拷贝出来。
+
+</p>
+<pre><code>socket.on(&apos;readable&apos;, function() {
+  var data = socket.read();
+  // 为需要保留的数据分配内存
+  var sb = new SlowBuffer(10);
+  // 将数据拷贝到新的空间中
+  data.copy(sb, 0, 0, 10);
+  store.push(sb);
+});</code></pre>
+<p>Though this should used sparingly and only be a last resort <em>after</em> a developer
+has actively observed undue memory retention in their applications.
+
+
+</p>
+<p>请谨慎使用，仅作为开发者频繁观察到他们的应用中过度的内存保留时的<em>最后</em>手段。</p>
+
+          </div>
+        </div>
+    </div>
+    <div id="footer">
+        <a href="http://joyent.com" class="joyent-logo">Joyent</a>
+        <ul class="clearfix">
+            <li><a href="http://nodejs.org/">Node.js</a></li>
+            <li><a href="http://nodejs.org/download/">Download</a></li>
+            <li><a href="http://nodejs.org/about/">About</a></li>
+            <li><a href="http://npmjs.org/">npm Registry</a></li>
+            <li><a href="http://nodejs.org/api/">Docs</a></li>
+            <li><a href="http://blog.nodejs.org">Blog</a></li>
+            <li><a href="http://nodejs.org/community/">Community</a></li>
+            <li><a href="http://nodejs.org/logos/">Logos</a></li>
+            <li><a href="http://jobs.nodejs.org/">Jobs</a></li>
+            <li><a href="http://twitter.com/nodejs" class="twitter">@nodejs</a></li>
+        </ul>
+
+        <p>Copyright <a href="http://joyent.com/">Joyent, Inc</a>, Node.js is a <a href="http://jixiangac.com/trademark-policy.pdf">trademark</a> of Joyent, Inc. View <a href="https://raw.github.com/joyent/node/v0.10.18/LICENSE">license</a>.</p>
+    </div>
+
+  <script src="public/api_assets/sh_main.js"></script>
+  <script src="public/api_assets/sh_javascript.min.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+  <!--
+  <script>
+    window._gaq = [['_setAccount', 'UA-10874194-2'], ['_trackPageview']];
+    (function(d, t) {
+      var g = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      g.src = '//www.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g, s);
+    }(document, 'script'));
+  </script>
+  -->
+</body>
+</html>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-26599868-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
