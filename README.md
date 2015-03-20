@@ -1,6 +1,6 @@
 nodejs
 ======
 
-copyright by cnodejs.net
+Copyright by cnodejs.net
 
-thx to this mirror: `wget -m -k 'http://jixiangac.com/doc/node/'`
+Thx to this mirror: `wget -m -k 'http://jixiangac.com/doc/node/'`
